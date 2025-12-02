@@ -19,11 +19,6 @@ import { cn } from '@/lib/utils';
 // Menu items.
 const items = [
   {
-    title: 'Test',
-    url: '/test',
-    icon: Home,
-  },
-  {
     title: 'B2B Leads',
     url: '/b2b-leads',
     icon: Inbox,
@@ -48,7 +43,9 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {
-                const isActive = item.url.includes(pathname);
+                // Correct and safe active logic
+                const isActive =
+                  pathname === item.url || pathname.startsWith(`${item.url}/`);
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton

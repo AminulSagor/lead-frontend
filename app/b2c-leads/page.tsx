@@ -1,5 +1,7 @@
 import { Button } from '@/components/ui/button';
+import { CirclePlus } from 'lucide-react';
 import Link from 'next/link';
+import B2CLeadsTable from './_components/b2c-leads-table';
 
 const page = () => {
   return (
@@ -7,9 +9,13 @@ const page = () => {
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold tracking-tight">B2C Leads</h2>
         <Button asChild>
-          <Link href={'/b2b-leads/create'}>Create</Link>
+          <Link href={'/b2c-leads/create'}>
+            <CirclePlus />
+            Create
+          </Link>
         </Button>
       </div>
+      <B2CLeadsTable />
     </div>
   );
 };
