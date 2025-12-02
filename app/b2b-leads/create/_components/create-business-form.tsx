@@ -28,10 +28,7 @@ import {
   BusinessProfileFormType,
   BusinessProfileSchema,
 } from './business-form-schema';
-
-// =======================
-// ZOD Schema (Section 1)
-// =======================
+import { useCreateBusinessProfile } from '@/query/b2b/create-b2b-leads';
 
 export default function CreateBusinessForm() {
   const form = useForm<BusinessProfileFormType>({
@@ -67,6 +64,55 @@ export default function CreateBusinessForm() {
       state: '',
       postalCode: '',
       country: 'Bangladesh',
+      // business info
+      businessPhone: '',
+      secondaryPhone: '',
+      email: '',
+      supportEmail: '',
+      website: '',
+      // key contact
+      keyContactName: '',
+      keyContactPosition: '',
+      keyContactDepartment: '',
+      keyContactPhone: '',
+      keyContactEmail: '',
+      keyContactLinkedIn: '',
+      // online presence
+      opFacebook: '',
+      opInstagram: '',
+      opLinkedin: '',
+      opTwitter: '',
+      opYoutube: '',
+      opTiktok: '',
+      opGoogleBusiness: '',
+      opDirectoryListings: '',
+      // operations
+      operationsOpeningHours: '',
+      operationsTimeZone: '',
+      operationsEmployees: '',
+      operationsTools: '',
+      operationsCertifications: '',
+      // financial information
+      fnPaymentMethods: '',
+      fnBillingAddress: '',
+      fnInvoiceContact: '',
+      fnPrimaryCurrency: '',
+      fnPaymentTerms: '',
+      // legal information
+      legalLicenses: '',
+      legalPermits: '',
+      legalInsurance: '',
+      legalComplianceCertificates: '',
+      // marketing information
+      marketingTargetAudience: '',
+      marketingValueProposition: '',
+      marketingMainCompetitors: '',
+      marketingKeywords: '',
+      // meta data
+      metaTags: '',
+      metaNotes: '',
+      metaDateAdded: '',
+      metaLastUpdated: '',
     },
   });
 
@@ -103,8 +149,20 @@ export default function CreateBusinessForm() {
   // location
   const countries = ['Bangladesh', 'USA', 'UK', 'India', 'Canada', 'Australia'];
 
+  const { mutate, isPending, error, data } = useCreateBusinessProfile();
+
   function onSubmit(values: BusinessProfileFormType) {
     console.log('FORM DATA:', values);
+    mutate(values, {
+      onSuccess: (data) => {
+        console.log('DATA:', data);
+        alert('Business Profile Created Successfully');
+      },
+      onError: (error) => {
+        console.log('ERROR:', error);
+        alert('Business Profile Creation Failed');
+      },
+    });
   }
 
   return (
@@ -375,7 +433,6 @@ export default function CreateBusinessForm() {
               />
             </CardContent>
           </Card>
-
           {/* service */}
           <Card className="border border-gray-200 shadow-none">
             <CardHeader>
@@ -576,7 +633,6 @@ export default function CreateBusinessForm() {
               </div>
             </CardContent>
           </Card>
-
           {/* location */}
           <Card className="border border-gray-200 shadow-none">
             <CardHeader>
@@ -688,9 +744,705 @@ export default function CreateBusinessForm() {
               />
             </CardContent>
           </Card>
+          {/* contact info */}
+          <Card className="border border-gray-200 shadow-none rounded-sm">
+            <CardHeader>
+              <CardTitle>Contact Information</CardTitle>
+            </CardHeader>
+            <CardContent className=" grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="businessPhone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Business Phone</FormLabel>
+                    <FormControl>
+                      <Input placeholder="+1 555 555 5555" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="secondaryPhone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Secondary Phone</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Optional" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="you@company.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="supportEmail"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Support Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="support@company.com (optional)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="website"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Website</FormLabel>
+                    <FormControl>
+                      <Input placeholder="https://example.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+          </Card>
+          {/* key contact */}
+          <Card className="border border-gray-200 shadow-none rounded-sm">
+            <CardHeader>
+              <CardTitle>Key Contact</CardTitle>
+            </CardHeader>
+            <CardContent className=" grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="keyContactName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Contact Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="keyContactPosition"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Position / Role</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Manager (optional)" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="keyContactDepartment"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Department</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Marketing (optional)" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="keyContactPhone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone</FormLabel>
+                    <FormControl>
+                      <Input placeholder="+1 555 555 5555" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="keyContactEmail"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="contact@company.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="keyContactLinkedIn"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>LinkedIn URL</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="https://linkedin.com/in/username"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+          </Card>
+          {/* online presence */}
+          <Card className="border border-gray-200 shadow-none rounded-sm">
+            <CardHeader>
+              <CardTitle>Online Presence</CardTitle>
+            </CardHeader>
+            <CardContent className=" grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="opFacebook"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Facebook</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="https://opFacebook.com/yourpage"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="opInstagram"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Instagram</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="https://opInstagram.com/yourprofile"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="opLinkedin"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>LinkedIn</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="https://opLinkedin.com/company/yourbrand"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="opTwitter"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>X / Twitter</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="https://opTwitter.com/yourprofile"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="opYoutube"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>YouTube</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="https://opYoutube.com/@yourchannel"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="opTiktok"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>TikTok</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="https://opTiktok.com/@yourprofile"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="opGoogleBusiness"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Google Business Profile</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Google Business URL (optional)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="opDirectoryListings"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Directory Listings</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Yelp, Trustpilot, etc. (optional)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+          </Card>
+          {/* operations */}
+          <Card className="border border-gray-200 shadow-none rounded-sm">
+            <CardHeader>
+              <CardTitle>Operations</CardTitle>
+            </CardHeader>
+            <CardContent className=" grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="operationsOpeningHours"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Operating Hours</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Mon–Fri, 9am–6pm (optional)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="operationsTimeZone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Time Zone</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="GMT+6, PST, EST, etc. (optional)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="operationsEmployees"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Number of Employees</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="50, 200+, etc. (optional)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="operationsTools"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tools / Technologies Used</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Slack, Jira, AWS, etc. (optional)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="operationsCertifications"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Certifications</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="ISO, PCI DSS, etc. (optional)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+          </Card>
+          <Card className="border border-gray-200 shadow-none rounded-sm">
+            <CardHeader>
+              <CardTitle>Financial Information</CardTitle>
+            </CardHeader>
+            <CardContent className=" grid grid-cols-2 gap-4">
+              {/* Payment Methods */}
+              <FormField
+                control={form.control}
+                name="fnPaymentMethods"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Payment Methods Accepted</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="e.g. Visa, Mastercard, PayPal"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Billing Address */}
+              <FormField
+                control={form.control}
+                name="fnBillingAddress"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Billing Address</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter billing address" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Invoice Contact */}
+              <FormField
+                control={form.control}
+                name="fnInvoiceContact"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Invoice Contact</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Person responsible for invoicing"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Primary Currency */}
+              <FormField
+                control={form.control}
+                name="fnPrimaryCurrency"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Primary Currency</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g. USD, EUR, BDT" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Payment Terms */}
+              <FormField
+                control={form.control}
+                name="fnPaymentTerms"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Payment Terms</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g. Net 30, Net 15" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+          </Card>
+
+          <Card className="border border-gray-200 shadow-none rounded-sm">
+            <CardHeader>
+              <CardTitle>Legal Information</CardTitle>
+            </CardHeader>
+            <CardContent className=" grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="legalLicenses"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Licenses</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="List of licenses (optional)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="legalPermits"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Permits</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="List of permits (optional)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="legalInsurance"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Insurance</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Insurance details (optional)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="legalComplianceCertificates"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Compliance Certificates</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Certificates (optional)" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+          </Card>
+
+          {/*  marketing information */}
+          <Card className="border border-gray-200 shadow-none rounded-sm">
+            <CardHeader>
+              <CardTitle> Marketing Information</CardTitle>
+            </CardHeader>
+            <CardContent className=" grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="marketingTargetAudience"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Target Audience</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Describe your audience" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="marketingValueProposition"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Value Proposition</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Your value proposition" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="marketingMainCompetitors"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Main Competitors</FormLabel>
+                    <FormControl>
+                      <Input placeholder="List main competitors" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="marketingKeywords"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Keywords (SEO / Industry Terms)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="SEO keywords" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+          </Card>
+
+          {/* meta data */}
+          <Card className="border border-gray-200 shadow-none rounded-sm">
+            <CardHeader>
+              <CardTitle>Metadata</CardTitle>
+            </CardHeader>
+            <CardContent className=" grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="metaTags"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tags</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter tags (comma separated)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="metaNotes"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Notes</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Any notes" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="metaDateAdded"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Date Added</FormLabel>
+                    <FormControl>
+                      <Input type="date" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="metaLastUpdated"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Updated</FormLabel>
+                    <FormControl>
+                      <Input type="date" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+          </Card>
           {/* SUBMIT BUTTON */}
-          <Button type="submit" className="w-full py-6 text-base">
-            Save Business Profile
+          <Button
+            type="submit"
+            className="w-full py-6 text-base"
+            disabled={isPending}
+          >
+            {isPending ? 'Saving...' : 'Save Business Profile'}
           </Button>
         </form>
       </Form>
