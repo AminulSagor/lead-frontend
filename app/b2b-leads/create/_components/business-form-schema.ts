@@ -5,7 +5,7 @@ export const BusinessProfileSchema = z.object({
   businessId: z.string().optional(),
   name: z.string().min(2, 'Business name is required'),
   businessType: z.string().min(1, 'Business type is required'),
-  description: z.string().optional(),
+  businessDescription: z.string().optional(),
   registrationNumber: z.string().optional(),
   taxId: z.string().optional(),
   establishedDate: z.string().optional(),

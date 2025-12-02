@@ -1,81 +1,11 @@
-import mongoose, { Schema, Document } from 'mongoose';
-
-export interface IBusinessProfile extends Document {
-  businessId?: string;
-  name: string;
-  businessType: string;
-  description?: string;
-  registrationNumber?: string;
-  taxId?: string;
-  establishedDate?: string;
-  status: string;
-  primaryIndustry: string;
-  niche: string;
-  subNiche: string;
-  serviceName: string;
-  category: string;
-  subCategory?: string;
-  serviceDescription?: string;
-  pricingModel: 'Hourly' | 'Fixed' | 'Tiered' | 'Subscription';
-  rate: string;
-  currency: string;
-  serviceAvailability: 'Online' | 'On-Site' | 'Hybrid';
-  onlineService: 'Yes' | 'No';
-  street?: string;
-  subCity?: string;
-  city: string;
-  state: string;
-  postalCode?: string;
-  country: string;
-  businessPhone?: string;
-  secondaryPhone?: string;
-  email?: string;
-  supportEmail?: string;
-  website?: string;
-  keyContactName?: string;
-  keyContactPosition?: string;
-  keyContactDepartment?: string;
-  keyContactPhone?: string;
-  keyContactEmail?: string;
-  keyContactLinkedIn?: string;
-  opFacebook?: string;
-  opInstagram?: string;
-  opLinkedin?: string;
-  opTwitter?: string;
-  opYoutube?: string;
-  opTiktok?: string;
-  opGoogleBusiness?: string;
-  opDirectoryListings?: string;
-  operationsOpeningHours?: string;
-  operationsTimeZone?: string;
-  operationsEmployees?: string;
-  operationsTools?: string;
-  operationsCertifications?: string;
-  fnPaymentMethods?: string;
-  fnBillingAddress?: string;
-  fnInvoiceContact?: string;
-  fnPrimaryCurrency?: string;
-  fnPaymentTerms?: string;
-  legalLicenses?: string;
-  legalPermits?: string;
-  legalInsurance?: string;
-  legalComplianceCertificates?: string;
-  marketingTargetAudience?: string;
-  marketingValueProposition?: string;
-  marketingMainCompetitors?: string;
-  marketingKeywords?: string;
-  metaTags?: string;
-  metaNotes?: string;
-  metaDateAdded?: string;
-  metaLastUpdated?: string;
-}
+import mongoose, { Schema, Document, Model } from 'mongoose';
 
 const BusinessProfileSchema: Schema = new Schema(
   {
     businessId: { type: String },
     name: { type: String, required: true },
     businessType: { type: String, required: true },
-    description: { type: String },
+    businessDescription: { type: String },
     registrationNumber: { type: String },
     taxId: { type: String },
     establishedDate: { type: String },
@@ -151,7 +81,8 @@ const BusinessProfileSchema: Schema = new Schema(
   { timestamps: true }
 );
 
-export default mongoose.model<IBusinessProfile>(
-  'BusinessProfile',
-  BusinessProfileSchema
-);
+const BusinessProfile =
+  mongoose.models.BusinessProfile ||
+  mongoose.model('BusinessProfile', BusinessProfileSchema);
+
+export default BusinessProfile;

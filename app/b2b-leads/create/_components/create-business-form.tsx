@@ -1,7 +1,5 @@
 'use client';
-
-import * as z from 'zod';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
@@ -38,7 +36,7 @@ export default function CreateBusinessForm() {
       businessId: '',
       name: '',
       businessType: '',
-      description: '',
+      businessDescription: '',
       registrationNumber: '',
       taxId: '',
       establishedDate: '',
@@ -138,18 +136,16 @@ export default function CreateBusinessForm() {
   // industry vars
   const primary = form.watch('primaryIndustry');
   const niche = form.watch('niche');
-  const subNiche = form.watch('subNiche');
 
   // service vars
   const pricingModels = ['Hourly', 'Fixed', 'Tiered', 'Subscription'];
   const availabilityOptions = ['Online', 'On-Site', 'Hybrid'];
-  const onlineOptions = ['Yes', 'No'];
   const currencyOptions = ['USD', 'EUR', 'GBP', 'BDT'];
 
   // location
   const countries = ['Bangladesh', 'USA', 'UK', 'India', 'Canada', 'Australia'];
 
-  const { mutate, isPending, error, data } = useCreateBusinessProfile();
+  const { mutate, isPending } = useCreateBusinessProfile();
 
   function onSubmit(values: BusinessProfileFormType) {
     console.log('FORM DATA:', values);
@@ -317,7 +313,7 @@ export default function CreateBusinessForm() {
               {/* Description */}
               <FormField
                 control={form.control}
-                name="description"
+                name="businessDescription"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Brief Description</FormLabel>
@@ -487,7 +483,7 @@ export default function CreateBusinessForm() {
               {/* Description */}
               <FormField
                 control={form.control}
-                name="description"
+                name="serviceDescription"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Short Description</FormLabel>

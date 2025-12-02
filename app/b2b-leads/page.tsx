@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import B2BLeadsTable from './_components/b2bleads-table';
+import B2bTable2 from './_components/b2b-leads-table2';
 
 const page = () => {
   return (
@@ -11,7 +11,7 @@ const page = () => {
           <Link href={'/b2b-leads/create'}>Create</Link>
         </Button>
       </div>
-      <B2BLeadsTable />
+      <B2bTable2 />
     </div>
   );
 };
