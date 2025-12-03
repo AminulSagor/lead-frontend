@@ -15,7 +15,7 @@ const HealthMedicalCard = () => {
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="grid grid-cols-2 gap-4">
+      <CardContent className="grid grid-cols-4 gap-4">
         {/* Physical Health */}
         <InputField
           control={control}

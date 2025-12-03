@@ -14,7 +14,7 @@ const SocialCivicCard = () => {
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="grid grid-cols-2 gap-4">
+      <CardContent className="grid grid-cols-4 gap-4">
         <InputField
           control={control}
           name="organizations"

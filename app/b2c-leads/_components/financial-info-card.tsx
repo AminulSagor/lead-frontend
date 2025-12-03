@@ -16,7 +16,7 @@ const FinancialInformationCard = () => {
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="grid grid-cols-3 gap-4">
+      <CardContent className="grid grid-cols-4 gap-4">
         {/* Income */}
         <InputField
           control={control}
