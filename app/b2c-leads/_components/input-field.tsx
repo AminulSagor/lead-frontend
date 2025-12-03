@@ -1,0 +1,45 @@
+'use client';
+
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Control, FieldPath, FieldValues } from 'react-hook-form';
+
+interface InputFieldProps<T extends FieldValues> {
+  control: Control<T>;
+  name: FieldPath<T>;
+  label: string;
+  placeholder?: string;
+  type?: React.InputHTMLAttributes<HTMLInputElement>['type']; // 👈 type-safe HTML input types
+}
+
+const InputField = <T extends FieldValues>({
+  control,
+  name,
+  label,
+  placeholder,
+  type = 'text', // 👈 default input type
+}: InputFieldProps<T>) => {
+  return (
+    <FormField
+      control={control}
+      name={name}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{label}</FormLabel>
+          <FormControl>
+            <Input type={type} placeholder={placeholder} {...field} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+};
+
+export default InputField;

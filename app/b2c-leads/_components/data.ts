@@ -480,3 +480,23 @@ export const DUMMY_B2C_LEADS = [
     salary: '$92k',
   },
 ];
+
+export const COUNTRY_LIST = [
+  { label: 'Bangladesh', value: 'bangladesh' },
+  { label: 'India', value: 'india' },
+  { label: 'UAE', value: 'uae' },
+  { label: 'Sri Lanka', value: 'srilanka' },
+  { label: 'Singapore', value: 'singapore' },
+  { label: 'USA', value: 'usa' },
+  { label: 'Pakistan', value: 'pakistan' },
+  { label: 'Philippines', value: 'philippines' },
+  { label: 'Malaysia', value: 'malaysia' },
+  { label: 'UK', value: 'uk' },
+  { label: 'Japan', value: 'japan' },
+];
+
+export const GENDER_LIST = [
+  { label: 'Male', value: 'male' },
+  { label: 'Female', value: 'female' },
+];
+
