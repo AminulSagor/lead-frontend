@@ -184,7 +184,7 @@ export default function CreateBusinessForm() {
               </CardHeader>
 
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-4 gap-4">
                   {/* Business ID */}
                   <FormField
                     control={form.control}
@@ -230,7 +230,7 @@ export default function CreateBusinessForm() {
                             onValueChange={field.onChange}
                             defaultValue={field.value}
                           >
-                            <SelectTrigger>
+                            <SelectTrigger className="w-full">
                               <SelectValue placeholder="Select type" />
                             </SelectTrigger>
                             <SelectContent>
@@ -307,7 +307,7 @@ export default function CreateBusinessForm() {
                             onValueChange={field.onChange}
                             defaultValue={field.value}
                           >
-                            <SelectTrigger>
+                            <SelectTrigger className="w-full">
                               <SelectValue placeholder="Select status" />
                             </SelectTrigger>
                             <SelectContent>
@@ -449,7 +449,7 @@ export default function CreateBusinessForm() {
               <CardHeader>
                 <CardTitle>Service Overview</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className=" grid grid-cols-4 gap-4">
                 {/* Service Name */}
                 <FormField
                   control={form.control}
@@ -525,7 +525,7 @@ export default function CreateBusinessForm() {
                           onValueChange={field.onChange}
                           value={field.value}
                         >
-                          <SelectTrigger>
+                          <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select pricing model" />
                           </SelectTrigger>
                           <SelectContent>
@@ -542,109 +542,103 @@ export default function CreateBusinessForm() {
                   )}
                 />
 
-                {/* Rate & Currency */}
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="rate"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Rate *</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter rate" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                <FormField
+                  control={form.control}
+                  name="rate"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Rate *</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter rate" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                  <FormField
-                    control={form.control}
-                    name="currency"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Currency *</FormLabel>
-                        <FormControl>
-                          <Select
-                            onValueChange={field.onChange}
-                            value={field.value}
-                          >
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Select currency" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {currencyOptions.map((c) => (
-                                <SelectItem key={c} value={c}>
-                                  {c}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                <FormField
+                  control={form.control}
+                  name="currency"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Currency *</FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select currency" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {currencyOptions.map((c) => (
+                              <SelectItem key={c} value={c}>
+                                {c}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                {/* Service Availability & Online */}
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="serviceAvailability"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Service Availability *</FormLabel>
-                        <FormControl>
-                          <Select
-                            onValueChange={field.onChange}
-                            value={field.value}
-                          >
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Select availability" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {availabilityOptions.map((a) => (
-                                <SelectItem key={a} value={a}>
-                                  {a}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                <FormField
+                  control={form.control}
+                  name="serviceAvailability"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Service Availability *</FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select availability" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {availabilityOptions.map((a) => (
+                              <SelectItem key={a} value={a}>
+                                {a}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                  <FormField
-                    control={form.control}
-                    name="onlineService"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Online or Remote Service *</FormLabel>
-                        <FormControl>
-                          <Select
-                            onValueChange={field.onChange}
-                            value={field.value}
-                          >
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Yes/No" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {['Yes', 'No'].map((o) => (
-                                <SelectItem key={o} value={o}>
-                                  {o}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                <FormField
+                  control={form.control}
+                  name="onlineService"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Online or Remote Service *</FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Yes/No" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {['Yes', 'No'].map((o) => (
+                              <SelectItem key={o} value={o}>
+                                {o}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </CardContent>
             </Card>
             {/* location */}
@@ -652,7 +646,7 @@ export default function CreateBusinessForm() {
               <CardHeader>
                 <CardTitle>Office Address</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="grid grid-cols-4 gap-4">
                 {/* Street */}
                 <FormField
                   control={form.control}
@@ -740,7 +734,7 @@ export default function CreateBusinessForm() {
                           onValueChange={field.onChange}
                           value={field.value}
                         >
-                          <SelectTrigger>
+                          <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select country" />
                           </SelectTrigger>
                           <SelectContent>
@@ -763,7 +757,7 @@ export default function CreateBusinessForm() {
               <CardHeader>
                 <CardTitle>Contact Information</CardTitle>
               </CardHeader>
-              <CardContent className=" grid grid-cols-2 gap-4">
+              <CardContent className=" grid grid-cols-4 gap-4">
                 <FormField
                   control={form.control}
                   name="businessPhone"
@@ -843,7 +837,7 @@ export default function CreateBusinessForm() {
               <CardHeader>
                 <CardTitle>Key Contact</CardTitle>
               </CardHeader>
-              <CardContent className=" grid grid-cols-2 gap-4">
+              <CardContent className=" grid grid-cols-4 gap-4">
                 <FormField
                   control={form.control}
                   name="keyContactName"
@@ -937,7 +931,7 @@ export default function CreateBusinessForm() {
               <CardHeader>
                 <CardTitle>Online Presence</CardTitle>
               </CardHeader>
-              <CardContent className=" grid grid-cols-2 gap-4">
+              <CardContent className=" grid grid-cols-4 gap-4">
                 <FormField
                   control={form.control}
                   name="opFacebook"
@@ -1073,7 +1067,7 @@ export default function CreateBusinessForm() {
               <CardHeader>
                 <CardTitle>Operations</CardTitle>
               </CardHeader>
-              <CardContent className=" grid grid-cols-2 gap-4">
+              <CardContent className=" grid grid-cols-4 gap-4">
                 <FormField
                   control={form.control}
                   name="operationsOpeningHours"
@@ -1164,7 +1158,7 @@ export default function CreateBusinessForm() {
               <CardHeader>
                 <CardTitle>Financial Information</CardTitle>
               </CardHeader>
-              <CardContent className=" grid grid-cols-2 gap-4">
+              <CardContent className=" grid grid-cols-4 gap-4">
                 {/* Payment Methods */}
                 <FormField
                   control={form.control}
@@ -1252,7 +1246,7 @@ export default function CreateBusinessForm() {
               <CardHeader>
                 <CardTitle>Legal Information</CardTitle>
               </CardHeader>
-              <CardContent className=" grid grid-cols-2 gap-4">
+              <CardContent className=" grid grid-cols-4 gap-4">
                 <FormField
                   control={form.control}
                   name="legalLicenses"
@@ -1328,7 +1322,7 @@ export default function CreateBusinessForm() {
               <CardHeader>
                 <CardTitle> Marketing Information</CardTitle>
               </CardHeader>
-              <CardContent className=" grid grid-cols-2 gap-4">
+              <CardContent className=" grid grid-cols-4 gap-4">
                 <FormField
                   control={form.control}
                   name="marketingTargetAudience"
@@ -1398,7 +1392,7 @@ export default function CreateBusinessForm() {
               <CardHeader>
                 <CardTitle>Metadata</CardTitle>
               </CardHeader>
-              <CardContent className=" grid grid-cols-2 gap-4">
+              <CardContent className=" grid grid-cols-4 gap-4">
                 <FormField
                   control={form.control}
                   name="metaTags"
