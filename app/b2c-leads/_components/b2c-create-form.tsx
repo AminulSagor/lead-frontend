@@ -14,6 +14,15 @@ import PersonalDetailsCard from './personal-details-card';
 import ProfessionalDetailsCard from './professional-details-card';
 import SkillsCard from './skills-card';
 import CareerSummaryCard from './career-summary-card';
+import EducationCard from './education-card';
+import PersonalWebCard from './personal-web-card';
+import InterestsCard from './hobbies-card';
+import SocialCivicCard from './social-civic-card';
+import FamilyHouseholdCard from './family-household-card';
+import HealthMedicalCard from './health-medical-card';
+import FinancialInformationCard from './financial-info-card';
+import LegalGovernmentCard from './legal-govt-card';
+import MembershipsAffiliationsCard from './membership-affiliation-card';
 
 const B2CCreateForm = () => {
   const form = useForm<B2CProfileSchemaType>({
@@ -63,6 +72,83 @@ const B2CCreateForm = () => {
       // career summary
       totalExperience: '',
       careerHighlight: '',
+      // education
+      highestDegree: '',
+      degreesEarned: '',
+      institutions: '',
+      fieldsOfStudy: '',
+      graduationDates: '',
+      gpa: '',
+      academicHonors: '',
+      publications: '',
+      researchAreas: '',
+      thesisTitle: '',
+      academicIds: '',
+      // personal web presence
+      personalWebsite: '',
+      portfolio: '',
+      blog: '',
+      onlineResume: '',
+      linktree: '',
+      publicNotion: '',
+      // interest / hobbies
+      interests: '',
+      lifestylePreferences: '',
+      // social / civic activities
+      organizations: '',
+      role: '',
+      activities: '',
+      civicEngagement: '',
+      policyInterests: '',
+      // family / household
+      maritalStatus: '',
+      partnerSpouse: '',
+      childrenDependents: '',
+      householdSize: '',
+      householdIncome: '',
+      familyMedicalHistory: '',
+      guardianshipStatus: '',
+      // health / medical records
+      heightWeightBMI: '',
+      allergies: '',
+      chronicIllnesses: '',
+      disabilities: '',
+      diagnoses: '',
+      medications: '',
+      surgeries: '',
+      vaccinationRecords: '',
+      medicalDevices: '',
+      healthInsurance: '',
+      // financial info
+      salary: '',
+      totalIncome: '',
+      incomeHistory: '',
+      savings: '',
+      investments: '',
+      cryptocurrency: '',
+      loans: '',
+      debts: '',
+      bankAccounts: '',
+      creditScore: '',
+      transactionHistory: '',
+      insurancePolicies: '',
+      // legal and govt
+      nationalId: '',
+      passport: '',
+      driversLicense: '',
+      visaWorkPermit: '',
+      criminalBackground: '',
+      courtRecords: '',
+      contractsSigned: '',
+      consentRecords: '',
+      taxIdentificationNumber: '',
+      // membership and affiliation
+      clubs: '',
+      alumniGroups: '',
+      professionalAssociations: '',
+      nonprofits: '',
+      loyaltyPrograms: '',
+      volunteerActivities: '',
     },
   });
 
@@ -88,6 +174,15 @@ const B2CCreateForm = () => {
             <ProfessionalDetailsCard />
             <SkillsCard />
             <CareerSummaryCard />
+            <EducationCard />
+            <PersonalWebCard />
+            <InterestsCard />
+            <SocialCivicCard />
+            <FamilyHouseholdCard />
+            <HealthMedicalCard />
+            <FinancialInformationCard />
+            <LegalGovernmentCard />
+            <MembershipsAffiliationsCard />
             <Button type="submit" size={'sm'}>
               Submit
             </Button>

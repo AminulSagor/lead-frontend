@@ -89,6 +89,97 @@ export const B2CProfileSchema = z.object({
     .min(1, 'Total Years of Experience is required')
     .regex(/^\d+$/, 'Enter a valid number'),
   careerHighlight: z.string().optional(),
+  // education
+  highestDegree: z.string().min(1, 'Highest Degree is required'),
+  degreesEarned: z.string().optional(),
+  institutions: z.string().optional(),
+  fieldsOfStudy: z.string().optional(),
+  graduationDates: z.string().optional(),
+  gpa: z.string().optional(),
+  academicHonors: z.string().optional(),
+  publications: z.string().optional(),
+  researchAreas: z.string().optional(),
+  thesisTitle: z.string().optional(),
+  academicIds: z.string().optional(),
+  // personal web presence
+  personalWebsite: z
+    .string()
+    .url('Enter a valid URL')
+    .or(z.literal(''))
+    .optional(),
+  portfolio: z.string().url('Enter a valid URL').or(z.literal('')).optional(),
+  blog: z.string().url('Enter a valid URL').or(z.literal('')).optional(),
+  onlineResume: z
+    .string()
+    .url('Enter a valid URL')
+    .or(z.literal(''))
+    .optional(),
+  linktree: z.string().url('Enter a valid URL').or(z.literal('')).optional(),
+  publicNotion: z
+    .string()
+    .url('Enter a valid URL')
+    .or(z.literal(''))
+    .optional(),
+
+  // hobbies
+  interests: z.string().min(1, 'Select a hobby'),
+  lifestylePreferences: z.string().optional(),
+  // social / civic activities
+  organizations: z.string().min(1, 'Organizations / Groups is required'),
+  role: z.string().optional(),
+  activities: z.string().optional(),
+  civicEngagement: z.string().optional(),
+  policyInterests: z.string().optional(),
+  // family / household
+  maritalStatus: z.string().min(1, 'Marital Status is required'),
+  partnerSpouse: z.string().optional(),
+  childrenDependents: z.string().optional(),
+  householdSize: z.string().optional(),
+  householdIncome: z.string().min(1, 'Household Income is required'),
+  familyMedicalHistory: z.string().optional(),
+  guardianshipStatus: z.string().optional(),
+  // health / medical reports
+  heightWeightBMI: z.string().optional(),
+  allergies: z.string().optional(),
+  chronicIllnesses: z.string().optional(),
+  disabilities: z.string().optional(),
+  diagnoses: z.string().optional(),
+  medications: z.string().optional(),
+  surgeries: z.string().optional(),
+  vaccinationRecords: z.string().optional(),
+  medicalDevices: z.string().optional(),
+  healthInsurance: z.string().optional(),
+
+  // financial info
+  salary: z.string().min(1, 'Salary is required'),
+  totalIncome: z.string().optional(),
+  incomeHistory: z.string().optional(),
+  savings: z.string().optional(),
+  investments: z.string().optional(),
+  cryptocurrency: z.string().optional(),
+  loans: z.string().optional(),
+  debts: z.string().optional(),
+  bankAccounts: z.string().optional(),
+  creditScore: z.string().optional(),
+  transactionHistory: z.string().optional(),
+  insurancePolicies: z.string().optional(),
+  // legal and government
+  nationalId: z.string().optional(),
+  passport: z.string().optional(),
+  driversLicense: z.string().optional(),
+  visaWorkPermit: z.string().optional(),
+  criminalBackground: z.string().optional(),
+  courtRecords: z.string().optional(),
+  contractsSigned: z.string().optional(),
+  consentRecords: z.string().optional(),
+  taxIdentificationNumber: z.string().optional(),
+  // memberships and affiliations
+  clubs: z.string().optional(),
+  alumniGroups: z.string().optional(),
+  professionalAssociations: z.string().optional(),
+  nonprofits: z.string().optional(),
+  loyaltyPrograms: z.string().optional(),
+  volunteerActivities: z.string().optional(),
 });
 
 export type B2CProfileSchemaType = z.infer<typeof B2CProfileSchema>;

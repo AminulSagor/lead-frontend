@@ -523,3 +523,24 @@ export const INDUSTRY_LIST = [
   { label: 'HealthTech', value: 'healthtech' },
   { label: 'EdTech', value: 'edtech' },
 ];
+
+export const HOBBIES_LIST = [
+  { label: 'Reading', value: 'reading' },
+  { label: 'Traveling', value: 'traveling' },
+  { label: 'Sports', value: 'sports' },
+  { label: 'Music', value: 'music' },
+  { label: 'Cooking', value: 'cooking' },
+  { label: 'Gaming', value: 'gaming' },
+  { label: 'Photography', value: 'photography' },
+  { label: 'Art / Painting', value: 'art_painting' },
+  { label: 'Writing', value: 'writing' },
+  { label: 'Fitness / Gym', value: 'fitness_gym' },
+];
+
+export const MARITAL_STATUS_OPTIONS = [
+  { label: 'Single', value: 'single' },
+  { label: 'Married', value: 'married' },
+  { label: 'Divorced', value: 'divorced' },
+  { label: 'Widowed', value: 'widowed' },
+  { label: 'Separated', value: 'separated' },
+];
