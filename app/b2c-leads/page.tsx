@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { CirclePlus } from 'lucide-react';
 import Link from 'next/link';
 import B2CLeadsTable from './_components/b2c-leads-table';
+import { Suspense } from 'react';
 
 const page = () => {
   return (
@@ -15,7 +16,9 @@ const page = () => {
           </Link>
         </Button>
       </div>
-      <B2CLeadsTable />
+      <Suspense>
+        <B2CLeadsTable />
+      </Suspense>
     </div>
   );
 };

@@ -1,7 +1,8 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import B2bTable2 from './_components/b2b-leads-table2';
+import B2BLeadsTable from './_components/b2b-leads-table2';
 import { CirclePlus } from 'lucide-react';
+import { Suspense } from 'react';
 
 const page = () => {
   return (
@@ -15,7 +16,9 @@ const page = () => {
           </Link>
         </Button>
       </div>
-      <B2bTable2 />
+      <Suspense>
+        <B2BLeadsTable />
+      </Suspense>
     </div>
   );
 };
