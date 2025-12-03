@@ -1,19 +1,19 @@
 'use client';
 import { Button } from '@/components/ui/button';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeftCircle } from 'lucide-react';
 import Link from 'next/link';
-import { Form } from '@/components/ui/form';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
+import AddressCard from './address-card';
 import {
   B2CProfileSchema,
   B2CProfileSchemaType,
 } from './b2c-create-form-schema';
-import { zodResolver } from '@hookform/resolvers/zod';
-import InputField from './input-field';
-import { Select, SelectTrigger, SelectValue } from '@/components/ui/select';
-import SelectField from './select-filed';
-import { COUNTRY_LIST, GENDER_LIST } from './data';
+import ContactCard from './contact-card';
+import PersonalDetailsCard from './personal-details-card';
+import ProfessionalDetailsCard from './professional-details-card';
+import SkillsCard from './skills-card';
+import CareerSummaryCard from './career-summary-card';
 
 const B2CCreateForm = () => {
   const form = useForm<B2CProfileSchemaType>({
@@ -23,9 +23,46 @@ const B2CCreateForm = () => {
       fullName: '',
       nickname: '',
       dob: '',
-      gender: '',
+      gender: 'male',
       nationality: '',
       // contact and communication
+      primaryEmail: '',
+      secondaryEmail: '',
+      primaryPhone: '',
+      secondaryPhone: '',
+      whatsapp: '',
+      telegram: '',
+      wechat: '',
+      prefferedContactMethod: 'phone',
+      // location
+      city: '',
+      cityCorporation: '',
+      country: '',
+      postalCode: '',
+      state: '',
+      street: '',
+      subCity: '',
+      timeZone: '',
+      // professional details
+      currentJobTitle: '',
+      company: '',
+      workType: undefined,
+      workModel: undefined,
+      primaryIndustry: '',
+      industrySubsector: '',
+      coreResponsibilities: '',
+      keyTools: '',
+      // skills
+      primarySkills: '',
+      secondarySkills: '',
+      technicalTools: '',
+      topSoftSkills: '',
+      professionalCertifications: '',
+      licenses: '',
+      credentials: '',
+      // career summary
+      totalExperience: '',
+      careerHighlight: '',
     },
   });
 
@@ -43,98 +80,19 @@ const B2CCreateForm = () => {
         </Button>
       </div>
       <div className=" mx-auto">
-        <Form {...form}>
+        <FormProvider {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <Card className="border border-gray-200 shadow-none rounded-sm">
-              <CardHeader>
-                <CardTitle className="text-lg font-medium">
-                  Identity & Personal Details
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="grid grid-cols-3 gap-4">
-                <InputField
-                  control={form.control}
-                  label="Full Name"
-                  name="fullName"
-                  placeholder="Enter full name here"
-                />
-                <InputField
-                  control={form.control}
-                  label="Nickname"
-                  name="nickname"
-                  placeholder="Enter nickname here"
-                />
-                <InputField
-                  control={form.control}
-                  label="Date of Birth"
-                  name="dob"
-                  type="date"
-                />
-                <SelectField
-                  control={form.control}
-                  name="nationality"
-                  label="Nationality"
-                  options={COUNTRY_LIST}
-                  placeholder="Select Nationality"
-                  className=""
-                />
-                <SelectField
-                  control={form.control}
-                  name="gender"
-                  label="Gender"
-                  options={GENDER_LIST}
-                  placeholder="Select Gender"
-                />
-              </CardContent>
-            </Card>
-
-            <Card className="border border-gray-200 shadow-none rounded-sm">
-              <CardHeader>
-                <CardTitle className="text-lg font-medium">
-                  Contact & Communication*
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="grid grid-cols-3 gap-4">
-                <InputField
-                  control={form.control}
-                  label="Full Name"
-                  name="fullName"
-                  placeholder="Enter full name here"
-                />
-                <InputField
-                  control={form.control}
-                  label="Nickname"
-                  name="nickname"
-                  placeholder="Enter nickname here"
-                />
-                <InputField
-                  control={form.control}
-                  label="Date of Birth"
-                  name="dob"
-                  type="date"
-                />
-                <SelectField
-                  control={form.control}
-                  name="nationality"
-                  label="Nationality"
-                  options={COUNTRY_LIST}
-                  placeholder="Select Nationality"
-                  className=""
-                />
-                <SelectField
-                  control={form.control}
-                  name="gender"
-                  label="Gender"
-                  options={GENDER_LIST}
-                  placeholder="Select Gender"
-                />
-              </CardContent>
-            </Card>
+            <PersonalDetailsCard />
+            <ContactCard />
+            <AddressCard />
+            <ProfessionalDetailsCard />
+            <SkillsCard />
+            <CareerSummaryCard />
             <Button type="submit" size={'sm'}>
               Submit
             </Button>
           </form>
-        </Form>
+        </FormProvider>
       </div>
     </div>
   );

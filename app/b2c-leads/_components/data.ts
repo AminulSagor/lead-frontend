@@ -500,3 +500,26 @@ export const GENDER_LIST = [
   { label: 'Female', value: 'female' },
 ];
 
+export const TIMEZONE_LIST = [
+  { label: 'GMT+6 (Bangladesh)', value: 'Asia/Dhaka' },
+  { label: 'GMT+5:30 (India)', value: 'Asia/Kolkata' },
+];
+
+export const WORK_TYPE_OPTIONS = [
+  { label: 'Full-time', value: 'fullTime' },
+  { label: 'Part-time', value: 'partTime' },
+  { label: 'Contract', value: 'contract' },
+  { label: 'Freelance', value: 'freelance' },
+];
+
+export const WORK_MODEL_OPTIONS = [
+  { label: 'Onsite', value: 'onsite' },
+  { label: 'Hybrid', value: 'hybrid' },
+  { label: 'Remote', value: 'remote' },
+];
+
+export const INDUSTRY_LIST = [
+  { label: 'FinTech', value: 'fintech' },
+  { label: 'HealthTech', value: 'healthtech' },
+  { label: 'EdTech', value: 'edtech' },
+];
