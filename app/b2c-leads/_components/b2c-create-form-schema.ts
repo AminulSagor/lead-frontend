@@ -108,12 +108,8 @@ export const B2CProfileSchema = z.object({
     .or(z.literal(''))
     .optional(),
   portfolio: z.string().url('Enter a valid URL').or(z.literal('')).optional(),
-  blog: z.string().url('Enter a valid URL').or(z.literal('')).optional(),
-  onlineResume: z
-    .string()
-    .url('Enter a valid URL')
-    .or(z.literal(''))
-    .optional(),
+  blog: z.url('Enter a valid URL').or(z.literal('')).optional(),
+  onlineResume: z.url('Enter a valid URL').or(z.literal('')).optional(),
   linktree: z.string().url('Enter a valid URL').or(z.literal('')).optional(),
   publicNotion: z
     .string()

@@ -258,7 +258,11 @@ export default function B2BLeadsTable() {
         </div>
 
         {/* Reset */}
-        <Button variant="outline" onClick={() => router.replace(pathname)}>
+        <Button
+          className="hover:cursor-pointer"
+          variant="destructive"
+          onClick={() => router.replace(pathname)}
+        >
           Reset Filters
         </Button>
       </div>

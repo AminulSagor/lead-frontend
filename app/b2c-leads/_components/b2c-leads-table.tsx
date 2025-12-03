@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectContent,
   SelectItem,
+  SelectValue,
 } from '@/components/ui/select';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -44,6 +45,18 @@ export default function B2CLeadsTable() {
   const genderFilter = searchParams.get('gender') || '';
   const industryFilter = searchParams.get('industry') || '';
 
+  //
+  const nationalityFilter = searchParams.get('nationality') || '';
+  const stateFilter = searchParams.get('state') || '';
+  const subSectorFilter = searchParams.get('subSector') || '';
+  const skillsFilter = searchParams.get('skills') || '';
+  const highestDegreeFilter = searchParams.get('highestDegree') || '';
+  const hobbiesFilter = searchParams.get('hobbies') || '';
+  const organizationsFilter = searchParams.get('organizations') || '';
+  const maritalStatusFilter = searchParams.get('maritalStatus') || '';
+  const incomeFilter = searchParams.get('income') || '';
+  const salaryFilter = searchParams.get('salary') || '';
+
   /* ------------------------ Helper to update URL params ------------------------ */
 
   function updateParam(key: string, value: string) {
@@ -66,22 +79,78 @@ export default function B2CLeadsTable() {
         !lead.name.toLowerCase().includes(nameFilter.toLowerCase())
       )
         return false;
+      if (genderFilter && lead.gender !== genderFilter) return false;
+      if (industryFilter && lead.industry !== industryFilter) return false;
+
       if (
-        genderFilter &&
-        genderFilter !== 'undefined' &&
-        lead.gender !== genderFilter
+        nationalityFilter &&
+        !lead.nationality
+          .toLowerCase()
+          .includes(nationalityFilter.toLowerCase())
       )
         return false;
       if (
-        industryFilter &&
-        industryFilter !== 'undefined' &&
-        lead.industry !== industryFilter
+        stateFilter &&
+        !lead.state.toLowerCase().includes(stateFilter.toLowerCase())
+      )
+        return false;
+      if (
+        subSectorFilter &&
+        !lead.subSector.toLowerCase().includes(subSectorFilter.toLowerCase())
+      )
+        return false;
+      if (
+        skillsFilter &&
+        !lead.skills.toLowerCase().includes(skillsFilter.toLowerCase())
+      )
+        return false;
+
+      if (highestDegreeFilter && lead.highestDegree !== highestDegreeFilter)
+        return false;
+      if (
+        hobbiesFilter &&
+        !lead.hobbies.toLowerCase().includes(hobbiesFilter.toLowerCase())
+      )
+        return false;
+      if (
+        organizationsFilter &&
+        !lead.organizations
+          .toLowerCase()
+          .includes(organizationsFilter.toLowerCase())
+      )
+        return false;
+
+      if (maritalStatusFilter && lead.maritalStatus !== maritalStatusFilter)
+        return false;
+
+      if (
+        incomeFilter &&
+        !lead.income.toLowerCase().includes(incomeFilter.toLowerCase())
+      )
+        return false;
+      if (
+        salaryFilter &&
+        !lead.salary.toLowerCase().includes(salaryFilter.toLowerCase())
       )
         return false;
 
       return true;
     });
-  }, [nameFilter, genderFilter, industryFilter]);
+  }, [
+    nameFilter,
+    genderFilter,
+    industryFilter,
+    nationalityFilter,
+    stateFilter,
+    subSectorFilter,
+    skillsFilter,
+    highestDegreeFilter,
+    hobbiesFilter,
+    organizationsFilter,
+    maritalStatusFilter,
+    incomeFilter,
+    salaryFilter,
+  ]);
 
   /* ------------------------ Fix invalid page after filtering ------------------------ */
   const totalPages = Math.ceil(filteredData.length / pageSize);
@@ -100,13 +169,23 @@ export default function B2CLeadsTable() {
   return (
     <div className="space-y-4">
       {/* FILTER BAR */}
-      <div className="p-4 border rounded-lg flex items-center justify-between">
-        <div className="flex flex-wrap gap-4 items-center">
+      <div className="p-4 border rounded-lg space-y-4">
+        <div className="flex items-center justify-between">
           <p className="text-lg font-semibold">Filters:</p>
+          {/* Reset */}
+          <Button
+            className="hover:cursor-pointer"
+            variant="destructive"
+            onClick={() => router.replace(pathname)}
+          >
+            Reset Filters
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
           {/* Name Filter */}
           <Input
             placeholder="Search by name..."
-            className="w-[200px]"
             value={nameFilter}
             onChange={(e) => updateParam('name', e.target.value)}
           />
@@ -116,7 +195,7 @@ export default function B2CLeadsTable() {
             value={genderFilter || '__all'}
             onValueChange={(v) => updateParam('gender', v === '__all' ? '' : v)}
           >
-            <SelectTrigger className="w-[150px]">
+            <SelectTrigger className="w-full">
               {genderFilter || 'Gender'}
             </SelectTrigger>
             <SelectContent>
@@ -133,7 +212,7 @@ export default function B2CLeadsTable() {
               updateParam('industry', v === '__all' ? '' : v)
             }
           >
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full">
               {industryFilter || 'Industry'}
             </SelectTrigger>
             <SelectContent>
@@ -143,12 +222,85 @@ export default function B2CLeadsTable() {
               <SelectItem value="Finance">Finance</SelectItem>
             </SelectContent>
           </Select>
-        </div>
 
-        {/* Reset */}
-        <Button variant="outline" onClick={() => router.replace(pathname)}>
-          Reset Filters
-        </Button>
+          <Input
+            placeholder="Nationality"
+            value={nationalityFilter}
+            onChange={(e) => updateParam('nationality', e.target.value)}
+          />
+          <Input
+            placeholder="State"
+            value={stateFilter}
+            onChange={(e) => updateParam('state', e.target.value)}
+          />
+          <Input
+            placeholder="Sub Sector"
+            value={subSectorFilter}
+            onChange={(e) => updateParam('subSector', e.target.value)}
+          />
+          <Input
+            placeholder="Skills"
+            value={skillsFilter}
+            onChange={(e) => updateParam('skills', e.target.value)}
+          />
+
+          <Select
+            value={highestDegreeFilter || '__all'}
+            onValueChange={(v) =>
+              updateParam('highestDegree', v === '__all' ? '' : v)
+            }
+          >
+            <SelectTrigger className="w-full">
+              {highestDegreeFilter || 'Highest Degree'}
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="__all">All</SelectItem>
+              <SelectItem value="Bachelor">Bachelor</SelectItem>
+              <SelectItem value="Master">Master</SelectItem>
+              <SelectItem value="PhD">PhD</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Input
+            placeholder="Hobbies"
+            value={hobbiesFilter}
+            onChange={(e) => updateParam('hobbies', e.target.value)}
+          />
+
+          <Input
+            placeholder="Organizations"
+            value={organizationsFilter}
+            onChange={(e) => updateParam('organizations', e.target.value)}
+          />
+
+          <Select
+            value={maritalStatusFilter || '__all'}
+            onValueChange={(v) =>
+              updateParam('maritalStatus', v === '__all' ? '' : v)
+            }
+          >
+            <SelectTrigger className="w-full">
+              {maritalStatusFilter || 'Marital Status'}
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="__all">All</SelectItem>
+              <SelectItem value="Single">Single</SelectItem>
+              <SelectItem value="Married">Married</SelectItem>
+              <SelectItem value="Divorced">Divorced</SelectItem>
+            </SelectContent>
+          </Select>
+          <Input
+            placeholder="Income"
+            value={incomeFilter}
+            onChange={(e) => updateParam('income', e.target.value)}
+          />
+
+          <Input
+            placeholder="Salary"
+            value={salaryFilter}
+            onChange={(e) => updateParam('salary', e.target.value)}
+          />
+        </div>
       </div>
 
       {/* TABLE */}
@@ -156,7 +308,7 @@ export default function B2CLeadsTable() {
         <div className="mx-auto min-w-full max-w-[80vw] [&>div]:rounded-sm [&>div]:border">
           <Table>
             <TableHeader className="bg-muted">
-              <TableRow>
+              <TableRow className="[&>th]:border-r [&>th]:border-r-accent-foreground/20 [&>th:last-child]:border-r-0">
                 <TableHead>Name</TableHead>
                 <TableHead>Gender</TableHead>
                 <TableHead>Nationality</TableHead>
@@ -183,7 +335,10 @@ export default function B2CLeadsTable() {
                 </TableRow>
               ) : (
                 paginatedData.map((lead) => (
-                  <TableRow key={lead.id}>
+                  <TableRow
+                    className="[&>td]:border-r [&>td:last-child]:border-r-0"
+                    key={lead.id}
+                  >
                     <TableCell>{lead.name}</TableCell>
                     <TableCell>{lead.gender}</TableCell>
                     <TableCell>{lead.nationality}</TableCell>
@@ -200,7 +355,7 @@ export default function B2CLeadsTable() {
                     <TableCell className="text-right">
                       <div className="inline-flex items-center gap-1">
                         <Button size="sm" variant="ghost" asChild>
-                          <Link href={`/b2b-leads/`}>
+                          <Link href={`/b2c-leads/${lead.id}`}>
                             <EyeIcon className="h-4 w-4" />
                           </Link>
                         </Button>

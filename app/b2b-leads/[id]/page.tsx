@@ -1,10 +1,8 @@
-import { DUMMY_LEADS } from '../_components/data';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ArrowLeftCircle } from 'lucide-react';
 import Link from 'next/link';
-import { ArrowLeftCircle, ArrowUpLeftFromSquare } from 'lucide-react';
+import { DUMMY_LEADS } from '../_components/data';
 
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;

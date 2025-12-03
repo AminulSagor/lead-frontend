@@ -159,13 +159,13 @@ const B2CCreateForm = () => {
     <div className="space-y-4">
       <div>
         <Button asChild>
-          <Link href={'/b2b-leads'}>
+          <Link href={'/b2c-leads'}>
             <ArrowLeftCircle />
             Back
           </Link>
         </Button>
       </div>
-      <div className=" mx-auto">
+      <div className="mx-auto">
         <FormProvider {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <PersonalDetailsCard />
