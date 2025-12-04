@@ -1,6 +1,6 @@
 import z from 'zod';
 const phoneRegex = /^\+?[0-9\s\-().]{7,20}$/;
-export const BusinessProfileSchema = z.object({
+export const B2BProfileSchema = z.object({
   // business profile
   businessId: z.string().optional(),
   name: z.string().min(2, 'Business name is required'),
@@ -193,4 +193,4 @@ export const BusinessProfileSchema = z.object({
   metaLastUpdated: z.string().trim().optional().or(z.literal('')),
 });
 
-export type BusinessProfileFormType = z.infer<typeof BusinessProfileSchema>;
+export type BusinessProfileFormType = z.infer<typeof B2BProfileSchema>;

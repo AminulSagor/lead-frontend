@@ -24,15 +24,15 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import {
   BusinessProfileFormType,
-  BusinessProfileSchema,
-} from './business-form-schema';
+  B2BProfileSchema,
+} from './b2b-create-form-schema';
 import { useCreateBusinessProfile } from '@/query/b2b/create-b2b-leads';
 import Link from 'next/link';
 import { ArrowLeftCircle } from 'lucide-react';
 
 export default function CreateBusinessForm() {
   const form = useForm<BusinessProfileFormType>({
-    resolver: zodResolver(BusinessProfileSchema),
+    resolver: zodResolver(B2BProfileSchema),
     defaultValues: {
       // business profile
       businessId: '',
