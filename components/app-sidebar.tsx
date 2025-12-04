@@ -4,6 +4,7 @@ import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -15,6 +16,8 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { logout } from '@/actions/logout';
+import { Button } from './ui/button';
 
 // Menu items.
 const items = [
@@ -67,6 +70,18 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter>
+        <form action={logout}>
+          <Button
+            type="submit"
+            variant={'outline'}
+            className="w-full hover:cursor-pointer"
+          >
+            Logout
+          </Button>
+        </form>
+      </SidebarFooter>
     </Sidebar>
   );
 }
