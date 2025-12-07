@@ -195,11 +195,8 @@ export const B2BProfileSchema = z.object({
   // meta data
   metaTags: z.string().trim().optional().or(z.literal('')),
   metaNotes: z.string().trim().optional().or(z.literal('')),
-  metaDateAdded: z.string().trim().optional().or(z.literal('')),
-  metaLastUpdated: z.string().trim().optional().or(z.literal('')),
-
-  // test
-  department: z.string().min(1, 'Department is required'),
+  // metaDateAdded: z.string().trim().optional().or(z.literal('')),
+  // metaLastUpdated: z.string().trim().optional().or(z.literal('')),
 });
 
 export type BusinessProfileFormType = z.infer<typeof B2BProfileSchema>;

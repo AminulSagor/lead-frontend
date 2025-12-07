@@ -1,6 +1,7 @@
 'use client';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import toast, { Toaster } from 'react-hot-toast';
 
 import {
   Form,
@@ -37,6 +38,7 @@ import Link from 'next/link';
 import { ArrowLeftCircle, Plus, PlusIcon, X } from 'lucide-react';
 import { AdvancedSelector } from '@/components/advance-selector';
 import InputField from '@/components/input-field';
+import TextareaField from '@/components/text-area';
 
 export default function CreateBusinessForm() {
   const form = useForm<BusinessProfileFormType>({
@@ -126,10 +128,8 @@ export default function CreateBusinessForm() {
       // meta data
       metaTags: '',
       metaNotes: '',
-      metaDateAdded: '',
-      metaLastUpdated: '',
-      // test
-      department: '',
+      // metaDateAdded:"",
+      // metaLastUpdated: '',
     },
   });
 
@@ -438,7 +438,8 @@ export default function CreateBusinessForm() {
                   <Button
                     className="cursor-pointer"
                     type="button"
-                    onClick={() =>
+                    onClick={() => {
+                      toast.success('Service added!');
                       serviceOverviewAppend({
                         category: '',
                         subCategory: '',
@@ -449,8 +450,8 @@ export default function CreateBusinessForm() {
                         serviceAvailability: 'Hybrid',
                         serviceName: '',
                         serviceDescription: '',
-                      })
-                    }
+                      });
+                    }}
                   >
                     <PlusIcon />
                   </Button>
@@ -463,211 +464,225 @@ export default function CreateBusinessForm() {
                   </p>
                 </CardContent>
               )}
-              <CardContent className=" grid grid-cols-2 gap-4">
+              <CardContent className="space-y-4">
                 {serviceOverviewFields.map((field, index) => (
                   <div
                     key={index}
-                    className="space-y-2 p-4 border rounded-md grid grid-cols-2 gap-4 relative"
+                    className="p-5 border rounded-xl relative shadow-sm bg-white space-y-5"
                   >
+                    {/* Remove Button */}
                     <button
                       type="button"
-                      onClick={() => serviceOverviewRemove(index)}
-                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition duration-300 ease-in-out hover:cursor-pointer"
+                      onClick={() => {
+                        toast.error('Service removed!');
+                        serviceOverviewRemove(index);
+                      }}
+                      className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition"
                     >
                       <X className="w-4 h-4" />
                     </button>
-                    {/* Service Name */}
-                    <FormField
-                      control={form.control}
-                      name={`serviceOverview.${index}.serviceName`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Service Name *</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Enter service name"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
 
-                    {/* Category */}
-                    <FormField
-                      control={form.control}
-                      name={`serviceOverview.${index}.category`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Category *</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Enter category" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    {/* Top Row — Basic Info */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <FormField
+                        control={form.control}
+                        name={`serviceOverview.${index}.serviceName`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Service Name *</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Enter service name"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                    {/* Sub-category */}
-                    <FormField
-                      control={form.control}
-                      name={`serviceOverview.${index}.subCategory`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Sub-category</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Optional" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                      <FormField
+                        control={form.control}
+                        name={`serviceOverview.${index}.category`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Category *</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter category" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name={`serviceOverview.${index}.subCategory`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Sub-category</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Optional" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
 
                     {/* Description */}
-                    <FormField
-                      control={form.control}
-                      name={`serviceOverview.${index}.serviceDescription`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Short Description</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Optional description"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    <div className="grid grid-cols-1">
+                      <FormField
+                        control={form.control}
+                        name={`serviceOverview.${index}.serviceDescription`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Short Description</FormLabel>
+                            <FormControl>
+                              <Textarea
+                                placeholder="Optional description"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
 
-                    {/* Pricing Model */}
-                    <FormField
-                      control={form.control}
-                      name={`serviceOverview.${index}.pricingModel`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Pricing Model *</FormLabel>
-                          <FormControl>
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value}
-                            >
-                              <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select pricing model" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {pricingModels.map((model) => (
-                                  <SelectItem key={model} value={model}>
-                                    {model}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    {/* Pricing & Options — Responsive Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {/* Pricing Model */}
+                      <FormField
+                        control={form.control}
+                        name={`serviceOverview.${index}.pricingModel`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Pricing Model *</FormLabel>
+                            <FormControl>
+                              <Select
+                                onValueChange={field.onChange}
+                                value={field.value}
+                              >
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder="Select pricing model" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {pricingModels.map((model) => (
+                                    <SelectItem key={model} value={model}>
+                                      {model}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                    <FormField
-                      control={form.control}
-                      name={`serviceOverview.${index}.rate`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Rate *</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Enter rate" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                      {/* Rate */}
+                      <FormField
+                        control={form.control}
+                        name={`serviceOverview.${index}.rate`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Rate *</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter rate" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                    <FormField
-                      control={form.control}
-                      name={`serviceOverview.${index}.currency`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Currency *</FormLabel>
-                          <FormControl>
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value}
-                            >
-                              <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select currency" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {currencyOptions.map((c) => (
-                                  <SelectItem key={c} value={c}>
-                                    {c}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                      {/* Currency */}
+                      <FormField
+                        control={form.control}
+                        name={`serviceOverview.${index}.currency`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Currency *</FormLabel>
+                            <FormControl>
+                              <Select
+                                onValueChange={field.onChange}
+                                value={field.value}
+                              >
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder="Select currency" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {currencyOptions.map((c) => (
+                                    <SelectItem key={c} value={c}>
+                                      {c}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                    <FormField
-                      control={form.control}
-                      name={`serviceOverview.${index}.serviceAvailability`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Service Availability *</FormLabel>
-                          <FormControl>
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value}
-                            >
-                              <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select availability" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {availabilityOptions.map((a) => (
-                                  <SelectItem key={a} value={a}>
-                                    {a}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                      {/* Availability */}
+                      <FormField
+                        control={form.control}
+                        name={`serviceOverview.${index}.serviceAvailability`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Service Availability *</FormLabel>
+                            <FormControl>
+                              <Select
+                                onValueChange={field.onChange}
+                                value={field.value}
+                              >
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder="Select availability" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {availabilityOptions.map((a) => (
+                                    <SelectItem key={a} value={a}>
+                                      {a}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                    <FormField
-                      control={form.control}
-                      name={`serviceOverview.${index}.onlineService`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Online or Remote Service *</FormLabel>
-                          <FormControl>
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value}
-                            >
-                              <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Yes/No" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {['Yes', 'No'].map((o) => (
-                                  <SelectItem key={o} value={o}>
-                                    {o}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                      {/* Online/Remote */}
+                      <FormField
+                        control={form.control}
+                        name={`serviceOverview.${index}.onlineService`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Online or Remote Service *</FormLabel>
+                            <FormControl>
+                              <Select
+                                onValueChange={field.onChange}
+                                value={field.value}
+                              >
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder="Yes/No" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {['Yes', 'No'].map((o) => (
+                                    <SelectItem key={o} value={o}>
+                                      {o}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
                 ))}
               </CardContent>
@@ -871,7 +886,8 @@ export default function CreateBusinessForm() {
                   <Button
                     type="button"
                     className="hover:cursor-pointer"
-                    onClick={() =>
+                    onClick={() => {
+                      toast.success('Key contact added');
                       keyContactsAppend({
                         keyContactName: '',
                         keyContactPosition: '',
@@ -879,8 +895,8 @@ export default function CreateBusinessForm() {
                         keyContactEmail: '',
                         keyContactPhone: '',
                         keyContactLinkedIn: '',
-                      })
-                    }
+                      });
+                    }}
                   >
                     <Plus />
                   </Button>
@@ -902,7 +918,10 @@ export default function CreateBusinessForm() {
                     {/* ❌ Remove Button */}
                     <button
                       type="button"
-                      onClick={() => keyContactsRemove(index)}
+                      onClick={() => {
+                        toast.error('Key contact removed');
+                        keyContactsRemove(index);
+                      }}
                       className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition duration-300 ease-in-out hover:cursor-pointer"
                     >
                       <X className="w-4 h-4" />
@@ -1146,7 +1165,7 @@ export default function CreateBusinessForm() {
               <CardHeader>
                 <CardTitle>Operations</CardTitle>
               </CardHeader>
-              <CardContent className=" grid grid-cols-4 gap-4">
+              <CardContent className=" grid grid-cols-3 gap-4">
                 <FormField
                   control={form.control}
                   name="operationsOpeningHours"
@@ -1198,38 +1217,18 @@ export default function CreateBusinessForm() {
                   )}
                 />
 
-                <FormField
+                <TextareaField
                   control={form.control}
+                  label="Tools / Technologies Used"
                   name="operationsTools"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Tools / Technologies Used</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Slack, Jira, AWS, etc. (optional)"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  placeholder="Slack, Jira, AWS, etc. (optional)"
                 />
 
-                <FormField
+                <TextareaField
                   control={form.control}
+                  label="Certifications"
                   name="operationsCertifications"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Certifications</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="ISO, PCI DSS, etc. (optional)"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  placeholder="ISO, PCI DSS, etc. (optional)"
                 />
               </CardContent>
             </Card>
@@ -1237,7 +1236,7 @@ export default function CreateBusinessForm() {
               <CardHeader>
                 <CardTitle>Financial Information</CardTitle>
               </CardHeader>
-              <CardContent className=" grid grid-cols-4 gap-4">
+              <CardContent className="grid grid-cols-4 gap-4">
                 {/* Payment Methods */}
                 <FormField
                   control={form.control}
@@ -1264,7 +1263,10 @@ export default function CreateBusinessForm() {
                     <FormItem>
                       <FormLabel>Billing Address</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter billing address" {...field} />
+                        <Input
+                          placeholder="Enter billing address (Optional)"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -1280,7 +1282,7 @@ export default function CreateBusinessForm() {
                       <FormLabel>Invoice Contact</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Person responsible for invoicing"
+                          placeholder="Person responsible for invoicing (Optional)"
                           {...field}
                         />
                       </FormControl>
@@ -1312,7 +1314,10 @@ export default function CreateBusinessForm() {
                     <FormItem>
                       <FormLabel>Payment Terms</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g. Net 30, Net 15" {...field} />
+                        <Input
+                          placeholder="e.g. Net 30, Net 15 (Optional)"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -1399,67 +1404,33 @@ export default function CreateBusinessForm() {
               <CardHeader>
                 <CardTitle> Marketing Information</CardTitle>
               </CardHeader>
-              <CardContent className=" grid grid-cols-4 gap-4">
-                <FormField
+              <CardContent className="grid grid-cols-4 gap-4">
+                <TextareaField
                   control={form.control}
+                  label="Target Audience"
                   name="marketingTargetAudience"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Target Audience</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Describe your audience"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  placeholder="Describe Your Audience (optional)"
                 />
 
-                <FormField
+                <TextareaField
                   control={form.control}
+                  label="Value Proposition"
                   name="marketingValueProposition"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Value Proposition</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Your value proposition"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  placeholder="Your value proposition (optional)"
                 />
 
-                <FormField
+                <TextareaField
                   control={form.control}
+                  label="Main Competitors"
                   name="marketingMainCompetitors"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Main Competitors</FormLabel>
-                      <FormControl>
-                        <Input placeholder="List main competitors" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  placeholder="List main competitors (optional)"
                 />
 
-                <FormField
+                <TextareaField
                   control={form.control}
+                  label="Main Competitors"
                   name="marketingKeywords"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Keywords (SEO / Industry Terms)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="SEO keywords" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  placeholder="Keywords (SEO / Industry Terms) (optional)"
                 />
               </CardContent>
             </Card>
@@ -1468,39 +1439,22 @@ export default function CreateBusinessForm() {
               <CardHeader>
                 <CardTitle>Metadata</CardTitle>
               </CardHeader>
-              <CardContent className=" grid grid-cols-4 gap-4">
-                <FormField
+              <CardContent className=" grid grid-cols-2 gap-4">
+                <TextareaField
                   control={form.control}
+                  label="Tags"
                   name="metaTags"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Tags</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter tags (comma separated)"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  placeholder="Enter tags (comma separated) (Optional)"
                 />
 
-                <FormField
+                <TextareaField
                   control={form.control}
+                  label="Notes"
                   name="metaNotes"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Notes</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Any notes" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  placeholder="Any notes (Optional)"
                 />
 
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="metaDateAdded"
                   render={({ field }) => (
@@ -1526,7 +1480,7 @@ export default function CreateBusinessForm() {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
               </CardContent>
             </Card>
             {/* SUBMIT BUTTON */}

@@ -6,6 +6,7 @@ import { AppSidebar } from '@/components/app-sidebar';
 import QueryProvider from '@/lib/query-client-provider';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { Toaster } from 'react-hot-toast';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -54,7 +55,10 @@ export default async function RootLayout({
               <div className="border-b w-full sticky top-0 z-50 bg-background h-16 flex items-center">
                 <SidebarTrigger />
               </div>
-              <div className="flex-1 p-2">{children}</div>
+              <div className="flex-1 p-2">
+                {children}
+                <Toaster />
+              </div>
             </main>
           </SidebarProvider>
         </QueryProvider>
