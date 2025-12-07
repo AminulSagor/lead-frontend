@@ -1,5 +1,4 @@
 'use client';
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import InputField from './input-field';
 import SelectField from './select-filed';
@@ -7,7 +6,7 @@ import { useFormContext } from 'react-hook-form';
 import { COUNTRY_LIST, TIMEZONE_LIST } from './data';
 
 const AddressCard = () => {
-  const { control } = useFormContext(); // auto-get control from FormProvider
+  const { control } = useFormContext();
 
   return (
     <Card className="border border-gray-200 shadow-none rounded-sm">

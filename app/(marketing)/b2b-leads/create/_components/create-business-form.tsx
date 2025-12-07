@@ -1,5 +1,5 @@
 'use client';
-import { useForm } from 'react-hook-form';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
@@ -21,21 +21,28 @@ import {
   SelectItem,
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardAction,
+} from '@/components/ui/card';
 import {
   BusinessProfileFormType,
   B2BProfileSchema,
 } from './b2b-create-form-schema';
 import { useCreateBusinessProfile } from '@/query/b2b/create-b2b-leads';
 import Link from 'next/link';
-import { ArrowLeftCircle } from 'lucide-react';
+import { ArrowLeftCircle, Plus, PlusIcon, X } from 'lucide-react';
+import { AdvancedSelector } from '@/components/advance-selector';
+import InputField from '@/components/input-field';
 
 export default function CreateBusinessForm() {
   const form = useForm<BusinessProfileFormType>({
     resolver: zodResolver(B2BProfileSchema),
     defaultValues: {
       // business profile
-      businessId: '',
       name: '',
       businessType: '',
       businessDescription: '',
@@ -48,15 +55,19 @@ export default function CreateBusinessForm() {
       niche: '',
       subNiche: '',
       // services
-      serviceName: '',
-      category: '',
-      subCategory: '',
-      serviceDescription: '',
-      pricingModel: 'Hourly',
-      rate: '',
-      currency: 'USD',
-      serviceAvailability: 'Online',
-      onlineService: 'Yes',
+      serviceOverview: [
+        {
+          category: '',
+          subCategory: '',
+          serviceDescription: '',
+          pricingModel: 'Hourly',
+          rate: '',
+          currency: 'USD',
+          serviceAvailability: 'Online',
+          onlineService: 'Yes',
+          serviceName: '',
+        },
+      ],
       // location
       street: '',
       subCity: '',
@@ -71,12 +82,16 @@ export default function CreateBusinessForm() {
       supportEmail: '',
       website: '',
       // key contact
-      keyContactName: '',
-      keyContactPosition: '',
-      keyContactDepartment: '',
-      keyContactPhone: '',
-      keyContactEmail: '',
-      keyContactLinkedIn: '',
+      keyContacts: [
+        {
+          keyContactName: '',
+          keyContactPosition: '',
+          keyContactDepartment: '',
+          keyContactPhone: '',
+          keyContactEmail: '',
+          keyContactLinkedIn: '',
+        },
+      ],
       // online presence
       opFacebook: '',
       opInstagram: '',
@@ -113,40 +128,35 @@ export default function CreateBusinessForm() {
       metaNotes: '',
       metaDateAdded: '',
       metaLastUpdated: '',
+      // test
+      department: '',
     },
   });
 
-  // Example: dynamic options
-  const industryOptions = ['IT', 'Healthcare', 'Education'];
-  const nicheOptions: Record<string, string[]> = {
-    IT: ['Web Development', 'Mobile Apps', 'AI/ML'],
-    Healthcare: ['Hospitals', 'Pharma', 'Diagnostics'],
-    Education: ['Schools', 'Colleges', 'Online Courses'],
-  };
-  const subNicheOptions: Record<string, string[]> = {
-    'Web Development': ['Frontend', 'Backend', 'Full Stack'],
-    'Mobile Apps': ['iOS', 'Android', 'Cross-platform'],
-    'AI/ML': ['NLP', 'Computer Vision', 'Data Science'],
-    Hospitals: ['General', 'Specialty'],
-    Pharma: ['OTC', 'Prescription'],
-    Diagnostics: ['Labs', 'Imaging'],
-    Schools: ['Primary', 'Secondary'],
-    Colleges: ['Engineering', 'Arts', 'Science'],
-    'Online Courses': ['Tech', 'Business', 'Design'],
-  };
+  const {
+    fields: keyContactsFields,
+    append: keyContactsAppend,
+    remove: keyContactsRemove,
+  } = useFieldArray({
+    control: form.control,
+    name: 'keyContacts',
+  });
 
-  // industry vars
-  const primary = form.watch('primaryIndustry');
-  const niche = form.watch('niche');
+  const {
+    fields: serviceOverviewFields,
+    append: serviceOverviewAppend,
+    remove: serviceOverviewRemove,
+  } = useFieldArray({
+    control: form.control,
+    name: 'serviceOverview',
+  });
 
   // service vars
   const pricingModels = ['Hourly', 'Fixed', 'Tiered', 'Subscription'];
   const availabilityOptions = ['Online', 'On-Site', 'Hybrid'];
   const currencyOptions = ['USD', 'EUR', 'GBP', 'BDT'];
-
   // location
   const countries = ['Bangladesh', 'USA', 'UK', 'India', 'Canada', 'Australia'];
-
   const { mutate, isPending } = useCreateBusinessProfile();
 
   function onSubmit(values: BusinessProfileFormType) {
@@ -185,21 +195,6 @@ export default function CreateBusinessForm() {
 
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-4 gap-4">
-                  {/* Business ID */}
-                  <FormField
-                    control={form.control}
-                    name="businessId"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Business ID</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Optional" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
                   {/* Name */}
                   <FormField
                     control={form.control}
@@ -219,80 +214,57 @@ export default function CreateBusinessForm() {
                   />
 
                   {/* Business Type */}
-                  <FormField
+                  <Controller
                     control={form.control}
                     name="businessType"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Business Type *</FormLabel>
-                        <FormControl>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Select type" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="llc">LLC</SelectItem>
-                              <SelectItem value="corp">Corporation</SelectItem>
-                              <SelectItem value="sole">
-                                Sole Proprietorship
-                              </SelectItem>
-                              <SelectItem value="partner">
-                                Partnership
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                    render={({ field, fieldState }) => (
+                      <div className="space-y-2">
+                        <FormLabel>Business Type</FormLabel>
+                        <AdvancedSelector
+                          onChange={field.onChange}
+                          value={field.value}
+                          placeholder="Select Business Type"
+                          presets={[
+                            'LLC',
+                            'Corporation',
+                            'Sole Proprietorship',
+                            'Partnership',
+                          ]}
+                        />
+
+                        {fieldState.error && (
+                          <p className="text-sm text-red-500">
+                            {fieldState.error.message}
+                          </p>
+                        )}
+                      </div>
                     )}
                   />
 
                   {/* Registration Number */}
-                  <FormField
+
+                  <InputField
                     control={form.control}
+                    placeholder="Optional"
                     name="registrationNumber"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Registration Number</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Optional" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                    label="Registration Number"
                   />
 
                   {/* Tax ID */}
-                  <FormField
+
+                  <InputField
                     control={form.control}
+                    placeholder="Optional"
                     name="taxId"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Tax ID</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Optional" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                    label="Tax ID"
                   />
 
                   {/* Established Date */}
-                  <FormField
+                  <InputField
                     control={form.control}
+                    label="Date Founded"
+                    placeholder="12 Dec , 2023"
                     name="establishedDate"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Date Founded</FormLabel>
-                        <FormControl>
-                          <Input type="date" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
                   />
 
                   {/* Status */}
@@ -351,95 +323,109 @@ export default function CreateBusinessForm() {
               <CardHeader>
                 <CardTitle>Industry Classification</CardTitle>
               </CardHeader>
-              <CardContent className="grid grid-cols-3 gap-4">
+              <CardContent className="grid grid-cols-4 gap-4">
                 {/* Primary Industry */}
-                <FormField
+
+                <Controller
                   control={form.control}
                   name="primaryIndustry"
-                  render={({ field }) => (
-                    <FormItem>
+                  render={({ field, fieldState }) => (
+                    <div className="space-y-2">
                       <FormLabel>Primary Industry *</FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select Primary Industry" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {industryOptions.map((option) => (
-                              <SelectItem key={option} value={option}>
-                                {option}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                      <AdvancedSelector
+                        onChange={field.onChange}
+                        value={field.value}
+                        placeholder="Select Primary Industry"
+                        presets={['IT', 'Healthcare', 'Education']}
+                      />
+
+                      {fieldState.error && (
+                        <p className="text-sm text-red-500">
+                          {fieldState.error.message}
+                        </p>
+                      )}
+                    </div>
                   )}
                 />
 
                 {/* Niche */}
-                <FormField
+
+                <Controller
                   control={form.control}
                   name="niche"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Niche *</FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                          disabled={!primary}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select Niche" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {primary &&
-                              nicheOptions[primary]?.map((option) => (
-                                <SelectItem key={option} value={option}>
-                                  {option}
-                                </SelectItem>
-                              ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                  render={({ field, fieldState }) => (
+                    <div className="space-y-2">
+                      <FormLabel>Niche</FormLabel>
+                      <AdvancedSelector
+                        onChange={field.onChange}
+                        value={field.value}
+                        placeholder="Select Niche"
+                        presets={[
+                          'Web Development',
+                          'Mobile Apps',
+                          'AI/ML',
+                          'Hospitals',
+                          'Pharma',
+                          'Diagnostics',
+                          'Schools',
+                          'Colleges',
+                          'Online Courses',
+                        ]}
+                      />
+
+                      {fieldState.error && (
+                        <p className="text-sm text-red-500">
+                          {fieldState.error.message}
+                        </p>
+                      )}
+                    </div>
                   )}
                 />
 
                 {/* Sub-niche */}
-                <FormField
+                <Controller
                   control={form.control}
                   name="subNiche"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Sub-niche *</FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                          disabled={!niche}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select Sub-niche" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {niche &&
-                              subNicheOptions[niche]?.map((option) => (
-                                <SelectItem key={option} value={option}>
-                                  {option}
-                                </SelectItem>
-                              ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                  render={({ field, fieldState }) => (
+                    <div className="space-y-2">
+                      <FormLabel>Sub Niche</FormLabel>
+                      <AdvancedSelector
+                        onChange={field.onChange}
+                        value={field.value}
+                        placeholder="Select Sub Niche"
+                        presets={[
+                          'Frontend',
+                          'Backend',
+                          'Full Stack',
+                          'iOS',
+                          'Android',
+                          'Cross-platform',
+                          'NLP',
+                          'Computer Vision',
+                          'Data Science',
+                          'General',
+                          'Specialty',
+                          'OTC',
+                          'Prescription',
+                          'Labs',
+                          'Imaging',
+                          'Primary',
+                          'Secondary',
+                          'Engineering',
+                          'Arts',
+                          'Science',
+                          'Tech',
+                          'Business',
+                          'Design',
+                        ]}
+                      />
+
+                      {fieldState.error && (
+                        <p className="text-sm text-red-500">
+                          {fieldState.error.message}
+                        </p>
+                      )}
+                    </div>
                   )}
                 />
               </CardContent>
@@ -448,197 +434,242 @@ export default function CreateBusinessForm() {
             <Card className="border border-gray-200 shadow-none">
               <CardHeader>
                 <CardTitle>Service Overview</CardTitle>
+                <CardAction>
+                  <Button
+                    className="cursor-pointer"
+                    type="button"
+                    onClick={() =>
+                      serviceOverviewAppend({
+                        category: '',
+                        subCategory: '',
+                        currency: '',
+                        onlineService: 'Yes',
+                        pricingModel: 'Hourly',
+                        rate: '',
+                        serviceAvailability: 'Hybrid',
+                        serviceName: '',
+                        serviceDescription: '',
+                      })
+                    }
+                  >
+                    <PlusIcon />
+                  </Button>
+                </CardAction>
               </CardHeader>
-              <CardContent className=" grid grid-cols-4 gap-4">
-                {/* Service Name */}
-                <FormField
-                  control={form.control}
-                  name="serviceName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Service Name *</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter service name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              {serviceOverviewFields.length === 0 && (
+                <CardContent>
+                  <p className="text-sm text-gray-500 text-center">
+                    No services added yet
+                  </p>
+                </CardContent>
+              )}
+              <CardContent className=" grid grid-cols-2 gap-4">
+                {serviceOverviewFields.map((field, index) => (
+                  <div
+                    key={index}
+                    className="space-y-2 p-4 border rounded-md grid grid-cols-2 gap-4 relative"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => serviceOverviewRemove(index)}
+                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition duration-300 ease-in-out hover:cursor-pointer"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                    {/* Service Name */}
+                    <FormField
+                      control={form.control}
+                      name={`serviceOverview.${index}.serviceName`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Service Name *</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Enter service name"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                {/* Category */}
-                <FormField
-                  control={form.control}
-                  name="category"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Category *</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter category" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    {/* Category */}
+                    <FormField
+                      control={form.control}
+                      name={`serviceOverview.${index}.category`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Category *</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter category" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                {/* Sub-category */}
-                <FormField
-                  control={form.control}
-                  name="subCategory"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Sub-category</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Optional" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    {/* Sub-category */}
+                    <FormField
+                      control={form.control}
+                      name={`serviceOverview.${index}.subCategory`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Sub-category</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Optional" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                {/* Description */}
-                <FormField
-                  control={form.control}
-                  name="serviceDescription"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Short Description</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Optional description"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    {/* Description */}
+                    <FormField
+                      control={form.control}
+                      name={`serviceOverview.${index}.serviceDescription`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Short Description</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Optional description"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                {/* Pricing Model */}
-                <FormField
-                  control={form.control}
-                  name="pricingModel"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Pricing Model *</FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select pricing model" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {pricingModels.map((model) => (
-                              <SelectItem key={model} value={model}>
-                                {model}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    {/* Pricing Model */}
+                    <FormField
+                      control={form.control}
+                      name={`serviceOverview.${index}.pricingModel`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Pricing Model *</FormLabel>
+                          <FormControl>
+                            <Select
+                              onValueChange={field.onChange}
+                              value={field.value}
+                            >
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select pricing model" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {pricingModels.map((model) => (
+                                  <SelectItem key={model} value={model}>
+                                    {model}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <FormField
-                  control={form.control}
-                  name="rate"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Rate *</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter rate" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    <FormField
+                      control={form.control}
+                      name={`serviceOverview.${index}.rate`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Rate *</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter rate" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <FormField
-                  control={form.control}
-                  name="currency"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Currency *</FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select currency" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {currencyOptions.map((c) => (
-                              <SelectItem key={c} value={c}>
-                                {c}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    <FormField
+                      control={form.control}
+                      name={`serviceOverview.${index}.currency`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Currency *</FormLabel>
+                          <FormControl>
+                            <Select
+                              onValueChange={field.onChange}
+                              value={field.value}
+                            >
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select currency" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {currencyOptions.map((c) => (
+                                  <SelectItem key={c} value={c}>
+                                    {c}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <FormField
-                  control={form.control}
-                  name="serviceAvailability"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Service Availability *</FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select availability" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {availabilityOptions.map((a) => (
-                              <SelectItem key={a} value={a}>
-                                {a}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    <FormField
+                      control={form.control}
+                      name={`serviceOverview.${index}.serviceAvailability`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Service Availability *</FormLabel>
+                          <FormControl>
+                            <Select
+                              onValueChange={field.onChange}
+                              value={field.value}
+                            >
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select availability" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {availabilityOptions.map((a) => (
+                                  <SelectItem key={a} value={a}>
+                                    {a}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <FormField
-                  control={form.control}
-                  name="onlineService"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Online or Remote Service *</FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Yes/No" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {['Yes', 'No'].map((o) => (
-                              <SelectItem key={o} value={o}>
-                                {o}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    <FormField
+                      control={form.control}
+                      name={`serviceOverview.${index}.onlineService`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Online or Remote Service *</FormLabel>
+                          <FormControl>
+                            <Select
+                              onValueChange={field.onChange}
+                              value={field.value}
+                            >
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Yes/No" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {['Yes', 'No'].map((o) => (
+                                  <SelectItem key={o} value={o}>
+                                    {o}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                ))}
               </CardContent>
             </Card>
             {/* location */}
@@ -836,94 +867,142 @@ export default function CreateBusinessForm() {
             <Card className="border border-gray-200 shadow-none rounded-sm">
               <CardHeader>
                 <CardTitle>Key Contact</CardTitle>
+                <CardAction>
+                  <Button
+                    type="button"
+                    className="hover:cursor-pointer"
+                    onClick={() =>
+                      keyContactsAppend({
+                        keyContactName: '',
+                        keyContactPosition: '',
+                        keyContactDepartment: '',
+                        keyContactEmail: '',
+                        keyContactPhone: '',
+                        keyContactLinkedIn: '',
+                      })
+                    }
+                  >
+                    <Plus />
+                  </Button>
+                </CardAction>
               </CardHeader>
-              <CardContent className=" grid grid-cols-4 gap-4">
-                <FormField
-                  control={form.control}
-                  name="keyContactName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Contact Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="John Doe" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              {keyContactsFields.length === 0 && (
+                <CardContent className="grid grid-cols-2 gap-4">
+                  <div className="col-span-2 text-center text-gray-500">
+                    No key contacts added yet.
+                  </div>
+                </CardContent>
+              )}
+              <CardContent className="grid grid-cols-3 gap-4">
+                {keyContactsFields.map((item, index) => (
+                  <div
+                    key={item.id}
+                    className="relative space-y-2 border p-4 rounded-md"
+                  >
+                    {/* ❌ Remove Button */}
+                    <button
+                      type="button"
+                      onClick={() => keyContactsRemove(index)}
+                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition duration-300 ease-in-out hover:cursor-pointer"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                    <FormField
+                      control={form.control}
+                      name={`keyContacts.${index}.keyContactName`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Contact Name</FormLabel>
+                          <FormControl>
+                            <Input placeholder="John Doe" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <FormField
-                  control={form.control}
-                  name="keyContactPosition"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Position / Role</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Manager (optional)" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    <FormField
+                      control={form.control}
+                      name={`keyContacts.${index}.keyContactPosition`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Position / Role</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Manager (optional)"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <FormField
-                  control={form.control}
-                  name="keyContactDepartment"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Department</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Marketing (optional)" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    <FormField
+                      name={`keyContacts.${index}.keyContactDepartment`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Department</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Marketing (optional)"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <FormField
-                  control={form.control}
-                  name="keyContactPhone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Phone</FormLabel>
-                      <FormControl>
-                        <Input placeholder="+1 555 555 5555" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    <FormField
+                      control={form.control}
+                      name={`keyContacts.${index}.keyContactPhone`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Phone</FormLabel>
+                          <FormControl>
+                            <Input placeholder="+1 555 555 5555" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <FormField
-                  control={form.control}
-                  name="keyContactEmail"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input placeholder="contact@company.com" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    <FormField
+                      control={form.control}
+                      name={`keyContacts.${index}.keyContactEmail`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="contact@company.com"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <FormField
-                  control={form.control}
-                  name="keyContactLinkedIn"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>LinkedIn URL</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="https://linkedin.com/in/username"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    <FormField
+                      control={form.control}
+                      name={`keyContacts.${index}.keyContactLinkedIn`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>LinkedIn URL</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="https://linkedin.com/in/username"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                ))}
               </CardContent>
             </Card>
             {/* online presence */}
@@ -1241,7 +1320,6 @@ export default function CreateBusinessForm() {
                 />
               </CardContent>
             </Card>
-
             <Card className="border border-gray-200 shadow-none rounded-sm">
               <CardHeader>
                 <CardTitle>Legal Information</CardTitle>
@@ -1316,7 +1394,6 @@ export default function CreateBusinessForm() {
                 />
               </CardContent>
             </Card>
-
             {/*  marketing information */}
             <Card className="border border-gray-200 shadow-none rounded-sm">
               <CardHeader>
@@ -1386,7 +1463,6 @@ export default function CreateBusinessForm() {
                 />
               </CardContent>
             </Card>
-
             {/* meta data */}
             <Card className="border border-gray-200 shadow-none rounded-sm">
               <CardHeader>

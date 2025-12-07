@@ -7,24 +7,24 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Control, FieldPath, FieldValues } from 'react-hook-form';
 
-interface InputFieldProps<T extends FieldValues> {
+interface TextareaFieldProps<T extends FieldValues> {
   control: Control<T>;
   name: FieldPath<T>;
   label: string;
   placeholder?: string;
-  type?: React.InputHTMLAttributes<HTMLInputElement>['type']; // 👈 type-safe HTML input types
+  rows?: number;
 }
 
-const InputField = <T extends FieldValues>({
+const TextareaField = <T extends FieldValues>({
   control,
   name,
   label,
   placeholder,
-  type = 'text',
-}: InputFieldProps<T>) => {
+  rows = 4,
+}: TextareaFieldProps<T>) => {
   return (
     <FormField
       control={control}
@@ -33,7 +33,12 @@ const InputField = <T extends FieldValues>({
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input type={type} placeholder={placeholder} {...field} />
+            <Textarea
+              placeholder={placeholder}
+              rows={rows}
+              className="resize-none"
+              {...field}
+            />
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -42,4 +47,4 @@ const InputField = <T extends FieldValues>({
   );
 };
 
-export default InputField;
+export default TextareaField;
