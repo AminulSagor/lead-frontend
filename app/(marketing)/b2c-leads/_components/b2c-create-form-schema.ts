@@ -13,7 +13,6 @@ export const B2CProfileSchema = z.object({
   nationality: z.string().min(1, 'Nationality is required'),
   dob: z.string().or(z.literal('')).optional(),
   gender: z.enum(['male', 'female', 'other']).or(z.literal('')),
-
   // contact and communications
   primaryEmail: z
     .string()
