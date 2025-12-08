@@ -1,13 +1,11 @@
 'use client';
 
-import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useFormContext } from 'react-hook-form';
-import InputField from './input-field';
+import TextareaField from '@/components/text-area';
 
 const MembershipsAffiliationsCard = () => {
   const { control } = useFormContext();
-
   return (
     <Card className="border border-gray-200 shadow-none rounded-sm">
       <CardHeader>
@@ -17,37 +15,37 @@ const MembershipsAffiliationsCard = () => {
       </CardHeader>
 
       <CardContent className="grid grid-cols-4 gap-4">
-        <InputField
+        <TextareaField
           control={control}
           name="clubs"
           label="Clubs"
           placeholder="Enter clubs"
         />
-        <InputField
+        <TextareaField
           control={control}
           name="alumniGroups"
           label="Alumni Groups"
           placeholder="Enter alumni groups"
         />
-        <InputField
+        <TextareaField
           control={control}
           name="professionalAssociations"
           label="Professional Associations"
           placeholder="Enter professional associations"
         />
-        <InputField
+        <TextareaField
           control={control}
           name="nonprofits"
           label="Nonprofits"
           placeholder="Enter nonprofits"
         />
-        <InputField
+        <TextareaField
           control={control}
           name="loyaltyPrograms"
           label="Loyalty Programs"
           placeholder="Enter loyalty programs"
         />
-        <InputField
+        <TextareaField
           control={control}
           name="volunteerActivities"
           label="Volunteer Activities"

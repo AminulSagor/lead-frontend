@@ -1,10 +1,8 @@
 'use client';
 
-import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useFormContext } from 'react-hook-form';
-import InputField from './input-field';
-import SelectField from './select-filed';
+import TextareaField from '@/components/text-area';
 
 const SkillsCard = () => {
   const { control } = useFormContext();
@@ -19,25 +17,25 @@ const SkillsCard = () => {
 
       <CardContent className="grid grid-cols-4 gap-4">
         {/* 5.1 Skills */}
-        <InputField
+        <TextareaField
           control={control}
           name="primarySkills"
           label="Primary Skills *"
           placeholder="Enter primary skills"
         />
-        <InputField
+        <TextareaField
           control={control}
           name="secondarySkills"
           label="Secondary Skills *"
           placeholder="Enter secondary skills"
         />
-        <InputField
+        <TextareaField
           control={control}
           name="technicalTools"
           label="Technical Tools / Software"
           placeholder="Enter technical tools or software"
         />
-        <InputField
+        <TextareaField
           control={control}
           name="topSoftSkills"
           label="Top Soft Skills"
@@ -45,19 +43,19 @@ const SkillsCard = () => {
         />
 
         {/* 5.2 Certifications & Licenses */}
-        <InputField
+        <TextareaField
           control={control}
           name="professionalCertifications"
           label="Professional Certifications"
           placeholder="Enter professional certifications"
         />
-        <InputField
+        <TextareaField
           control={control}
           name="licenses"
           label="Licenses"
           placeholder="Enter licenses"
         />
-        <InputField
+        <TextareaField
           control={control}
           name="credentials"
           label="Credentials"

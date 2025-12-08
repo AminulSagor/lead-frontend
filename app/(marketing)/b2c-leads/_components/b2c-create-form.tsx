@@ -89,15 +89,12 @@ const B2CCreateForm = () => {
       portfolio: '',
       blog: '',
       onlineResume: '',
-      linktree: '',
-      publicNotion: '',
+      othersWeb: '',
       // interest / hobbies
-      interests: '',
+      interests: [],
       lifestylePreferences: '',
       // social / civic activities
-      organizations: '',
-      role: '',
-      activities: '',
+      civicActivities: [{ activities: '', organizations: '', role: '' }],
       civicEngagement: '',
       policyInterests: '',
       // family / household
@@ -120,8 +117,15 @@ const B2CCreateForm = () => {
       medicalDevices: '',
       healthInsurance: '',
       // financial info
-      salary: '',
-      totalIncome: '',
+      salary: {
+        salaryCurrency: '',
+        salaryAmount: '',
+      },
+      totalIncome: {
+        totalAmount: '',
+        totalCurrency: '',
+      },
+      assets: '',
       incomeHistory: '',
       savings: '',
       investments: '',

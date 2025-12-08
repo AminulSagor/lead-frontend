@@ -4,9 +4,11 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useFormContext } from 'react-hook-form';
 import InputField from './input-field';
+import TextareaField from '@/components/text-area';
+import { B2CProfileSchemaType } from './b2c-create-form-schema';
 
 const PersonalWebCard = () => {
-  const { control } = useFormContext();
+  const { control } = useFormContext<B2CProfileSchemaType>();
 
   return (
     <Card className="border border-gray-200 shadow-none rounded-sm">
@@ -41,17 +43,12 @@ const PersonalWebCard = () => {
           label="Online Resume"
           placeholder="Enter online resume URL"
         />
-        <InputField
+
+        <TextareaField
           control={control}
-          name="linktree"
-          label="Linktree / Beacons / Lnk.bio"
-          placeholder="Enter Linktree / Beacons / Lnk.bio URL"
-        />
-        <InputField
-          control={control}
-          name="publicNotion"
-          label="Public Notion Page"
-          placeholder="Enter public Notion page URL"
+          name="othersWeb"
+          label="Others"
+          placeholder="Enter other digital presence URLs"
         />
       </CardContent>
     </Card>

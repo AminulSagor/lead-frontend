@@ -1,5 +1,11 @@
 import z from 'zod';
 const phoneRegex = /^[0-9+\-()\s]{6,20}$/;
+
+export const civicActivitiesSchema = z.object({
+  organizations: z.string().min(1, 'Organizations / Groups is required'),
+  role: z.string().optional(),
+  activities: z.string().optional(),
+});
 export const B2CProfileSchema = z.object({
   // personal details
   fullName: z.string().min(2, 'Full name is required'),
@@ -110,20 +116,12 @@ export const B2CProfileSchema = z.object({
   portfolio: z.string().url('Enter a valid URL').or(z.literal('')).optional(),
   blog: z.url('Enter a valid URL').or(z.literal('')).optional(),
   onlineResume: z.url('Enter a valid URL').or(z.literal('')).optional(),
-  linktree: z.string().url('Enter a valid URL').or(z.literal('')).optional(),
-  publicNotion: z
-    .string()
-    .url('Enter a valid URL')
-    .or(z.literal(''))
-    .optional(),
-
+  othersWeb: z.string().url('Enter a valid URL').or(z.literal('')).optional(),
   // hobbies
-  interests: z.string().min(1, 'Select a hobby'),
+  interests: z.array(z.string()).optional(),
   lifestylePreferences: z.string().optional(),
   // social / civic activities
-  organizations: z.string().min(1, 'Organizations / Groups is required'),
-  role: z.string().optional(),
-  activities: z.string().optional(),
+  civicActivities: z.array(civicActivitiesSchema).optional(),
   civicEngagement: z.string().optional(),
   policyInterests: z.string().optional(),
   // family / household
@@ -147,8 +145,15 @@ export const B2CProfileSchema = z.object({
   healthInsurance: z.string().optional(),
 
   // financial info
-  salary: z.string().min(1, 'Salary is required'),
-  totalIncome: z.string().optional(),
+  salary: z.object({
+    salaryCurrency: z.string().optional(),
+    salaryAmount: z.string().optional(),
+  }),
+  totalIncome: z.object({
+    totalCurrency: z.string().optional(),
+    totalAmount: z.string().optional(),
+  }),
+  assets: z.string().optional(),
   incomeHistory: z.string().optional(),
   savings: z.string().optional(),
   investments: z.string().optional(),

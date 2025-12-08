@@ -1,13 +1,17 @@
 'use client';
 
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import InputField from './input-field';
 import SelectField from './select-filed';
 import { WORK_TYPE_OPTIONS, WORK_MODEL_OPTIONS, INDUSTRY_LIST } from './data';
+import TextareaField from '@/components/text-area';
+import { FormLabel } from '@/components/ui/form';
+import { AdvancedSelector } from '@/components/advance-selector';
+import { B2CProfileSchemaType } from './b2c-create-form-schema';
 
 const ProfessionalDetailsCard = () => {
-  const { control } = useFormContext();
+  const { control } = useFormContext<B2CProfileSchemaType>();
 
   return (
     <Card className="border border-gray-200 shadow-none rounded-sm">
@@ -47,13 +51,28 @@ const ProfessionalDetailsCard = () => {
         />
 
         {/* Industry Classification */}
-        <SelectField
+
+        <Controller
           control={control}
           name="primaryIndustry"
-          label="Primary Industry"
-          placeholder="Select primary industry"
-          options={INDUSTRY_LIST}
+          render={({ field, fieldState }) => (
+            <div className="space-y-2">
+              <FormLabel>Primary Industry</FormLabel>
+              <AdvancedSelector
+                onChange={field.onChange}
+                value={field.value}
+                placeholder="Select primary industry"
+                presets={INDUSTRY_LIST.map((opt) => opt.label)}
+              />
+              {fieldState.error && (
+                <p className="text-sm text-red-500">
+                  {fieldState.error.message}
+                </p>
+              )}
+            </div>
+          )}
         />
+
         <InputField
           control={control}
           name="industrySubsector"
@@ -61,19 +80,20 @@ const ProfessionalDetailsCard = () => {
           placeholder="E.g., FinTech – Payments"
         />
 
-        {/* Job Scope */}
-        <InputField
-          control={control}
-          name="coreResponsibilities"
-          label="Core Responsibilities"
-          placeholder="Enter core responsibilities"
-        />
-        <InputField
-          control={control}
-          name="keyTools"
-          label="Key Tools / Platforms Used"
-          placeholder="Enter key tools / platforms used"
-        />
+        <div className="col-span-4 grid grid-cols-2 gap-4">
+          <TextareaField
+            control={control}
+            name="coreResponsibilities"
+            label="Core Responsibilities"
+            placeholder="Enter core responsibilities"
+          />
+          <TextareaField
+            control={control}
+            name="keyTools"
+            label="Key Tools / Platforms Used"
+            placeholder="Enter key tools / platforms used"
+          />
+        </div>
       </CardContent>
     </Card>
   );

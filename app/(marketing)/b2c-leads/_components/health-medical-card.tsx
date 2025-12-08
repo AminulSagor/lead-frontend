@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useFormContext } from 'react-hook-form';
 import InputField from './input-field';
+import TextareaField from '@/components/text-area';
 
 const HealthMedicalCard = () => {
   const { control } = useFormContext();
@@ -17,25 +18,25 @@ const HealthMedicalCard = () => {
 
       <CardContent className="grid grid-cols-4 gap-4">
         {/* Physical Health */}
-        <InputField
+        <TextareaField
           control={control}
           name="heightWeightBMI"
           label="Height / Weight / BMI"
           placeholder="Enter your height, weight, and BMI"
         />
-        <InputField
+        <TextareaField
           control={control}
           name="allergies"
           label="Allergies"
           placeholder="List any allergies"
         />
-        <InputField
+        <TextareaField
           control={control}
           name="chronicIllnesses"
           label="Chronic Illnesses"
           placeholder="Enter any chronic illnesses"
         />
-        <InputField
+        <TextareaField
           control={control}
           name="disabilities"
           label="Disabilities"
@@ -43,37 +44,37 @@ const HealthMedicalCard = () => {
         />
 
         {/* Medical Records */}
-        <InputField
+        <TextareaField
           control={control}
           name="diagnoses"
           label="Diagnoses"
           placeholder="Enter diagnoses"
         />
-        <InputField
+        <TextareaField
           control={control}
           name="medications"
           label="Medications"
           placeholder="Enter medications"
         />
-        <InputField
+        <TextareaField
           control={control}
           name="surgeries"
           label="Surgeries"
           placeholder="Enter surgeries"
         />
-        <InputField
+        <TextareaField
           control={control}
           name="vaccinationRecords"
           label="Vaccination Records"
           placeholder="Enter vaccination records"
         />
-        <InputField
+        <TextareaField
           control={control}
           name="medicalDevices"
           label="Medical Devices"
           placeholder="Enter any medical devices used"
         />
-        <InputField
+        <TextareaField
           control={control}
           name="healthInsurance"
           label="Health Insurance"

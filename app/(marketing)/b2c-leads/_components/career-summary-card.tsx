@@ -4,6 +4,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useFormContext } from 'react-hook-form';
 import InputField from './input-field';
+import TextareaField from '@/components/text-area';
 
 const CareerSummaryCard = () => {
   const { control } = useFormContext();
@@ -16,7 +17,7 @@ const CareerSummaryCard = () => {
 
       <CardContent className="grid grid-cols-2 gap-4">
         {/* Total Years of Experience */}
-        <InputField
+        <TextareaField
           control={control}
           name="totalExperience"
           label="Total Years of Experience *"
@@ -24,7 +25,7 @@ const CareerSummaryCard = () => {
         />
 
         {/* Career Highlight */}
-        <InputField
+        <TextareaField
           control={control}
           name="careerHighlight"
           label="Career Highlight"

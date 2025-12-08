@@ -1,10 +1,10 @@
 'use client';
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useFormContext } from 'react-hook-form';
 import InputField from './input-field';
 import SelectField from './select-filed';
 import { MARITAL_STATUS_OPTIONS } from './data';
+import TextareaField from '@/components/text-area';
 
 const FamilyHouseholdCard = () => {
   const { control } = useFormContext();
@@ -17,7 +17,7 @@ const FamilyHouseholdCard = () => {
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="grid grid-cols-4 gap-4">
+      <CardContent className="grid grid-cols-5 gap-4">
         <SelectField
           control={control}
           name="maritalStatus"
@@ -45,21 +45,21 @@ const FamilyHouseholdCard = () => {
         />
         <InputField
           control={control}
+          name="guardianshipStatus"
+          label="Guardianship Status"
+          placeholder="Enter guardianship status"
+        />
+        <TextareaField
+          control={control}
           name="householdIncome"
           label="Household Income *"
           placeholder="Enter household income"
         />
-        <InputField
+        <TextareaField
           control={control}
           name="familyMedicalHistory"
           label="Family Medical History"
           placeholder="Enter family medical history"
-        />
-        <InputField
-          control={control}
-          name="guardianshipStatus"
-          label="Guardianship Status"
-          placeholder="Enter guardianship status"
         />
       </CardContent>
     </Card>
