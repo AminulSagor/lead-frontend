@@ -1,7 +1,7 @@
-'use client';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import toast, { Toaster } from 'react-hot-toast';
+"use client";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import toast, { Toaster } from "react-hot-toast";
 
 import {
   Form,
@@ -10,124 +10,123 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from '@/components/ui/form';
+} from "@/components/ui/form";
 
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardHeader,
   CardTitle,
   CardContent,
   CardAction,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   BusinessProfileFormType,
   B2BProfileSchema,
-} from './b2b-create-form-schema';
-import { useCreateBusinessProfile } from '@/query/b2b/create-b2b-leads';
-import Link from 'next/link';
-import { ArrowLeftCircle, Plus, PlusIcon, X } from 'lucide-react';
-import { AdvancedSelector } from '@/components/advance-selector';
-import InputField from '@/components/input-field';
-import TextareaField from '@/components/text-area';
+} from "./b2b-create-form-schema";
+import Link from "next/link";
+import { ArrowLeftCircle, Plus, PlusIcon, X } from "lucide-react";
+import { AdvancedSelector } from "@/components/advance-selector";
+import InputField from "@/components/input-field";
+import TextareaField from "@/components/text-area";
 
 export default function CreateBusinessForm() {
   const form = useForm<BusinessProfileFormType>({
     resolver: zodResolver(B2BProfileSchema),
     defaultValues: {
       // business profile
-      name: '',
-      businessType: '',
-      businessDescription: '',
-      registrationNumber: '',
-      taxId: '',
-      establishedDate: '',
-      status: '',
+      name: "",
+      businessType: "",
+      businessDescription: "",
+      registrationNumber: "",
+      taxId: "",
+      establishedDate: "",
+      status: "",
       // industry classifications
-      primaryIndustry: '',
-      niche: '',
-      subNiche: '',
+      primaryIndustry: "",
+      niche: "",
+      subNiche: "",
       // services
       serviceOverview: [
         {
-          category: '',
-          subCategory: '',
-          serviceDescription: '',
-          pricingModel: 'Hourly',
-          rate: '',
-          currency: 'USD',
-          serviceAvailability: 'Online',
-          onlineService: 'Yes',
-          serviceName: '',
+          category: "",
+          subCategory: "",
+          serviceDescription: "",
+          pricingModel: "Hourly",
+          rate: "",
+          currency: "USD",
+          serviceAvailability: "Online",
+          onlineService: "Yes",
+          serviceName: "",
         },
       ],
       // location
-      street: '',
-      subCity: '',
-      city: '',
-      state: '',
-      postalCode: '',
-      country: 'Bangladesh',
+      street: "",
+      subCity: "",
+      city: "",
+      state: "",
+      postalCode: "",
+      country: "Bangladesh",
       // business info
-      businessPhone: '',
-      secondaryPhone: '',
-      email: '',
-      supportEmail: '',
-      website: '',
+      businessPhone: "",
+      secondaryPhone: "",
+      email: "",
+      supportEmail: "",
+      website: "",
       // key contact
       keyContacts: [
         {
-          keyContactName: '',
-          keyContactPosition: '',
-          keyContactDepartment: '',
-          keyContactPhone: '',
-          keyContactEmail: '',
-          keyContactLinkedIn: '',
+          keyContactName: "",
+          keyContactPosition: "",
+          keyContactDepartment: "",
+          keyContactPhone: "",
+          keyContactEmail: "",
+          keyContactLinkedIn: "",
         },
       ],
       // online presence
-      opFacebook: '',
-      opInstagram: '',
-      opLinkedin: '',
-      opTwitter: '',
-      opYoutube: '',
-      opTiktok: '',
-      opGoogleBusiness: '',
-      opDirectoryListings: '',
+      opFacebook: "",
+      opInstagram: "",
+      opLinkedin: "",
+      opTwitter: "",
+      opYoutube: "",
+      opTiktok: "",
+      opGoogleBusiness: "",
+      opDirectoryListings: "",
       // operations
-      operationsOpeningHours: '',
-      operationsTimeZone: '',
-      operationsEmployees: '',
-      operationsTools: '',
-      operationsCertifications: '',
+      operationsOpeningHours: "",
+      operationsTimeZone: "",
+      operationsEmployees: "",
+      operationsTools: "",
+      operationsCertifications: "",
       // financial information
-      fnPaymentMethods: '',
-      fnBillingAddress: '',
-      fnInvoiceContact: '',
-      fnPrimaryCurrency: '',
-      fnPaymentTerms: '',
+      fnPaymentMethods: "",
+      fnBillingAddress: "",
+      fnInvoiceContact: "",
+      fnPrimaryCurrency: "",
+      fnPaymentTerms: "",
       // legal information
-      legalLicenses: '',
-      legalPermits: '',
-      legalInsurance: '',
-      legalComplianceCertificates: '',
+      legalLicenses: "",
+      legalPermits: "",
+      legalInsurance: "",
+      legalComplianceCertificates: "",
       // marketing information
-      marketingTargetAudience: '',
-      marketingValueProposition: '',
-      marketingMainCompetitors: '',
-      marketingKeywords: '',
+      marketingTargetAudience: "",
+      marketingValueProposition: "",
+      marketingMainCompetitors: "",
+      marketingKeywords: "",
       // meta data
-      metaTags: '',
-      metaNotes: '',
+      metaTags: "",
+      metaNotes: "",
       // metaDateAdded:"",
       // metaLastUpdated: '',
     },
@@ -139,7 +138,7 @@ export default function CreateBusinessForm() {
     remove: keyContactsRemove,
   } = useFieldArray({
     control: form.control,
-    name: 'keyContacts',
+    name: "keyContacts",
   });
 
   const {
@@ -148,36 +147,25 @@ export default function CreateBusinessForm() {
     remove: serviceOverviewRemove,
   } = useFieldArray({
     control: form.control,
-    name: 'serviceOverview',
+    name: "serviceOverview",
   });
 
   // service vars
-  const pricingModels = ['Hourly', 'Fixed', 'Tiered', 'Subscription'];
-  const availabilityOptions = ['Online', 'On-Site', 'Hybrid'];
-  const currencyOptions = ['USD', 'EUR', 'GBP', 'BDT'];
+  const pricingModels = ["Hourly", "Fixed", "Tiered", "Subscription"];
+  const availabilityOptions = ["Online", "On-Site", "Hybrid"];
+  const currencyOptions = ["USD", "EUR", "GBP", "BDT"];
   // location
-  const countries = ['Bangladesh', 'USA', 'UK', 'India', 'Canada', 'Australia'];
-  const { mutate, isPending } = useCreateBusinessProfile();
+  const countries = ["Bangladesh", "USA", "UK", "India", "Canada", "Australia"];
 
   function onSubmit(values: BusinessProfileFormType) {
-    console.log('FORM DATA:', values);
-    mutate(values, {
-      onSuccess: (data) => {
-        console.log('DATA:', data);
-        alert('Business Profile Created Successfully');
-      },
-      onError: (error) => {
-        console.log('ERROR:', error);
-        alert('Business Profile Creation Failed');
-      },
-    });
+    console.log("FORM DATA:", values);
   }
 
   return (
     <div className="space-y-4">
       <div>
         <Button asChild>
-          <Link href={'/b2b-leads'}>
+          <Link href={"/b2b-leads"}>
             <ArrowLeftCircle />
             Back
           </Link>
@@ -225,10 +213,10 @@ export default function CreateBusinessForm() {
                           value={field.value}
                           placeholder="Select Business Type"
                           presets={[
-                            'LLC',
-                            'Corporation',
-                            'Sole Proprietorship',
-                            'Partnership',
+                            "LLC",
+                            "Corporation",
+                            "Sole Proprietorship",
+                            "Partnership",
                           ]}
                         />
 
@@ -336,7 +324,7 @@ export default function CreateBusinessForm() {
                         onChange={field.onChange}
                         value={field.value}
                         placeholder="Select Primary Industry"
-                        presets={['IT', 'Healthcare', 'Education']}
+                        presets={["IT", "Healthcare", "Education"]}
                       />
 
                       {fieldState.error && (
@@ -361,15 +349,15 @@ export default function CreateBusinessForm() {
                         value={field.value}
                         placeholder="Select Niche"
                         presets={[
-                          'Web Development',
-                          'Mobile Apps',
-                          'AI/ML',
-                          'Hospitals',
-                          'Pharma',
-                          'Diagnostics',
-                          'Schools',
-                          'Colleges',
-                          'Online Courses',
+                          "Web Development",
+                          "Mobile Apps",
+                          "AI/ML",
+                          "Hospitals",
+                          "Pharma",
+                          "Diagnostics",
+                          "Schools",
+                          "Colleges",
+                          "Online Courses",
                         ]}
                       />
 
@@ -394,29 +382,29 @@ export default function CreateBusinessForm() {
                         value={field.value}
                         placeholder="Select Sub Niche"
                         presets={[
-                          'Frontend',
-                          'Backend',
-                          'Full Stack',
-                          'iOS',
-                          'Android',
-                          'Cross-platform',
-                          'NLP',
-                          'Computer Vision',
-                          'Data Science',
-                          'General',
-                          'Specialty',
-                          'OTC',
-                          'Prescription',
-                          'Labs',
-                          'Imaging',
-                          'Primary',
-                          'Secondary',
-                          'Engineering',
-                          'Arts',
-                          'Science',
-                          'Tech',
-                          'Business',
-                          'Design',
+                          "Frontend",
+                          "Backend",
+                          "Full Stack",
+                          "iOS",
+                          "Android",
+                          "Cross-platform",
+                          "NLP",
+                          "Computer Vision",
+                          "Data Science",
+                          "General",
+                          "Specialty",
+                          "OTC",
+                          "Prescription",
+                          "Labs",
+                          "Imaging",
+                          "Primary",
+                          "Secondary",
+                          "Engineering",
+                          "Arts",
+                          "Science",
+                          "Tech",
+                          "Business",
+                          "Design",
                         ]}
                       />
 
@@ -439,17 +427,17 @@ export default function CreateBusinessForm() {
                     className="cursor-pointer"
                     type="button"
                     onClick={() => {
-                      toast.success('Service added!');
+                      toast.success("Service added!");
                       serviceOverviewAppend({
-                        category: '',
-                        subCategory: '',
-                        currency: '',
-                        onlineService: 'Yes',
-                        pricingModel: 'Hourly',
-                        rate: '',
-                        serviceAvailability: 'Hybrid',
-                        serviceName: '',
-                        serviceDescription: '',
+                        category: "",
+                        subCategory: "",
+                        currency: "",
+                        onlineService: "Yes",
+                        pricingModel: "Hourly",
+                        rate: "",
+                        serviceAvailability: "Hybrid",
+                        serviceName: "",
+                        serviceDescription: "",
                       });
                     }}
                   >
@@ -474,7 +462,7 @@ export default function CreateBusinessForm() {
                     <button
                       type="button"
                       onClick={() => {
-                        toast.error('Service removed!');
+                        toast.error("Service removed!");
                         serviceOverviewRemove(index);
                       }}
                       className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition"
@@ -670,7 +658,7 @@ export default function CreateBusinessForm() {
                                   <SelectValue placeholder="Yes/No" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  {['Yes', 'No'].map((o) => (
+                                  {["Yes", "No"].map((o) => (
                                     <SelectItem key={o} value={o}>
                                       {o}
                                     </SelectItem>
@@ -887,14 +875,14 @@ export default function CreateBusinessForm() {
                     type="button"
                     className="hover:cursor-pointer"
                     onClick={() => {
-                      toast.success('Key contact added');
+                      toast.success("Key contact added");
                       keyContactsAppend({
-                        keyContactName: '',
-                        keyContactPosition: '',
-                        keyContactDepartment: '',
-                        keyContactEmail: '',
-                        keyContactPhone: '',
-                        keyContactLinkedIn: '',
+                        keyContactName: "",
+                        keyContactPosition: "",
+                        keyContactDepartment: "",
+                        keyContactEmail: "",
+                        keyContactPhone: "",
+                        keyContactLinkedIn: "",
                       });
                     }}
                   >
@@ -919,7 +907,7 @@ export default function CreateBusinessForm() {
                     <button
                       type="button"
                       onClick={() => {
-                        toast.error('Key contact removed');
+                        toast.error("Key contact removed");
                         keyContactsRemove(index);
                       }}
                       className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition duration-300 ease-in-out hover:cursor-pointer"
@@ -1484,12 +1472,8 @@ export default function CreateBusinessForm() {
               </CardContent>
             </Card>
             {/* SUBMIT BUTTON */}
-            <Button
-              type="submit"
-              className="w-full py-6 text-base"
-              disabled={isPending}
-            >
-              {isPending ? 'Saving...' : 'Save Business Profile'}
+            <Button type="submit" className="w-full py-6 text-base">
+              Save
             </Button>
           </form>
         </Form>
