@@ -1,6 +1,9 @@
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+
 export default function Home() {
   return (
-    <div className=" flex flex-col gap-8 justify-center items-center h-[80vh]">
+    <div className=" flex flex-col gap-4 justify-center items-center h-[80vh]">
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold tracking-tight">Lead Flow</h1>
         <p className="text-muted-foreground text-lg max-w-xl mx-auto">
@@ -8,22 +11,16 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="flex justify-center gap-4">
-        <a
-          href="/b2b-leads"
-          className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-medium hover:opacity-90 transition"
-        >
-          Explore B2B Leads
-        </a>
-        <a
-          href="/b2c-leads"
-          className="px-6 py-3 rounded-lg border font-medium hover:bg-muted transition"
-        >
-          Explore B2C Leads
-        </a>
+      <div className="flex justify-center gap-2">
+        <Button asChild>
+          <Link href={"/b2b-leads"}>Explore B2B Leads</Link>
+        </Button>
+        <Button variant={"outline"}>
+          <Link href={"/b2c-leads"}>Explore B2C Leads</Link>
+        </Button>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6 pt-8">
+      <div className="grid md:grid-cols-3 gap-2 pt-8">
         <div className="p-6 border rounded-xl shadow-sm bg-card">
           <h3 className="font-semibold text-xl mb-2">Lead Intelligence</h3>
           <p className="text-muted-foreground text-sm">
