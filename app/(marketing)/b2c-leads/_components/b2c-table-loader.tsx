@@ -1,6 +1,5 @@
 import { cookies } from "next/headers";
 import B2CLeadsTable from "./b2c-leads-table";
-import { constructFromSymbol } from "date-fns/constants";
 
 interface Props {
   page: number;

@@ -22,6 +22,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { EditIcon, EyeIcon, TrashIcon } from "lucide-react";
 import React from "react";
+import { deleteB2CLead } from "@/actions/deleteB2CLead";
 
 export interface Lead {
   id: number;
@@ -76,6 +77,11 @@ export default function B2CLeadsTable({ result, total }: B2CLeadsTableProps) {
 
   const totalPages = Math.ceil(total / pageSize);
   const validPage = Math.min(page, totalPages || 1);
+
+  const handleDelete = async (id: number) => {
+    const res = await deleteB2CLead(id);
+    console.log(res);
+  };
 
   return (
     <div className="space-y-4">
@@ -292,10 +298,14 @@ export default function B2CLeadsTable({ result, total }: B2CLeadsTableProps) {
                             </Link>
                           </Button>
 
-                          <Button size="sm" variant="ghost" asChild>
-                            <Link href={`/b2b-leads/delete/`}>
-                              <TrashIcon className="h-4 w-4" />
-                            </Link>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => {
+                              handleDelete(lead.id);
+                            }}
+                          >
+                            <TrashIcon className="h-4 w-4" />
                           </Button>
                         </div>
                       </TableCell>

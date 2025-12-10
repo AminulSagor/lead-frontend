@@ -1,13 +1,7 @@
 export const B2C_SECTIONS = [
   {
     title: "Personal Details",
-    fields: [
-      "fullName",
-      "nickname",
-      "nationality",
-      "dob",
-      "gender",
-    ],
+    fields: ["fullName", "nickname", "nationality", "dob", "gender"],
   },
   {
     title: "Contact & Communication",
