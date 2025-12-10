@@ -79,8 +79,7 @@ export default function B2CLeadsTable({ result, total }: B2CLeadsTableProps) {
   const validPage = Math.min(page, totalPages || 1);
 
   const handleDelete = async (id: number) => {
-    const res = await deleteB2CLead(id);
-    console.log(res);
+    await deleteB2CLead(id);
   };
 
   return (
@@ -299,6 +298,7 @@ export default function B2CLeadsTable({ result, total }: B2CLeadsTableProps) {
                           </Button>
 
                           <Button
+                            className="cursor-pointer"
                             size="sm"
                             variant="ghost"
                             onClick={() => {
