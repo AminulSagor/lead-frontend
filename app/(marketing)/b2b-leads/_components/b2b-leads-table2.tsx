@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -15,17 +15,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { EditIcon, EyeIcon, TrashIcon } from 'lucide-react';
-import Link from 'next/link';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useMemo } from 'react';
+} from "@/components/ui/table";
+import { EditIcon, EyeIcon, TrashIcon } from "lucide-react";
+import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo } from "react";
 import {
   BUSINESS_TYPE_LIST,
   COUNTRY_LIST,
   DUMMY_LEADS,
   INDUSTRY_LIST,
-} from './data';
+} from "./data";
 
 export default function B2BLeadsTable() {
   const searchParams = useSearchParams();
@@ -34,22 +34,21 @@ export default function B2BLeadsTable() {
 
   /* ------------------------ URL → derived state ------------------------ */
   const filters = {
-    businessType: searchParams.get('businessType') || '',
-    industry: searchParams.get('industry') || '',
-    onlineService: searchParams.get('onlineService') || '',
-    country: searchParams.get('country') || '',
-    niche: searchParams.get('niche') || '',
-    serviceAvailability: searchParams.get('serviceAvailability') || '',
-    city: searchParams.get('city') || '',
+    businessType: searchParams.get("businessType") || "",
+    industry: searchParams.get("industry") || "",
+    onlineService: searchParams.get("onlineService") || "",
+    country: searchParams.get("country") || "",
+    niche: searchParams.get("niche") || "",
+    serviceAvailability: searchParams.get("serviceAvailability") || "",
+    city: searchParams.get("city") || "",
   };
 
-  const page = Number(searchParams.get('page') || 1);
-  const pageSize = Number(searchParams.get('pageSize') || 10);
+  const page = Number(searchParams.get("page") || 1);
+  const pageSize = Number(searchParams.get("pageSize") || 10);
 
   /* ------------------------ Helper to update URL ------------------------ */
   function updateParam(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString());
-
     if (!value) params.delete(key);
     else params.set(key, value);
 
@@ -60,7 +59,7 @@ export default function B2BLeadsTable() {
   const filteredLeads = useMemo(() => {
     return DUMMY_LEADS.filter((lead) => {
       if (filters.businessType) {
-        const bt = lead.businessType.toLowerCase().replace(/\s+/g, '');
+        const bt = lead.businessType.toLowerCase().replace(/\s+/g, "");
         if (!bt.includes(filters.businessType.toLowerCase())) return false;
       }
 
@@ -125,7 +124,7 @@ export default function B2BLeadsTable() {
 
   /* ------------------------ Fix invalid page when filtering ------------------------ */
   useEffect(() => {
-    if (page > totalPages) updateParam('page', '1');
+    if (page > totalPages) updateParam("page", "1");
   }, [totalPages]);
 
   /* ------------------------ UI ------------------------ */
@@ -139,7 +138,7 @@ export default function B2BLeadsTable() {
           {/* Business Type */}
           <Select
             value={filters.businessType}
-            onValueChange={(value) => updateParam('businessType', value)}
+            onValueChange={(value) => updateParam("businessType", value)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Business Type" />
@@ -156,7 +155,7 @@ export default function B2BLeadsTable() {
           {/* Industry */}
           <Select
             value={filters.industry}
-            onValueChange={(value) => updateParam('industry', value)}
+            onValueChange={(value) => updateParam("industry", value)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Industry" />
@@ -173,7 +172,7 @@ export default function B2BLeadsTable() {
           {/* Online Service */}
           <Select
             value={filters.onlineService}
-            onValueChange={(value) => updateParam('onlineService', value)}
+            onValueChange={(value) => updateParam("onlineService", value)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Online Service" />
@@ -187,7 +186,7 @@ export default function B2BLeadsTable() {
           {/* Country */}
           <Select
             value={filters.country}
-            onValueChange={(value) => updateParam('country', value)}
+            onValueChange={(value) => updateParam("country", value)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Country" />
@@ -204,7 +203,7 @@ export default function B2BLeadsTable() {
           {/* NEW: Niche */}
           <Select
             value={filters.niche}
-            onValueChange={(value) => updateParam('niche', value)}
+            onValueChange={(value) => updateParam("niche", value)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Niche" />
@@ -221,7 +220,7 @@ export default function B2BLeadsTable() {
           {/* NEW: Service Availability */}
           <Select
             value={filters.serviceAvailability}
-            onValueChange={(value) => updateParam('serviceAvailability', value)}
+            onValueChange={(value) => updateParam("serviceAvailability", value)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Service" />
@@ -240,7 +239,7 @@ export default function B2BLeadsTable() {
           {/* NEW: City */}
           <Select
             value={filters.city}
-            onValueChange={(value) => updateParam('city', value)}
+            onValueChange={(value) => updateParam("city", value)}
           >
             <SelectTrigger>
               <SelectValue placeholder="City" />
@@ -295,9 +294,9 @@ export default function B2BLeadsTable() {
                 <TableCell>
                   <span
                     className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
-                      row.onlineService === 'Yes'
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-gray-100 text-gray-700'
+                      row.onlineService === "Yes"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-gray-100 text-gray-700"
                     }`}
                   >
                     {row.onlineService}
@@ -361,7 +360,7 @@ export default function B2BLeadsTable() {
           <Button
             variant="outline"
             disabled={page <= 1}
-            onClick={() => updateParam('page', String(page - 1))}
+            onClick={() => updateParam("page", String(page - 1))}
           >
             Previous
           </Button>
@@ -373,7 +372,7 @@ export default function B2BLeadsTable() {
           <Button
             variant="outline"
             disabled={page >= totalPages}
-            onClick={() => updateParam('page', String(page + 1))}
+            onClick={() => updateParam("page", String(page + 1))}
           >
             Next
           </Button>

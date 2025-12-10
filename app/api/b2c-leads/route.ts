@@ -47,3 +47,6 @@ export async function POST(req: NextRequest) {
   console.log(data, "data backend");
   return NextResponse.json({ success: true, data });
 }
+
+
+

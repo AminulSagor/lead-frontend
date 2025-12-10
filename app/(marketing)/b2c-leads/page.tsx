@@ -1,11 +1,22 @@
 import { Button } from "@/components/ui/button";
-import { CirclePlus, Import, FolderUp } from "lucide-react";
+import { CirclePlus, Import } from "lucide-react";
 import Link from "next/link";
-import B2CLeadsTable from "./_components/b2c-leads-table";
 import { Suspense } from "react";
+import B2CTableLoader from "./_components/b2c-table-loader";
 import ExcelExport from "./_components/excel-export";
 
-const page = () => {
+interface B2CPageProps {
+  searchParams: {
+    page?: string;
+    pageSize?: string;
+  };
+}
+
+const page = async ({ searchParams }: B2CPageProps) => {
+  const params = await searchParams;
+  const page = Number(params.page ?? "1");
+  const limit = Number(params.pageSize ?? "10");
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -26,8 +37,8 @@ const page = () => {
           </Button>
         </div>
       </div>
-      <Suspense>
-        <B2CLeadsTable />
+      <Suspense fallback={<p>Loading...</p>}>
+        <B2CTableLoader page={page} limit={limit} />
       </Suspense>
     </div>
   );
