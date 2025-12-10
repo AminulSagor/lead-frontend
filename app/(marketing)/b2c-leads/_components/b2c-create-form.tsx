@@ -1,169 +1,188 @@
-'use client';
-import { Button } from '@/components/ui/button';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowLeftCircle } from 'lucide-react';
-import Link from 'next/link';
-import { FormProvider, useForm } from 'react-hook-form';
-import AddressCard from './address-card';
+"use client";
+import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowLeftCircle } from "lucide-react";
+import Link from "next/link";
+import { FormProvider, useForm } from "react-hook-form";
+import AddressCard from "./address-card";
 import {
   B2CProfileSchema,
   B2CProfileSchemaType,
-} from './b2c-create-form-schema';
-import ContactCard from './contact-card';
-import PersonalDetailsCard from './personal-details-card';
-import ProfessionalDetailsCard from './professional-details-card';
-import SkillsCard from './skills-card';
-import CareerSummaryCard from './career-summary-card';
-import EducationCard from './education-card';
-import PersonalWebCard from './personal-web-card';
-import InterestsCard from './hobbies-card';
-import SocialCivicCard from './social-civic-card';
-import FamilyHouseholdCard from './family-household-card';
-import HealthMedicalCard from './health-medical-card';
-import FinancialInformationCard from './financial-info-card';
-import LegalGovernmentCard from './legal-govt-card';
-import MembershipsAffiliationsCard from './membership-affiliation-card';
+} from "./b2c-create-form-schema";
+import ContactCard from "./contact-card";
+import PersonalDetailsCard from "./personal-details-card";
+import ProfessionalDetailsCard from "./professional-details-card";
+import SkillsCard from "./skills-card";
+import CareerSummaryCard from "./career-summary-card";
+import EducationCard from "./education-card";
+import PersonalWebCard from "./personal-web-card";
+import InterestsCard from "./hobbies-card";
+import SocialCivicCard from "./social-civic-card";
+import FamilyHouseholdCard from "./family-household-card";
+import HealthMedicalCard from "./health-medical-card";
+import FinancialInformationCard from "./financial-info-card";
+import LegalGovernmentCard from "./legal-govt-card";
+import MembershipsAffiliationsCard from "./membership-affiliation-card";
+import toast from "react-hot-toast";
 
 const B2CCreateForm = () => {
   const form = useForm<B2CProfileSchemaType>({
     resolver: zodResolver(B2CProfileSchema),
     defaultValues: {
       // personal details
-      fullName: '',
-      nickname: '',
-      dob: '',
-      gender: 'male',
-      nationality: '',
+      fullName: "",
+      nickname: "",
+      dob: "",
+      gender: "male",
+      nationality: "",
       // contact and communication
-      primaryEmail: '',
-      secondaryEmail: '',
-      primaryPhone: '',
-      secondaryPhone: '',
-      whatsapp: '',
-      telegram: '',
-      wechat: '',
-      prefferedContactMethod: 'phone',
+      primaryEmail: "",
+      secondaryEmail: "",
+      primaryPhone: "",
+      secondaryPhone: "",
+      whatsapp: "",
+      telegram: "",
+      wechat: "",
+      prefferedContactMethod: "phone",
       // location
-      city: '',
-      cityCorporation: '',
-      country: '',
-      postalCode: '',
-      state: '',
-      street: '',
-      subCity: '',
-      timeZone: '',
+      city: "",
+      cityCorporation: "",
+      country: "",
+      postalCode: "",
+      state: "",
+      street: "",
+      subCity: "",
+      timeZone: "",
       // professional details
-      currentJobTitle: '',
-      company: '',
+      currentJobTitle: "",
+      company: "",
       workType: undefined,
       workModel: undefined,
-      primaryIndustry: '',
-      industrySubsector: '',
-      coreResponsibilities: '',
-      keyTools: '',
+      primaryIndustry: "",
+      industrySubsector: "",
+      coreResponsibilities: "",
+      keyTools: "",
       // skills
-      primarySkills: '',
-      secondarySkills: '',
-      technicalTools: '',
-      topSoftSkills: '',
-      professionalCertifications: '',
-      licenses: '',
-      credentials: '',
+      primarySkills: "",
+      secondarySkills: "",
+      technicalTools: "",
+      topSoftSkills: "",
+      professionalCertifications: "",
+      licenses: "",
+      credentials: "",
       // career summary
-      totalExperience: '',
-      careerHighlight: '',
+      totalExperience: "",
+      careerHighlight: "",
       // education
-      highestDegree: '',
-      degreesEarned: '',
-      institutions: '',
-      fieldsOfStudy: '',
-      graduationDates: '',
-      gpa: '',
-      academicHonors: '',
-      publications: '',
-      researchAreas: '',
-      thesisTitle: '',
-      academicIds: '',
+      highestDegree: "",
+      degreesEarned: "",
+      institutions: "",
+      fieldsOfStudy: "",
+      graduationDates: "",
+      gpa: "",
+      academicHonors: "",
+      publications: "",
+      researchAreas: "",
+      thesisTitle: "",
+      academicIds: "",
       // personal web presence
-      personalWebsite: '',
-      portfolio: '',
-      blog: '',
-      onlineResume: '',
-      othersWeb: '',
+      personalWebsite: "",
+      portfolio: "",
+      blog: "",
+      onlineResume: "",
+      othersWeb: "",
       // interest / hobbies
       interests: [],
-      lifestylePreferences: '',
+      lifestylePreferences: "",
       // social / civic activities
-      civicActivities: [{ activities: '', organizations: '', role: '' }],
-      civicEngagement: '',
-      policyInterests: '',
+      civicActivities: [{ activities: "", organizations: "", role: "" }],
+      civicEngagement: "",
+      policyInterests: "",
       // family / household
-      maritalStatus: '',
-      partnerSpouse: '',
-      childrenDependents: '',
-      householdSize: '',
-      householdIncome: '',
-      familyMedicalHistory: '',
-      guardianshipStatus: '',
+      maritalStatus: "",
+      partnerSpouse: "",
+      childrenDependents: "",
+      householdSize: "",
+      householdIncome: "",
+      familyMedicalHistory: "",
+      guardianshipStatus: "",
       // health / medical records
-      heightWeightBMI: '',
-      allergies: '',
-      chronicIllnesses: '',
-      disabilities: '',
-      diagnoses: '',
-      medications: '',
-      surgeries: '',
-      vaccinationRecords: '',
-      medicalDevices: '',
-      healthInsurance: '',
+      heightWeightBMI: "",
+      allergies: "",
+      chronicIllnesses: "",
+      disabilities: "",
+      diagnoses: "",
+      medications: "",
+      surgeries: "",
+      vaccinationRecords: "",
+      medicalDevices: "",
+      healthInsurance: "",
       // financial info
       salary: {
-        salaryCurrency: '',
-        salaryAmount: '',
+        salaryCurrency: "",
+        salaryAmount: "",
       },
       totalIncome: {
-        totalAmount: '',
-        totalCurrency: '',
+        totalAmount: "",
+        totalCurrency: "",
       },
-      assets: '',
-      incomeHistory: '',
-      savings: '',
-      investments: '',
-      cryptocurrency: '',
-      loans: '',
-      debts: '',
-      bankAccounts: '',
-      creditScore: '',
-      transactionHistory: '',
-      insurancePolicies: '',
+      assets: "",
+      incomeHistory: "",
+      savings: "",
+      investments: "",
+      cryptocurrency: "",
+      loans: "",
+      debts: "",
+      bankAccounts: "",
+      creditScore: "",
+      transactionHistory: "",
+      insurancePolicies: "",
       // legal and govt
-      nationalId: '',
-      passport: '',
-      driversLicense: '',
-      visaWorkPermit: '',
-      criminalBackground: '',
-      courtRecords: '',
-      contractsSigned: '',
-      consentRecords: '',
-      taxIdentificationNumber: '',
+      nationalId: "",
+      passport: "",
+      driversLicense: "",
+      visaWorkPermit: "",
+      criminalBackground: "",
+      courtRecords: "",
+      contractsSigned: "",
+      consentRecords: "",
+      taxIdentificationNumber: "",
       // membership and affiliation
-      clubs: '',
-      alumniGroups: '',
-      professionalAssociations: '',
-      nonprofits: '',
-      loyaltyPrograms: '',
-      volunteerActivities: '',
+      clubs: "",
+      alumniGroups: "",
+      professionalAssociations: "",
+      nonprofits: "",
+      loyaltyPrograms: "",
+      volunteerActivities: "",
     },
   });
 
-  const onSubmit = (data: B2CProfileSchemaType) => {
-    console.log(data);
+  const onSubmit = async (data: B2CProfileSchemaType) => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/b2c/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to create profile");
+      }
+
+      const result = await res.json();
+      console.log("Success:", result);
+      toast.success("B2C Profile Created Successfully!");
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <div className="space-y-4">
       <div>
         <Button asChild>
-          <Link href={'/b2c-leads'}>
+          <Link href={"/b2c-leads"}>
             <ArrowLeftCircle />
             Back
           </Link>
@@ -187,7 +206,7 @@ const B2CCreateForm = () => {
             <FinancialInformationCard />
             <LegalGovernmentCard />
             <MembershipsAffiliationsCard />
-            <Button type="submit" size={'sm'}>
+            <Button type="submit" size={"sm"}>
               Submit
             </Button>
           </form>

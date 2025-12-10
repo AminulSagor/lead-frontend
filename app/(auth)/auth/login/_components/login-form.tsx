@@ -1,26 +1,32 @@
-'use client';
-
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+"use client";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function LoginForm() {
   const router = useRouter();
-
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch('/api/simple-login', {
-      method: 'POST',
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ username, password }),
     });
 
-    if (res.ok) {
-      window.location.href = '/';
-    } else {
-      alert('Invalid credentials');
+    const data = await res.json();
+
+    if (!res.ok) {
+      toast.error(data.message);
+      return;
+    }
+
+    if (data.success) {
+      router.push("/");
     }
   };
 
@@ -47,8 +53,6 @@ export default function LoginForm() {
           onChange={(e) => setPassword(e.target.value)}
           className="border p-2 rounded"
         />
-
-        {error && <p className="text-red-500 text-sm">{error}</p>}
 
         <button
           type="submit"
