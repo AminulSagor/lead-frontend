@@ -24,8 +24,10 @@ import FinancialInformationCard from "./financial-info-card";
 import LegalGovernmentCard from "./legal-govt-card";
 import MembershipsAffiliationsCard from "./membership-affiliation-card";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const B2CCreateForm = () => {
+  const router = useRouter();
   const form = useForm<B2CProfileSchemaType>({
     resolver: zodResolver(B2CProfileSchema),
     defaultValues: {
@@ -159,7 +161,7 @@ const B2CCreateForm = () => {
 
   const onSubmit = async (data: B2CProfileSchemaType) => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/b2c/create`, {
+      const res = await fetch(`/api/b2c-leads`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -168,12 +170,14 @@ const B2CCreateForm = () => {
       });
 
       if (!res.ok) {
-        throw new Error("Failed to create profile");
+        const data = await res.json();
+        console.error(data.message);
+        return;
       }
 
       const result = await res.json();
-      console.log("Success:", result);
       toast.success("B2C Profile Created Successfully!");
+      router.push("/b2c-leads");
     } catch (error) {
       console.error(error);
     }
