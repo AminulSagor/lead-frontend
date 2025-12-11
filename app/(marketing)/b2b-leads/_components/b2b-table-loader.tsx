@@ -1,6 +1,5 @@
-import { cookies } from "next/headers";
-import B2CLeadsTable from "./b2c-leads-table";
 import { getToken } from "@/lib/get-token";
+import B2BLeadsTable from "./b2b-leads-table";
 
 interface Props {
   page: number;
@@ -9,12 +8,12 @@ interface Props {
   hasFilters: boolean;
 }
 
-const B2CTableLoader = async ({ limit, page, filters, hasFilters }: Props) => {
+const B2bTableLoader = async ({ filters, hasFilters, limit, page }: Props) => {
   const token = await getToken();
   let url: string;
   if (!hasFilters) {
     // 🔹 No filters → normal listing API
-    url = `${process.env.API_URL}/b2c?page=${page}&limit=${limit}`;
+    url = `${process.env.API_URL}/b2b?page=${page}&limit=${limit}`;
   } else {
     // 🔹 Build a query string for all filters
     const query = new URLSearchParams({
@@ -27,7 +26,7 @@ const B2CTableLoader = async ({ limit, page, filters, hasFilters }: Props) => {
       ),
     }).toString();
 
-    url = `${process.env.API_URL}/b2c/search?${query}`;
+    url = `${process.env.API_URL}/b2b/search?${query}`;
   }
 
   const res = await fetch(url, {
@@ -38,10 +37,12 @@ const B2CTableLoader = async ({ limit, page, filters, hasFilters }: Props) => {
   });
 
   if (!res.ok) throw new Error("Failed to fetch data");
-
   const data = await res.json();
-
-  return <B2CLeadsTable result={data.data} total={data.meta.total} />;
+  return (
+    <>
+      <B2BLeadsTable result={data.data} total={data.meta.total} />
+    </>
+  );
 };
 
-export default B2CTableLoader;
+export default B2bTableLoader;

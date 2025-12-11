@@ -12,9 +12,6 @@ const B2CProfileLoader = async ({ id }: { id: number }) => {
   });
 
   const data = await res.json();
-  console.log(data);
-  console.log(data.data, "data");
-  //   return null;
   return <B2CProfileViewer data={data.data} />;
 };
 

@@ -1,10 +1,44 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import B2BLeadsTable from "./_components/b2b-leads-table2";
+import B2BLeadsTable from "./_components/b2b-leads-table";
 import { CirclePlus, Import } from "lucide-react";
 import { Suspense } from "react";
+import B2bTableLoader from "./_components/b2b-table-loader";
 
-const page = async () => {
+interface B2BPageProps {
+  searchParams: {
+    page?: string;
+    pageSize?: string;
+
+    businessType?: string;
+    primaryIndustry?: string;
+    niche?: string;
+    serviceName?: string;
+    country?: string;
+  };
+}
+
+const page = async ({ searchParams }: B2BPageProps) => {
+  const params = await searchParams;
+  const parsedParams = {
+    page: Number(params.page ?? 1),
+    pageSize: Number(params.pageSize ?? 10),
+    businessType: params.businessType ?? "",
+    primaryIndustry: params.primaryIndustry ?? "",
+    niche: params.niche ?? "",
+    serviceName: params.serviceName ?? "",
+    country: params.country ?? "",
+  };
+
+  // detect if filters except page/pageSize exist
+  const hasFilters = Object.entries(parsedParams).some(
+    ([key, value]) =>
+      key !== "page" &&
+      key !== "pageSize" &&
+      value !== "" &&
+      value !== undefined
+  );
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -24,8 +58,13 @@ const page = async () => {
           </Button>
         </div>
       </div>
-      <Suspense>
-        <B2BLeadsTable />
+      <Suspense fallback={<p>Loading...</p>}>
+        <B2bTableLoader
+          page={parsedParams.page}
+          limit={parsedParams.pageSize}
+          filters={parsedParams}
+          hasFilters={hasFilters}
+        />
       </Suspense>
     </div>
   );

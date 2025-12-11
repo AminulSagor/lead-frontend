@@ -44,9 +44,5 @@ export async function POST(req: NextRequest) {
   }
 
   const data = await res.json();
-  console.log(data, "data backend");
   return NextResponse.json({ success: true, data });
 }
-
-
-
