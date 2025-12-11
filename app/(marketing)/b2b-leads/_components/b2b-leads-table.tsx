@@ -16,16 +16,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { EditIcon, EyeIcon, TrashIcon } from "lucide-react";
+import { EditIcon, EyeIcon, Trash2Icon, TrashIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useTransition } from "react";
 import {
   BUSINESS_TYPE_LIST,
   COUNTRY_LIST,
   DUMMY_LEADS,
   INDUSTRY_LIST,
 } from "./data";
+import { deleteB2BLead } from "@/actions/deleteB2BLead";
+import toast from "react-hot-toast";
 
 export interface B2BLeadsTableProps {
   result: any;
@@ -33,6 +35,7 @@ export interface B2BLeadsTableProps {
 }
 
 export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
+  const [isPending, startTransition] = useTransition();
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -71,7 +74,18 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
     if (page > totalPages) updateParam("page", "1");
   }, [totalPages]);
 
-  /* ------------------------ UI ------------------------ */
+  const handleDelete = (businessId: string) => {
+    const toastId = toast.loading("Deleting...");
+    startTransition(async () => {
+      try {
+        await deleteB2BLead(businessId);
+        toast.success("Lead deleted successfully", { id: toastId });
+      } catch (error) {
+        toast.error("Failed to delete");
+      }
+    });
+  };
+
   return (
     <div className="space-y-4">
       {/* FILTER BAR */}
@@ -242,7 +256,7 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
                 <TableCell className="text-right">
                   <div className="inline-flex gap-2">
                     <Button size="sm" variant="ghost" asChild>
-                      <Link href={`/b2b-leads/${row.id}`}>
+                      <Link href={`/b2b-leads/${row.businessId}`}>
                         <EyeIcon className="h-4 w-4" />
                       </Link>
                     </Button>
@@ -253,10 +267,13 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
                       </Link>
                     </Button>
 
-                    <Button size="sm" variant="ghost" asChild>
-                      <Link href={`/b2b-leads/delete/${row.id}`}>
-                        <TrashIcon className="h-4 w-4" />
-                      </Link>
+                    <Button
+                      className="cursor-pointer"
+                      size="sm"
+                      variant={"ghost"}
+                      onClick={() => handleDelete(row.businessId)}
+                    >
+                      <Trash2Icon />
                     </Button>
                   </div>
                 </TableCell>

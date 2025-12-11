@@ -1,4 +1,3 @@
-import { cookies } from "next/headers";
 import B2CLeadsTable from "./b2c-leads-table";
 import { getToken } from "@/lib/get-token";
 
@@ -38,9 +37,7 @@ const B2CTableLoader = async ({ limit, page, filters, hasFilters }: Props) => {
   });
 
   if (!res.ok) throw new Error("Failed to fetch data");
-
   const data = await res.json();
-
   return <B2CLeadsTable result={data.data} total={data.meta.total} />;
 };
 
