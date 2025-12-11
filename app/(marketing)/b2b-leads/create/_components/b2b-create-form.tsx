@@ -1,45 +1,48 @@
 "use client";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import toast, { Toaster } from "react-hot-toast";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
 } from "@/components/ui/form";
 
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardAction,
-} from "@/components/ui/card";
-import {
-  BusinessProfileFormType,
-  B2BProfileSchema,
-} from "./b2b-create-form-schema";
-import Link from "next/link";
-import { ArrowLeftCircle, Plus, PlusIcon, X } from "lucide-react";
 import { AdvancedSelector } from "@/components/advance-selector";
 import InputField from "@/components/input-field";
 import TextareaField from "@/components/text-area";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { ArrowLeftCircle, Plus, PlusIcon, X } from "lucide-react";
+import Link from "next/link";
+import {
+  B2BProfileSchema,
+  BusinessProfileFormType,
+} from "./b2b-create-form-schema";
+import { createB2BLead } from "@/actions/createB2BLead";
+import { useRouter } from "next/navigation";
 
-export default function CreateBusinessForm() {
+export default function B2BCreateForm() {
+  const router = useRouter();
   const form = useForm<BusinessProfileFormType>({
     resolver: zodResolver(B2BProfileSchema),
     defaultValues: {
@@ -157,8 +160,14 @@ export default function CreateBusinessForm() {
   // location
   const countries = ["Bangladesh", "USA", "UK", "India", "Canada", "Australia"];
 
-  function onSubmit(values: BusinessProfileFormType) {
-    console.log("FORM DATA:", values);
+  async function onSubmit(values: BusinessProfileFormType) {
+    const res = await createB2BLead(values);
+    if (res.statusCode == 400) {
+      toast.error("Error Creating Lead");
+      return;
+    }
+    toast.success("B2B lead created!");
+    router.push("/b2b-leads");
   }
 
   return (

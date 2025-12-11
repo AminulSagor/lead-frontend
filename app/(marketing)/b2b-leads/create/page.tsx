@@ -1,4 +1,4 @@
-import CreateBusinessForm from './_components/create-business-form';
+import CreateBusinessForm from "./_components/b2b-create-form";
 
 const page = () => {
   return (
