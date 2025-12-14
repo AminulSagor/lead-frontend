@@ -262,7 +262,7 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
                     </Button>
 
                     <Button size="sm" variant="ghost" asChild>
-                      <Link href={`/b2b-leads/edit/${row.id}`}>
+                      <Link href={`/b2b-leads/edit/${row.businessId}`}>
                         <EditIcon className="h-4 w-4" />
                       </Link>
                     </Button>

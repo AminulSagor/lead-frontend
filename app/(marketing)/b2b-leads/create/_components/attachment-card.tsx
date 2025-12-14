@@ -7,7 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { BusinessProfileFormType } from "./b2b-create-form-schema";
 
-const AttachmentCard = () => {
+type AttachmentCardProps = {
+  initialUrl?: string;
+};
+
+const AttachmentCard = ({ initialUrl }: AttachmentCardProps) => {
   const { setValue, watch } = useFormContext<BusinessProfileFormType>();
 
   const companyImgUrl = watch("companyImgUrl");
@@ -75,6 +79,19 @@ const AttachmentCard = () => {
     }
   };
 
+  // useEffect(() => {
+  //   if (file) {
+  //     const objectUrl = URL.createObjectURL(file);
+  //     setPreview(objectUrl);
+  //     return () => URL.revokeObjectURL(objectUrl);
+  //   } else if (companyImgUrl) {
+  //     setPreview(companyImgUrl);
+  //   } else {
+  //     setPreview(null);
+  //   }
+  // }, [file, companyImgUrl]);
+
+  // In useEffect, include initialUrl fallback
   useEffect(() => {
     if (file) {
       const objectUrl = URL.createObjectURL(file);
@@ -82,10 +99,13 @@ const AttachmentCard = () => {
       return () => URL.revokeObjectURL(objectUrl);
     } else if (companyImgUrl) {
       setPreview(companyImgUrl);
+    } else if (initialUrl) {
+      setPreview(initialUrl);
+      setValue("companyImgUrl", initialUrl, { shouldValidate: true });
     } else {
       setPreview(null);
     }
-  }, [file, companyImgUrl]);
+  }, [file, companyImgUrl, initialUrl, setValue]);
 
   return (
     <Card>

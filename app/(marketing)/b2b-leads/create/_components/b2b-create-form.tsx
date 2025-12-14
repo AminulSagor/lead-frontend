@@ -43,14 +43,19 @@ import {
   BusinessProfileFormType,
 } from "./b2b-create-form-schema";
 import { createB2BLead } from "@/actions/createB2BLead";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import AttachmentCard from "./attachment-card";
 
-export default function B2BCreateForm() {
+type B2BCreateFormProps = {
+  initialData?: BusinessProfileFormType; // or the appropriate type
+};
+
+export default function B2BCreateForm({ initialData }: B2BCreateFormProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const form = useForm<BusinessProfileFormType>({
     resolver: zodResolver(B2BProfileSchema),
-    defaultValues: {
+    defaultValues: initialData || {
       // business profile
       name: "",
       businessType: "",
@@ -137,6 +142,7 @@ export default function B2BCreateForm() {
       metaNotes: "",
       // metaDateAdded:"",
       // metaLastUpdated: '',
+      companyImgUrl: "",
     },
   });
 
@@ -164,17 +170,25 @@ export default function B2BCreateForm() {
   const currencyOptions = ["USD", "EUR", "GBP", "BDT"];
   // location
   const countries = ["Bangladesh", "USA", "UK", "India", "Canada", "Australia"];
-
+  const isEdit = pathname.includes("edit");
   async function onSubmit(values: BusinessProfileFormType) {
     console.log(values, "values");
-    const res = await createB2BLead(values);
-    if (res.statusCode == 400) {
-      toast.error("Error Creating Lead");
-      return;
+
+    if (!isEdit) {
+      console.log("i am herre");
+      const res = await createB2BLead(values);
+      if (res.statusCode == 400) {
+        toast.error("Error Creating Lead");
+        return;
+      }
+      toast.success("B2B lead created!");
+      router.push("/b2b-leads");
+    } else {
+      console.log("call update function");
     }
-    toast.success("B2B lead created!");
-    router.push("/b2b-leads");
   }
+
+  console.log(initialData, "initial data");
 
   return (
     <div className="space-y-4">
