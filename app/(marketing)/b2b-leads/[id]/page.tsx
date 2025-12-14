@@ -1,58 +1,73 @@
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeftCircle } from 'lucide-react';
-import Link from 'next/link';
-import { DUMMY_LEADS } from '../_components/data';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowLeftCircle } from "lucide-react";
+import Link from "next/link";
+import { getToken } from "@/lib/get-token";
 
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
+  console.log(id, "id");
 
-  const data: any = DUMMY_LEADS.find((lead) => lead.id === id);
+  const token = await getToken();
+
+  const res = await fetch(process.env.API_URL + `/b2b/${id}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch lead");
+  }
+
+  const { data } = await res.json();
 
   if (!data) {
     return <div className="p-6 text-center text-red-500">Lead not found.</div>;
   }
 
-  const COMMENT_SECTIONS = [
+  const SECTIONS = [
     {
-      title: 'Business Profile',
+      title: "Business Profile",
       fields: [
-        'name',
-        'businessType',
-        'businessDescription',
-        'registrationNumber',
-        'taxId',
+        "name",
+        "businessType",
+        "businessDescription",
+        "registrationNumber",
+        "taxId",
       ],
     },
     {
-      title: 'Location',
-      fields: ['street', 'city', 'state', 'postalCode', 'country'],
+      title: "Location",
+      fields: ["street", "city", "state", "postalCode", "country"],
     },
     {
-      title: 'Key Contact',
+      title: "Key Contact",
       fields: [
-        'keyContactName',
-        'keyContactPosition',
-        'keyContactPhone',
-        'keyContactEmail',
+        "keyContactName",
+        "keyContactPosition",
+        "keyContactPhone",
+        "keyContactEmail",
       ],
     },
     {
-      title: 'Online Presence',
+      title: "Online Presence",
       fields: [
-        'opFacebook',
-        'opInstagram',
-        'opLinkedin',
-        'opTwitter',
-        'opYoutube',
+        "opFacebook",
+        "opInstagram",
+        "opLinkedin",
+        "opTwitter",
+        "opYoutube",
       ],
     },
     {
-      title: 'Operations',
+      title: "Operations",
       fields: [
-        'operationsOpeningHours',
-        'operationsEmployees',
-        'operationsTools',
+        "operationsOpeningHours",
+        "operationsEmployees",
+        "operationsTools",
       ],
     },
   ];
@@ -61,14 +76,14 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
     <div className="space-y-4">
       <div>
         <Button asChild>
-          <Link href={'/b2b-leads'}>
+          <Link href={"/b2b-leads"}>
             <ArrowLeftCircle />
             Back
           </Link>
         </Button>
       </div>
       <div className=" mx-auto  space-y-4">
-        {COMMENT_SECTIONS.map((section) => (
+        {SECTIONS.map((section) => (
           <Card key={section.title} className="rounded-sm">
             <CardHeader>
               <CardTitle className="text-lg">{section.title}</CardTitle>
@@ -79,11 +94,11 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
                 <div key={field}>
                   <p className="text-sm text-muted-foreground">
                     {field
-                      .replace(/([A-Z])/g, ' $1')
+                      .replace(/([A-Z])/g, " $1")
                       .replace(/^./, (c) => c.toUpperCase())}
                   </p>
 
-                  <p className="font-medium">{data[field] || 'N/A'}</p>
+                  <p className="font-medium">{data[field] || "N/A"}</p>
                 </div>
               ))}
             </CardContent>

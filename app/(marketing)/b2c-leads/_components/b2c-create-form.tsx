@@ -25,6 +25,7 @@ import LegalGovernmentCard from "./legal-govt-card";
 import MembershipsAffiliationsCard from "./membership-affiliation-card";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import AttachmentCard from "../../b2b-leads/create/_components/attachment-card";
 
 const B2CCreateForm = () => {
   const router = useRouter();
@@ -156,6 +157,7 @@ const B2CCreateForm = () => {
       nonprofits: "",
       loyaltyPrograms: "",
       volunteerActivities: "",
+      // attachment
     },
   });
 

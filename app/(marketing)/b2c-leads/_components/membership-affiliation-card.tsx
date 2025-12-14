@@ -1,11 +1,12 @@
-'use client';
+"use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useFormContext } from 'react-hook-form';
-import TextareaField from '@/components/text-area';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useFormContext } from "react-hook-form";
+import TextareaField from "@/components/text-area";
+import { B2CProfileSchemaType } from "./b2c-create-form-schema";
 
 const MembershipsAffiliationsCard = () => {
-  const { control } = useFormContext();
+  const { control } = useFormContext<B2CProfileSchemaType>();
   return (
     <Card className="border border-gray-200 shadow-none rounded-sm">
       <CardHeader>

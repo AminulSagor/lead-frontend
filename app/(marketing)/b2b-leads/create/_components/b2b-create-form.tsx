@@ -1,6 +1,11 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
+import {
+  Controller,
+  FormProvider,
+  useFieldArray,
+  useForm,
+} from "react-hook-form";
 import toast from "react-hot-toast";
 
 import {
@@ -40,6 +45,7 @@ import {
 } from "./b2b-create-form-schema";
 import { createB2BLead } from "@/actions/createB2BLead";
 import { useRouter } from "next/navigation";
+import AttachmentCard from "./attachment-card";
 
 export default function B2BCreateForm() {
   const router = useRouter();
@@ -161,6 +167,7 @@ export default function B2BCreateForm() {
   const countries = ["Bangladesh", "USA", "UK", "India", "Canada", "Australia"];
 
   async function onSubmit(values: BusinessProfileFormType) {
+    console.log(values, "values");
     const res = await createB2BLead(values);
     if (res.statusCode == 400) {
       toast.error("Error Creating Lead");
@@ -181,7 +188,7 @@ export default function B2BCreateForm() {
         </Button>
       </div>
       <div className=" mx-auto">
-        <Form {...form}>
+        <FormProvider {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <Card className="border border-gray-200 shadow-none rounded-sm">
               <CardHeader>
@@ -1480,12 +1487,14 @@ export default function B2BCreateForm() {
                 /> */}
               </CardContent>
             </Card>
+
+            <AttachmentCard />
             {/* SUBMIT BUTTON */}
             <Button type="submit" className="w-full py-6 text-base">
               Save
             </Button>
           </form>
-        </Form>
+        </FormProvider>
       </div>
     </div>
   );
