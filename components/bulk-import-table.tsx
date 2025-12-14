@@ -17,8 +17,8 @@ import Link from "next/link";
 import { useState } from "react";
 import * as XLSX from "xlsx";
 import { usePathname } from "next/navigation";
-import { normalizeB2BRow } from "./normalize-b2b-row";
-import { saveB2BBulkImport } from "@/actions/saveB2BImport";
+import { normalizeB2BRow } from "@/app/(marketing)/b2b-leads/_components/normalizeB2BRow";
+import { saveB2BBulkImport } from "@/actions/saveB2BBulkImport";
 
 type B2CProfileRow = Record<string, unknown>;
 

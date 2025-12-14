@@ -1,11 +1,9 @@
 "use server";
-
 import { getToken } from "@/lib/get-token";
 
-export async function saveB2CBulkImport(tableData: any) {
-  console.log(tableData, "save b2c import");
+export const saveB2BBulkImport = async (tableData: any) => {
   const token = await getToken();
-  const res = await fetch(process.env.API_URL + "/b2c/bulk-create", {
+  const res = await fetch(process.env.API_URL + "/b2b/bulk-create", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -18,4 +16,4 @@ export async function saveB2CBulkImport(tableData: any) {
 
   const data = await res.json();
   return data;
-}
+};
