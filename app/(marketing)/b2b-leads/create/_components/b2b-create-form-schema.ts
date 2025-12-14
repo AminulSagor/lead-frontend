@@ -193,7 +193,7 @@ export const B2BProfileSchema = z.object({
   marketingMainCompetitors: z.string().trim().optional().or(z.literal("")),
   marketingKeywords: z.string().trim().optional().or(z.literal("")),
   // meta data
-  metaTags: z.array(z.string().trim()).optional().default([]),
+  metaTags: z.array(z.string().or(z.literal(""))).optional(),
   metaNotes: z.string().trim().optional().or(z.literal("")),
   // metaDateAdded: z.string().trim().optional().or(z.literal('')),
   // metaLastUpdated: z.string().trim().optional().or(z.literal('')),

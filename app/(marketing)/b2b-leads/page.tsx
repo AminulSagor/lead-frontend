@@ -9,7 +9,6 @@ interface B2BPageProps {
   searchParams: {
     page?: string;
     pageSize?: string;
-
     businessType?: string;
     primaryIndustry?: string;
     niche?: string;
