@@ -59,8 +59,6 @@ const AttachmentCard = ({ initialUrl }: AttachmentCardProps) => {
         body: selectedFile,
       });
 
-      console.log(publicUrl, "public url");
-
       if (!uploadRes.ok) {
         throw new Error(`Upload failed: ${uploadRes.statusText}`);
       }

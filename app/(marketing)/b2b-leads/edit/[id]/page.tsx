@@ -12,7 +12,6 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     },
   });
   const { data } = await req.json();
-  console.log(data, "req");
   // Map keyContacts to form shape:
   const mappedKeyContacts = (data.keyContacts || []).map((kc: any) => ({
     keyContactName: kc.name || "",
@@ -27,8 +26,6 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     ...data,
     keyContacts: mappedKeyContacts,
   };
-
-  console.log(initialData, "initial data");
 
   return (
     <div>

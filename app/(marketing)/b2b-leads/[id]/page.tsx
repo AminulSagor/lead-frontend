@@ -6,7 +6,6 @@ import { getToken } from "@/lib/get-token";
 
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
-  console.log(id, "id");
 
   const token = await getToken();
 

@@ -29,8 +29,6 @@ const BulkImportTable = () => {
   const isB2C = pathname?.startsWith("/b2c-leads");
   const isB2B = pathname?.startsWith("/b2b-leads");
 
-  console.log({ isB2B, isB2C });
-
   const [tableData, setTableData] = useState<B2CProfileRow[]>([]);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -87,7 +85,6 @@ const BulkImportTable = () => {
     try {
       const res = await saveBulkImport(tableData);
       setTableData([]);
-      console.log(res);
     } catch (error) {
       console.error(error);
       alert("Failed to save data");
@@ -96,7 +93,6 @@ const BulkImportTable = () => {
     }
   };
 
-  console.log(tableData, "table data");
   return (
     <>
       <div className="flex justify-between">

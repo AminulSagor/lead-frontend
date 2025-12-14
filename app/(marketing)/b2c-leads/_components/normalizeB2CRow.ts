@@ -13,12 +13,6 @@ function parseCivicActivities(row: Record<string, any>) {
   const roles = splitCSV(row["civicActivities.role"]);
   const activities = splitCSV(row["civicActivities.activities"]);
 
-  console.log({
-    organizations,
-    roles,
-    activities,
-  });
-
   const maxLength = Math.max(
     organizations.length,
     roles.length,

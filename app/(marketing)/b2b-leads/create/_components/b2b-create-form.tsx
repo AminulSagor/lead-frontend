@@ -172,10 +172,7 @@ export default function B2BCreateForm({ initialData }: B2BCreateFormProps) {
   const countries = ["Bangladesh", "USA", "UK", "India", "Canada", "Australia"];
   const isEdit = pathname.includes("edit");
   async function onSubmit(values: BusinessProfileFormType) {
-    console.log(values, "values");
-
     if (!isEdit) {
-      console.log("i am herre");
       const res = await createB2BLead(values);
       if (res.statusCode == 400) {
         toast.error("Error Creating Lead");
@@ -187,8 +184,6 @@ export default function B2BCreateForm({ initialData }: B2BCreateFormProps) {
       console.log("call update function");
     }
   }
-
-  console.log(initialData, "initial data");
 
   return (
     <div className="space-y-4">
