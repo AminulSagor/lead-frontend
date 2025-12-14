@@ -1,5 +1,7 @@
-'use client';
-import { Button } from '@/components/ui/button';
+"use client";
+import { saveB2CBulkImport } from "@/actions/saveB2CBulkImport";
+import { normalizeB2CRow } from "@/app/(marketing)/b2c-leads/_components/normalizeB2CRow";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -7,27 +9,54 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { ArrowLeftCircle, FileSpreadsheet, Import, Save } from 'lucide-react';
-import Link from 'next/link';
-import { useState } from 'react';
-import * as XLSX from 'xlsx';
+} from "@/components/ui/table";
+import { ArrowLeftCircle, FileSpreadsheet, Import, Save } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import * as XLSX from "xlsx";
 type B2CProfileRow = Record<string, unknown>;
 const BulkImportTable = () => {
   const [tableData, setTableData] = useState<B2CProfileRow[]>([]);
+  const [isSaving, setIsSaving] = useState(false);
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const buffer = await file.arrayBuffer();
-    const workbook = XLSX.read(buffer, { type: 'array' });
+    const workbook = XLSX.read(buffer, { type: "array" });
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
-
-    const json = XLSX.utils.sheet_to_json<B2CProfileRow>(sheet, {
-      defval: '',
+    const rawRows = XLSX.utils.sheet_to_json<B2CProfileRow>(sheet, {
+      defval: "",
     });
 
-    setTableData(json);
+    console.log(rawRows, "raworws");
+    const normalizedRows = rawRows.map(normalizeB2CRow);
+    setTableData(normalizedRows);
+  };
+
+  console.log(tableData, "tabledata");
+
+  function renderCellValue(value: unknown) {
+    if (Array.isArray(value)) {
+      // civicActivities
+      return value
+        .map((item: any) => item.organizations)
+        .filter(Boolean)
+        .join(", ");
+    }
+
+    if (typeof value === "object" && value !== null) {
+      // salary / totalIncome
+      const obj = value as Record<string, any>;
+      return Object.values(obj).filter(Boolean).join(" ");
+    }
+
+    return String(value ?? "");
+  }
+
+  const handleSave = async () => {
+    const s = await saveB2CBulkImport(tableData);
+    console.log(s, "s");
   };
 
   return (
@@ -35,14 +64,14 @@ const BulkImportTable = () => {
       <div className="flex justify-between">
         <div>
           <Button asChild>
-            <Link href={'/b2c-leads'}>
+            <Link href={"/b2c-leads"}>
               <ArrowLeftCircle />
               Back
             </Link>
           </Button>
         </div>
         <div className="">
-          <Button asChild variant={'outline'} className="">
+          <Button asChild variant={"outline"} className="">
             <label htmlFor="file-upload" className="hover:cursor-pointer">
               <Import />
               Import Excel
@@ -81,7 +110,7 @@ const BulkImportTable = () => {
                     >
                       {Object.keys(row).map((colKey, colIndex) => (
                         <TableCell key={colIndex}>
-                          {String(row[colKey])}
+                          {renderCellValue(row[colKey])}
                         </TableCell>
                       ))}
                     </TableRow>
@@ -111,16 +140,9 @@ const BulkImportTable = () => {
       )}
       {tableData.length > 0 && (
         <div>
-          <Button
-            variant={'secondary'}
-            size={'default'}
-            className="hover:cursor-pointer"
-            onClick={() => {
-              alert(JSON.stringify(tableData, null, 2));
-            }}
-          >
+          <Button variant="secondary" disabled={isSaving} onClick={handleSave}>
             <Save />
-            Save
+            {isSaving ? "Saving..." : "Save"}
           </Button>
         </div>
       )}
