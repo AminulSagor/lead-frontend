@@ -9,7 +9,6 @@ import {
 import toast from "react-hot-toast";
 
 import {
-  Form,
   FormControl,
   FormField,
   FormItem,
@@ -134,7 +133,7 @@ export default function B2BCreateForm() {
       marketingMainCompetitors: "",
       marketingKeywords: "",
       // meta data
-      metaTags: "",
+      metaTags: [],
       metaNotes: "",
       // metaDateAdded:"",
       // metaLastUpdated: '',
@@ -1443,12 +1442,35 @@ export default function B2BCreateForm() {
               <CardHeader>
                 <CardTitle>Metadata</CardTitle>
               </CardHeader>
-              <CardContent className=" grid grid-cols-2 gap-4">
-                <TextareaField
+              <CardContent className=" grid grid-cols-1 gap-4">
+                <Controller
                   control={form.control}
-                  label="Tags"
                   name="metaTags"
-                  placeholder="Enter tags (comma separated) (Optional)"
+                  render={({ field, fieldState }) => (
+                    <div className="space-y-2">
+                      <FormLabel>Business Type</FormLabel>
+                      <AdvancedSelector
+                        onChange={field.onChange}
+                        value={field.value}
+                        placeholder="Select Tags"
+                        multi
+                        presets={[
+                          "Software",
+                          "SaaS",
+                          "IT Services",
+                          "Web Development",
+                          "Cloud",
+                          "AI",
+                        ]}
+                      />
+
+                      {fieldState.error && (
+                        <p className="text-sm text-red-500">
+                          {fieldState.error.message}
+                        </p>
+                      )}
+                    </div>
+                  )}
                 />
 
                 <TextareaField

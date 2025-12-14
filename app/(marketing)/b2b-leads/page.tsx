@@ -9,7 +9,6 @@ interface B2BPageProps {
   searchParams: {
     page?: string;
     pageSize?: string;
-
     businessType?: string;
     primaryIndustry?: string;
     niche?: string;
@@ -45,7 +44,7 @@ const page = async ({ searchParams }: B2BPageProps) => {
         <h2 className="text-2xl font-semibold tracking-tight">B2B Leads</h2>
         <div className="space-x-2">
           <Button asChild variant={"outline"}>
-            <Link href={"/b2c-leads/bulk-import"}>
+            <Link href={"/b2b-leads/bulk-import"}>
               <Import />
               Bulk Import
             </Link>
