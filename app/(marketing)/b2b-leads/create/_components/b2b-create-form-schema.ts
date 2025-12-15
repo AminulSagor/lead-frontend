@@ -198,8 +198,7 @@ export const B2BProfileSchema = z.object({
   // metaDateAdded: z.string().trim().optional().or(z.literal('')),
   // metaLastUpdated: z.string().trim().optional().or(z.literal('')),
 
-  // attachment:
-  companyImgUrl: z.string().url().optional(),
+  companyImgUrl: z.string().url().optional().or(z.literal("")),
 });
 
 export type BusinessProfileFormType = z.infer<typeof B2BProfileSchema>;

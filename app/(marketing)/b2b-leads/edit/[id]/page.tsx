@@ -1,5 +1,6 @@
 import { getToken } from "@/lib/get-token";
 import B2BCreateForm from "../../create/_components/b2b-create-form";
+import { nullsToEmptyStrings } from "@/lib/utils";
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
@@ -12,21 +13,6 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     },
   });
   const { data } = await req.json();
-
-  function nullsToEmptyStrings(obj: any): any {
-    if (obj === null) return "";
-    if (Array.isArray(obj)) {
-      return obj.map(nullsToEmptyStrings);
-    }
-    if (typeof obj === "object" && obj !== null) {
-      const newObj: any = {};
-      for (const key in obj) {
-        newObj[key] = nullsToEmptyStrings(obj[key]);
-      }
-      return newObj;
-    }
-    return obj;
-  }
 
   const cleanedData = nullsToEmptyStrings(data);
 

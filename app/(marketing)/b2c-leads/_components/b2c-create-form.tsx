@@ -202,6 +202,9 @@ const B2CCreateForm = ({ initialData }: B2CCreateFormProps) => {
       } else {
         const res = await updateB2CLead(id, data);
         toast.success(res.message);
+        if (res.success) {
+          router.push("/b2c-leads");
+        }
       }
     } catch (error) {
       console.error(error);

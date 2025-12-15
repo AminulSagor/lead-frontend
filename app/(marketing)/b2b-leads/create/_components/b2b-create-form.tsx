@@ -193,7 +193,6 @@ export default function B2BCreateForm({ initialData }: B2BCreateFormProps) {
     } else {
       // UPDATE
 
-      console.log(values, "values");
       const res = await updateB2BLead(businessId, values);
       console.log(res, "response update");
       // const data = await res.json();
@@ -205,8 +204,6 @@ export default function B2BCreateForm({ initialData }: B2BCreateFormProps) {
       }
     }
   }
-
-  console.log(isSubmitting, "isSbmitting");
 
   return (
     <div className="space-y-4">

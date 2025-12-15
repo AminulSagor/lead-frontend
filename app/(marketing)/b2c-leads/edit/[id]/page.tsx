@@ -1,6 +1,6 @@
 import { getToken } from "@/lib/get-token";
-import React from "react";
 import B2CCreateForm from "../../_components/b2c-create-form";
+import { nullsToEmptyStrings } from "@/lib/utils";
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
@@ -15,9 +15,11 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   const { data } = await req.json();
 
+  const cleanedData = nullsToEmptyStrings(data);
+
   return (
     <div>
-      <B2CCreateForm initialData={data} />
+      <B2CCreateForm initialData={cleanedData} />
     </div>
   );
 };
