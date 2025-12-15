@@ -16,10 +16,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { EditIcon, EyeIcon, Trash2Icon, TrashIcon } from "lucide-react";
+import { EditIcon, EyeIcon, Trash2Icon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import {
   BUSINESS_TYPE_LIST,
   COUNTRY_LIST,
@@ -53,16 +53,19 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
 
   const page = Number(searchParams.get("page") || 1);
   const pageSize = Number(searchParams.get("pageSize") || 10);
-
-  /* ------------------------ Update URL Params ------------------------ */
   function updateParam(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString());
 
-    if (!value) params.delete(key);
-    else params.set(key, value);
+    if (!value) {
+      params.delete(key);
+    } else {
+      params.set(key, value);
+    }
 
     // When changing filters, reset to page 1
-    if (key !== "page") params.set("page", "1");
+    if (key !== "page") {
+      params.set("page", "1");
+    }
 
     router.replace(`${pathname}?${params.toString()}`);
   }

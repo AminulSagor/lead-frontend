@@ -243,14 +243,14 @@ export default function B2CLeadsTable({ result, total }: B2CLeadsTableProps) {
             </TableHeader>
 
             <TableBody>
-              {result.length === 0 ? (
+              {result?.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={13} className="text-center py-6">
                     No results found.
                   </TableCell>
                 </TableRow>
               ) : (
-                result.map((lead) => {
+                result?.map((lead) => {
                   return (
                     <TableRow
                       className="[&>td]:border-r [&>td:last-child]:border-r-0"

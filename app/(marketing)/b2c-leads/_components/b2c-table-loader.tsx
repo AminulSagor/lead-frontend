@@ -36,9 +36,11 @@ const B2CTableLoader = async ({ limit, page, filters, hasFilters }: Props) => {
     next: { revalidate: 0 },
   });
 
-  if (!res.ok) throw new Error("Failed to fetch data");
+  if (!res.ok) {
+    console.log("Something went wrong");
+  }
   const data = await res.json();
-  return <B2CLeadsTable result={data.data} total={data.meta.total} />;
+  return <B2CLeadsTable result={data.data} total={data.meta?.total} />;
 };
 
 export default B2CTableLoader;

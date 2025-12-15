@@ -3,7 +3,7 @@ import { CirclePlus, Import } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import B2CTableLoader from "./_components/b2c-table-loader";
-import ExcelExport from "./_components/excel-export";
+import ExcelExport from "../../../components/excel-export";
 
 interface B2CPageProps {
   searchParams: {

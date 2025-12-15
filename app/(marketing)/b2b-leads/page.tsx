@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import B2BLeadsTable from "./_components/b2b-leads-table";
 import { CirclePlus, Import } from "lucide-react";
 import { Suspense } from "react";
 import B2bTableLoader from "./_components/b2b-table-loader";
+import ExcelExport from "@/components/excel-export";
 
 interface B2BPageProps {
   searchParams: {
@@ -43,6 +43,7 @@ const page = async ({ searchParams }: B2BPageProps) => {
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold tracking-tight">B2B Leads</h2>
         <div className="space-x-2">
+          <ExcelExport />
           <Button asChild variant={"outline"}>
             <Link href={"/b2b-leads/bulk-import"}>
               <Import />
