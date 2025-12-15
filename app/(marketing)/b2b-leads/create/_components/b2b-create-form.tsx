@@ -47,7 +47,7 @@ import { usePathname, useRouter } from "next/navigation";
 import AttachmentCard from "./attachment-card";
 
 type B2BCreateFormProps = {
-  initialData?: BusinessProfileFormType; // or the appropriate type
+  initialData?: BusinessProfileFormType;
 };
 
 export default function B2BCreateForm({ initialData }: B2BCreateFormProps) {

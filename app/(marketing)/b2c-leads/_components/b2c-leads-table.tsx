@@ -291,7 +291,7 @@ export default function B2CLeadsTable({ result, total }: B2CLeadsTableProps) {
                           </Button>
 
                           <Button size="sm" variant="ghost" asChild>
-                            <Link href={`/b2b-leads/edit/`}>
+                            <Link href={`/b2c-leads/edit/${lead.id}`}>
                               <EditIcon className="h-4 w-4" />
                             </Link>
                           </Button>

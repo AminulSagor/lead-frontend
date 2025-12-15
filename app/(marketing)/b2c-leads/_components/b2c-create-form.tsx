@@ -24,14 +24,18 @@ import FinancialInformationCard from "./financial-info-card";
 import LegalGovernmentCard from "./legal-govt-card";
 import MembershipsAffiliationsCard from "./membership-affiliation-card";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import AttachmentCard from "../../b2b-leads/create/_components/attachment-card";
 
-const B2CCreateForm = () => {
+interface B2CCreateFormProps {
+  initialData?: B2CProfileSchemaType;
+}
+const B2CCreateForm = ({ initialData }: B2CCreateFormProps) => {
+  const pathname = usePathname();
   const router = useRouter();
   const form = useForm<B2CProfileSchemaType>({
     resolver: zodResolver(B2CProfileSchema),
-    defaultValues: {
+    defaultValues: initialData || {
       // personal details
       fullName: "",
       nickname: "",
@@ -161,25 +165,31 @@ const B2CCreateForm = () => {
     },
   });
 
+  const isEdit = pathname.includes("edit");
+
   const onSubmit = async (data: B2CProfileSchemaType) => {
     try {
-      const res = await fetch(`/api/b2c-leads`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      if (!isEdit) {
+        const res = await fetch(`/api/b2c-leads`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
 
-      if (!res.ok) {
-        const data = await res.json();
-        console.error(data.message);
-        return;
+        if (!res.ok) {
+          const data = await res.json();
+          console.error(data.message);
+          return;
+        }
+
+        const result = await res.json();
+        toast.success("B2C Profile Created Successfully!");
+        router.push("/b2c-leads");
+      } else {
+        console.log("upadte");
       }
-
-      const result = await res.json();
-      toast.success("B2C Profile Created Successfully!");
-      router.push("/b2c-leads");
     } catch (error) {
       console.error(error);
     }

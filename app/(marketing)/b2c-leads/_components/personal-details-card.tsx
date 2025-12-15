@@ -1,8 +1,8 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import InputField from './input-field';
-import { useFormContext } from 'react-hook-form';
-import SelectField from './select-filed';
-import { COUNTRY_LIST, GENDER_LIST } from './data';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import InputField from "./input-field";
+import { useFormContext } from "react-hook-form";
+import SelectField from "./select-filed";
+import { COUNTRY_LIST, GENDER_LIST } from "./data";
 const PersonalDetailsCard = () => {
   const { control } = useFormContext();
   return (
@@ -25,19 +25,13 @@ const PersonalDetailsCard = () => {
           name="nickname"
           placeholder="Enter nickname here"
         />
-        <InputField
-          control={control}
-          label="Date of Birth"
-          name="dob"
-          type="date"
-        />
+        <InputField control={control} label="Date of Birth" name="dob" />
         <SelectField
           control={control}
           name="nationality"
           label="Nationality"
           options={COUNTRY_LIST}
           placeholder="Select Nationality"
-          className=""
         />
         <SelectField
           control={control}
