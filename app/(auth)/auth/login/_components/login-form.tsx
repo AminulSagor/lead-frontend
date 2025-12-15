@@ -7,26 +7,40 @@ export default function LoginForm() {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    });
+    setLoading(true);
+    setError("");
 
-    const data = await res.json();
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
 
-    if (!res.ok) {
-      toast.error(data.message);
-      return;
-    }
+      const data = await res.json();
 
-    if (data.success) {
-      router.push("/");
+      if (!res.ok) {
+        setError(data.message || "Something went wrong");
+        toast.error(data.message || "Something went wrong");
+        setLoading(false);
+        return;
+      }
+
+      if (data.success) {
+        router.push("/");
+      }
+    } catch (err) {
+      setError("Network error, please try again");
+      toast.error("Network error, please try again");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -38,12 +52,16 @@ export default function LoginForm() {
       >
         <h2 className="text-lg font-semibold">Login</h2>
 
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+
         <input
           type="text"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           className="border p-2 rounded"
+          disabled={loading}
+          autoComplete="username"
         />
 
         <input
@@ -52,13 +70,16 @@ export default function LoginForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="border p-2 rounded"
+          disabled={loading}
+          autoComplete="current-password"
         />
 
         <button
           type="submit"
-          className="bg-black text-white p-2 rounded hover:bg-gray-800"
+          className="bg-black text-white p-2 rounded hover:bg-gray-800 disabled:opacity-50"
+          disabled={loading}
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
       </form>
     </div>
