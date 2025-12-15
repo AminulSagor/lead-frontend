@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { BusinessProfileFormType } from "./b2b-create-form-schema";
+import { X } from "lucide-react";
 
 type AttachmentCardProps = {
   initialUrl?: string;
@@ -13,13 +14,13 @@ type AttachmentCardProps = {
 
 const AttachmentCard = ({ initialUrl }: AttachmentCardProps) => {
   const { setValue, watch } = useFormContext<BusinessProfileFormType>();
-
   const companyImgUrl = watch("companyImgUrl");
-
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] || null;
@@ -77,18 +78,16 @@ const AttachmentCard = ({ initialUrl }: AttachmentCardProps) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (file) {
-  //     const objectUrl = URL.createObjectURL(file);
-  //     setPreview(objectUrl);
-  //     return () => URL.revokeObjectURL(objectUrl);
-  //   } else if (companyImgUrl) {
-  //     setPreview(companyImgUrl);
-  //   } else {
-  //     setPreview(null);
-  //   }
-  // }, [file, companyImgUrl]);
+  const handleRemove = () => {
+    setFile(null);
+    setPreview(null);
+    setUploadError(null);
+    setValue("companyImgUrl", "", { shouldValidate: true });
 
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
   // In useEffect, include initialUrl fallback
   useEffect(() => {
     if (file) {
@@ -116,6 +115,7 @@ const AttachmentCard = ({ initialUrl }: AttachmentCardProps) => {
           <Label htmlFor="companyImgUrl">Upload Company Image</Label>
 
           <Input
+            ref={fileInputRef}
             id="companyImgUrl"
             type="file"
             accept="image/*"
@@ -133,12 +133,20 @@ const AttachmentCard = ({ initialUrl }: AttachmentCardProps) => {
         )}
 
         {preview && (
-          <div className="flex gap-3">
+          <div className="relative w-28 h-28">
             <img
               src={preview}
               alt="Company Image Preview"
               className="h-28 w-28 rounded-md border object-cover"
             />
+
+            <button
+              type="button"
+              onClick={handleRemove}
+              className="absolute -top-2 -right-2 rounded-full bg-red-600 p-1 text-white shadow hover:bg-red-700"
+            >
+              <X className="h-4 w-4" />
+            </button>
           </div>
         )}
 

@@ -19,15 +19,12 @@ import {
 import { EditIcon, EyeIcon, Trash2Icon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useTransition } from "react";
-import {
-  BUSINESS_TYPE_LIST,
-  COUNTRY_LIST,
-  DUMMY_LEADS,
-  INDUSTRY_LIST,
-} from "./data";
+import { useEffect, useState, useTransition } from "react";
+import { COUNTRY_LIST } from "./data";
 import { deleteB2BLead } from "@/actions/deleteB2BLead";
 import toast from "react-hot-toast";
+import { Input } from "@/components/ui/input";
+import { useDebounce } from "@/hooks/use-debounce-hook";
 
 export interface B2BLeadsTableProps {
   result: any;
@@ -39,8 +36,6 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-
-  /* ------------------------ GET FILTERS ------------------------ */
   const filters = {
     businessType: searchParams.get("businessType") || "",
     industry: searchParams.get("industry") || "",
@@ -50,9 +45,20 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
     serviceAvailability: searchParams.get("serviceAvailability") || "",
     city: searchParams.get("city") || "",
   };
-
   const page = Number(searchParams.get("page") || 1);
   const pageSize = Number(searchParams.get("pageSize") || 10);
+
+  const [inputs, setInputs] = useState({
+    businessType: filters.businessType,
+    industry: filters.industry,
+    niche: filters.niche,
+    city: filters.city,
+  });
+  const debouncedBusinessType = useDebounce(inputs.businessType, 500);
+  const debouncedIndustry = useDebounce(inputs.industry, 500);
+  const debouncedNiche = useDebounce(inputs.niche, 500);
+  const debouncedCity = useDebounce(inputs.city, 500);
+
   function updateParam(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString());
 
@@ -63,15 +69,29 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
     }
 
     // When changing filters, reset to page 1
-    if (key !== "page") {
-      params.set("page", "1");
-    }
+    // if (key !== "page") {
+    //   params.set("page", "1");
+    // }
 
     router.replace(`${pathname}?${params.toString()}`);
   }
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  useEffect(() => {
+    updateParam("businessType", debouncedBusinessType);
+  }, [debouncedBusinessType]);
 
+  useEffect(() => {
+    updateParam("industry", debouncedIndustry);
+  }, [debouncedIndustry]);
+
+  useEffect(() => {
+    updateParam("niche", debouncedNiche);
+  }, [debouncedNiche]);
+
+  useEffect(() => {
+    updateParam("city", debouncedCity);
+  }, [debouncedCity]);
   /* ---- If filters reduce result count, fix invalid page ---- */
   useEffect(() => {
     if (page > totalPages) updateParam("page", "1");
@@ -97,7 +117,7 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
           <p className="text-lg font-semibold">Filters:</p>
 
           {/* Business Type */}
-          <Select
+          {/* <Select
             value={filters.businessType}
             onValueChange={(value) => updateParam("businessType", value)}
           >
@@ -111,10 +131,18 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </Select> */}
 
+          <Input
+            placeholder="Business Type"
+            value={inputs.businessType}
+            onChange={(e) =>
+              setInputs((p) => ({ ...p, businessType: e.target.value }))
+            }
+            className="w-[180px]"
+          />
           {/* Industry */}
-          <Select
+          {/* <Select
             value={filters.industry}
             onValueChange={(value) => updateParam("industry", value)}
           >
@@ -128,10 +156,18 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </Select> */}
+          <Input
+            placeholder="Industry"
+            value={inputs.industry}
+            onChange={(e) =>
+              setInputs((p) => ({ ...p, industry: e.target.value }))
+            }
+            className="w-[180px]"
+          />
 
           {/* Online Service */}
-          <Select
+          {/* <Select
             value={filters.onlineService}
             onValueChange={(value) => updateParam("onlineService", value)}
           >
@@ -142,7 +178,7 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
               <SelectItem value="Yes">Yes</SelectItem>
               <SelectItem value="No">No</SelectItem>
             </SelectContent>
-          </Select>
+          </Select> */}
 
           {/* Country */}
           <Select
@@ -162,7 +198,7 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
           </Select>
 
           {/* Niche */}
-          <Select
+          {/* <Select
             value={filters.niche}
             onValueChange={(value) => updateParam("niche", value)}
           >
@@ -176,10 +212,17 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
-
+          </Select> */}
+          <Input
+            placeholder="Niche"
+            value={inputs.niche}
+            onChange={(e) =>
+              setInputs((p) => ({ ...p, niche: e.target.value }))
+            }
+            className="w-[180px]"
+          />
           {/* Service Availability */}
-          <Select
+          {/* <Select
             value={filters.serviceAvailability}
             onValueChange={(value) => updateParam("serviceAvailability", value)}
           >
@@ -195,10 +238,10 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </Select> */}
 
           {/* City */}
-          <Select
+          {/* <Select
             value={filters.city}
             onValueChange={(value) => updateParam("city", value)}
           >
@@ -214,7 +257,13 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
                 )
               )}
             </SelectContent>
-          </Select>
+          </Select> */}
+          <Input
+            placeholder="City"
+            value={inputs.city}
+            onChange={(e) => setInputs((p) => ({ ...p, city: e.target.value }))}
+            className="w-[180px]"
+          />
         </div>
 
         {/* Reset */}
@@ -240,48 +289,56 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
           </TableHeader>
 
           <TableBody>
-            {result.map((row: any, index: number) => (
-              <TableRow key={index}>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.businessType}</TableCell>
-                <TableCell>{row.primaryIndustry}</TableCell>
-                <TableCell>{row.niche}</TableCell>
-                <TableCell>
-                  {row.serviceName?.map((service: string, i: number) => (
-                    <span key={i}>
-                      {service}
-                      {i < row.serviceName.length - 1 ? ", " : ""}
-                    </span>
-                  ))}
-                </TableCell>
-                <TableCell>{row.country}</TableCell>
-                <TableCell>{row.city}</TableCell>
-                <TableCell className="text-right">
-                  <div className="inline-flex gap-2">
-                    <Button size="sm" variant="ghost" asChild>
-                      <Link href={`/b2b-leads/${row.businessId}`}>
-                        <EyeIcon className="h-4 w-4" />
-                      </Link>
-                    </Button>
-
-                    <Button size="sm" variant="ghost" asChild>
-                      <Link href={`/b2b-leads/edit/${row.businessId}`}>
-                        <EditIcon className="h-4 w-4" />
-                      </Link>
-                    </Button>
-
-                    <Button
-                      className="cursor-pointer"
-                      size="sm"
-                      variant={"ghost"}
-                      onClick={() => handleDelete(row.businessId)}
-                    >
-                      <Trash2Icon />
-                    </Button>
-                  </div>
+            {result.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={13} className="text-center py-6">
+                  No results found.
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              result.map((row: any, index: number) => (
+                <TableRow key={index}>
+                  <TableCell>{row.name}</TableCell>
+                  <TableCell>{row.businessType}</TableCell>
+                  <TableCell>{row.primaryIndustry}</TableCell>
+                  <TableCell>{row.niche}</TableCell>
+                  <TableCell>
+                    {row.serviceName?.map((service: string, i: number) => (
+                      <span key={i}>
+                        {service}
+                        {i < row.serviceName.length - 1 ? ", " : ""}
+                      </span>
+                    ))}
+                  </TableCell>
+                  <TableCell>{row.country}</TableCell>
+                  <TableCell>{row.city}</TableCell>
+                  <TableCell className="text-right">
+                    <div className="inline-flex gap-2">
+                      <Button size="sm" variant="ghost" asChild>
+                        <Link href={`/b2b-leads/${row.businessId}`}>
+                          <EyeIcon className="h-4 w-4" />
+                        </Link>
+                      </Button>
+
+                      <Button size="sm" variant="ghost" asChild>
+                        <Link href={`/b2b-leads/edit/${row.businessId}`}>
+                          <EditIcon className="h-4 w-4" />
+                        </Link>
+                      </Button>
+
+                      <Button
+                        className="cursor-pointer"
+                        size="sm"
+                        variant={"ghost"}
+                        onClick={() => handleDelete(row.businessId)}
+                      >
+                        <Trash2Icon />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>

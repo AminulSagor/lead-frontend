@@ -170,7 +170,9 @@ export default function B2BCreateForm({ initialData }: B2BCreateFormProps) {
   const currencyOptions = ["USD", "EUR", "GBP", "BDT"];
   // location
   const countries = ["Bangladesh", "USA", "UK", "India", "Canada", "Australia"];
+
   const isEdit = pathname.includes("edit");
+
   async function onSubmit(values: BusinessProfileFormType) {
     if (!isEdit) {
       const res = await createB2BLead(values);
@@ -1440,7 +1442,7 @@ export default function B2BCreateForm({ initialData }: B2BCreateFormProps) {
 
                 <TextareaField
                   control={form.control}
-                  label="Main Competitors"
+                  label="Keywords"
                   name="marketingKeywords"
                   placeholder="Keywords (SEO / Industry Terms) (optional)"
                 />

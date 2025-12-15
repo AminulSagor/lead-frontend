@@ -23,6 +23,7 @@ import Link from "next/link";
 import { EditIcon, EyeIcon, TrashIcon } from "lucide-react";
 import React from "react";
 import { deleteB2CLead } from "@/actions/deleteB2CLead";
+import toast from "react-hot-toast";
 
 export interface Lead {
   id: number;
@@ -79,7 +80,13 @@ export default function B2CLeadsTable({ result, total }: B2CLeadsTableProps) {
   const validPage = Math.min(page, totalPages || 1);
 
   const handleDelete = async (id: number) => {
-    await deleteB2CLead(id);
+    try {
+      const toastId = toast.loading("Deleting...");
+      await deleteB2CLead(id);
+      toast.success("Lead deleted successfully", { id: toastId });
+    } catch (error) {
+      toast.error("Error Deleting Lead");
+    }
   };
 
   return (

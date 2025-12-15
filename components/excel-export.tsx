@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 
 const ExcelExport = () => {
   const pathanme = usePathname();
-  console.log(pathanme);
   const isB2C = pathanme.startsWith("/b2c-leads");
   const handleDownload = async () => {
     const res = isB2C

@@ -12,18 +12,50 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     },
   });
   const { data } = await req.json();
+
+  function nullsToEmptyStrings(obj: any): any {
+    if (obj === null) return "";
+    if (Array.isArray(obj)) {
+      return obj.map(nullsToEmptyStrings);
+    }
+    if (typeof obj === "object" && obj !== null) {
+      const newObj: any = {};
+      for (const key in obj) {
+        newObj[key] = nullsToEmptyStrings(obj[key]);
+      }
+      return newObj;
+    }
+    return obj;
+  }
+
+  const cleanedData = nullsToEmptyStrings(data);
+
   // Map keyContacts to form shape:
-  const mappedKeyContacts = (data.keyContacts || []).map((kc: any) => ({
-    keyContactName: kc.name || "",
-    keyContactPosition: kc.position || "",
-    keyContactDepartment: kc.department || "",
-    keyContactPhone: kc.phone || "",
-    keyContactEmail: kc.email || "",
-    keyContactLinkedIn: kc.linkedIn || "",
+  const mappedKeyContacts = (cleanedData.keyContacts || []).map((kc: any) => ({
+    keyContactName: kc.name,
+    keyContactPosition: kc.position,
+    keyContactDepartment: kc.department,
+    keyContactPhone: kc.phone,
+    keyContactEmail: kc.email,
+    keyContactLinkedIn: kc.linkedIn,
   }));
 
+  const normalizeMetaTags = (metaTags: any): string[] => {
+    if (Array.isArray(metaTags)) return metaTags;
+
+    if (typeof metaTags === "string" && metaTags.trim() !== "") {
+      return metaTags
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter(Boolean);
+    }
+
+    return [];
+  };
+
   const initialData = {
-    ...data,
+    ...cleanedData,
+    metaTags: normalizeMetaTags(cleanedData.metaTags),
     keyContacts: mappedKeyContacts,
   };
 
