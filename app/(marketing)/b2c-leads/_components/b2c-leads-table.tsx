@@ -258,7 +258,6 @@ export default function B2CLeadsTable({ result, total }: B2CLeadsTableProps) {
                 </TableRow>
               ) : (
                 result?.map((lead) => {
-                  console.log(lead);
                   return (
                     <TableRow
                       className="[&>td]:border-r [&>td:last-child]:border-r-0"

@@ -194,7 +194,6 @@ export default function B2BCreateForm({ initialData }: B2BCreateFormProps) {
       // UPDATE
 
       const res = await updateB2BLead(businessId, values);
-      console.log(res, "response update");
       // const data = await res.json();
       if (res.success) {
         toast.success("B2B lead updated!");

@@ -15,7 +15,6 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   const { data } = await req.json();
   const cleanedData = nullsToEmptyStrings(data);
-  console.log(cleanedData, "clean data");
 
   return (
     <div>

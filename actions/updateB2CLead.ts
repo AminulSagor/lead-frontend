@@ -14,6 +14,5 @@ export async function updateB2CLead(id: number, values: B2CProfileSchemaType) {
   });
   const data = await res.json();
 
-  console.log("data from update b2c", data);
   return data;
 }

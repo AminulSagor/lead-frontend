@@ -198,6 +198,7 @@ export const B2BProfileSchema = z.object({
   // metaDateAdded: z.string().trim().optional().or(z.literal('')),
   // metaLastUpdated: z.string().trim().optional().or(z.literal('')),
 
+  // Company Image
   companyImgUrl: z.string().url().optional().or(z.literal("")),
 });
 

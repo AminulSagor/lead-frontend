@@ -33,8 +33,6 @@ const BulkImportTable = () => {
   const [tableData, setTableData] = useState<B2CProfileRow[]>([]);
   const [isSaving, setIsSaving] = useState(false);
 
-  console.log(tableData, "table Data");
-
   // Select normalize function based on route
   const normalizeRow = isB2C
     ? normalizeB2CRow
@@ -89,7 +87,7 @@ const BulkImportTable = () => {
       const res = await saveBulkImport(tableData);
       setTableData([]);
     } catch (error) {
-      console.error(error);
+      console.log(error);
       alert("Failed to save data");
     } finally {
       setIsSaving(false);

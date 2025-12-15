@@ -6,7 +6,7 @@ const B2CProfileLoader = async ({ id }: { id: number }) => {
   const res = await fetch(process.env.API_URL + "/b2c/" + id, {
     method: "GET",
     headers: {
-      Authorization: "Bearer" + " " + token,
+      Authorization: `Bearer ${token}`,
     },
     next: { revalidate: 0 },
   });

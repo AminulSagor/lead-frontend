@@ -168,4 +168,9 @@ export const B2C_SECTIONS = [
       "volunteerActivities",
     ],
   },
+
+  {
+    title: "Profile Image",
+    fields: ["profileImgUrl"],
+  },
 ];
