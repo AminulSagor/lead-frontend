@@ -25,10 +25,12 @@ import LegalGovernmentCard from "./legal-govt-card";
 import MembershipsAffiliationsCard from "./membership-affiliation-card";
 import toast from "react-hot-toast";
 import { usePathname, useRouter } from "next/navigation";
-import AttachmentCard from "../../b2b-leads/create/_components/attachment-card";
+import { updateB2CLead } from "@/actions/updateB2CLead";
 
 interface B2CCreateFormProps {
-  initialData?: B2CProfileSchemaType;
+  initialData?: B2CProfileSchemaType & {
+    id: number;
+  };
 }
 const B2CCreateForm = ({ initialData }: B2CCreateFormProps) => {
   const pathname = usePathname();
@@ -165,30 +167,41 @@ const B2CCreateForm = ({ initialData }: B2CCreateFormProps) => {
     },
   });
 
+  const {
+    formState: { isSubmitting },
+  } = form;
+
+  const id = initialData?.id;
+
   const isEdit = pathname.includes("edit");
 
   const onSubmit = async (data: B2CProfileSchemaType) => {
     try {
-      if (!isEdit) {
+      if (id === undefined) {
+        // Create a copy without 'othersWeb'
+        const { othersWeb, ...dataToSend } = data;
+
         const res = await fetch(`/api/b2c-leads`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify(dataToSend),
         });
 
         if (!res.ok) {
           const data = await res.json();
-          console.error(data.message);
+          toast.error("Something went wrong... Try Again Later");
+          console.log(data.message);
           return;
         }
 
-        const result = await res.json();
+        await res.json();
         toast.success("B2C Profile Created Successfully!");
         router.push("/b2c-leads");
       } else {
-        console.log("upadte");
+        const res = await updateB2CLead(id, data);
+        toast.success(res.message);
       }
     } catch (error) {
       console.error(error);
@@ -222,8 +235,13 @@ const B2CCreateForm = ({ initialData }: B2CCreateFormProps) => {
             <FinancialInformationCard />
             <LegalGovernmentCard />
             <MembershipsAffiliationsCard />
-            <Button type="submit" size={"sm"}>
-              Submit
+            <Button
+              disabled={isSubmitting}
+              type="submit"
+              size={"sm"}
+              className="w-full cursor-pointer"
+            >
+              {isSubmitting ? "Submitting..." : "Submit"}
             </Button>
           </form>
         </FormProvider>

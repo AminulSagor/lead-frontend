@@ -258,6 +258,7 @@ export default function B2CLeadsTable({ result, total }: B2CLeadsTableProps) {
                 </TableRow>
               ) : (
                 result?.map((lead) => {
+                  console.log(lead);
                   return (
                     <TableRow
                       className="[&>td]:border-r [&>td:last-child]:border-r-0"
@@ -286,7 +287,9 @@ export default function B2CLeadsTable({ result, total }: B2CLeadsTableProps) {
                       <TableCell>{lead.income}</TableCell>
                       <TableCell>
                         {lead.salary?.salaryAmount
-                          ? lead.salary.salaryAmount
+                          ? lead.salary.salaryAmount +
+                            " " +
+                            lead.salary.salaryCurrency
                           : null}
                       </TableCell>
                       <TableCell className="text-right">

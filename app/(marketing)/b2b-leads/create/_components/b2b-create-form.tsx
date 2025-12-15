@@ -1547,7 +1547,7 @@ export default function B2BCreateForm({ initialData }: B2BCreateFormProps) {
             <Button
               disabled={isSubmitting}
               type="submit"
-              className="w-full py-6 text-base"
+              className="w-full cursor-pointer "
             >
               {isSubmitting ? "Saving..." : "Save"}
             </Button>
