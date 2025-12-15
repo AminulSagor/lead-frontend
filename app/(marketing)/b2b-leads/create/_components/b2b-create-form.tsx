@@ -45,9 +45,12 @@ import {
 import { createB2BLead } from "@/actions/createB2BLead";
 import { usePathname, useRouter } from "next/navigation";
 import AttachmentCard from "./attachment-card";
+import { updateB2BLead } from "@/actions/updateB2BLead";
 
-type B2BCreateFormProps = {
-  initialData?: BusinessProfileFormType;
+export type B2BCreateFormProps = {
+  initialData?: BusinessProfileFormType & {
+    businessId?: string;
+  };
 };
 
 export default function B2BCreateForm({ initialData }: B2BCreateFormProps) {
@@ -147,6 +150,10 @@ export default function B2BCreateForm({ initialData }: B2BCreateFormProps) {
   });
 
   const {
+    formState: { isSubmitting },
+  } = form;
+
+  const {
     fields: keyContactsFields,
     append: keyContactsAppend,
     remove: keyContactsRemove,
@@ -171,21 +178,35 @@ export default function B2BCreateForm({ initialData }: B2BCreateFormProps) {
   // location
   const countries = ["Bangladesh", "USA", "UK", "India", "Canada", "Australia"];
 
-  const isEdit = pathname.includes("edit");
+  const businessId = initialData?.businessId;
 
   async function onSubmit(values: BusinessProfileFormType) {
-    if (!isEdit) {
+    if (!businessId) {
+      // CREATE
       const res = await createB2BLead(values);
-      if (res.statusCode == 400) {
+      if (res.statusCode === 400) {
         toast.error("Error Creating Lead");
         return;
       }
       toast.success("B2B lead created!");
       router.push("/b2b-leads");
     } else {
-      console.log("call update function");
+      // UPDATE
+
+      console.log(values, "values");
+      const res = await updateB2BLead(businessId, values);
+      console.log(res, "response update");
+      // const data = await res.json();
+      if (res.success) {
+        toast.success("B2B lead updated!");
+        router.push("/b2b-leads");
+      } else {
+        toast.error("Something went wrong! Try Later...");
+      }
     }
   }
+
+  console.log(isSubmitting, "isSbmitting");
 
   return (
     <div className="space-y-4">
@@ -1523,8 +1544,12 @@ export default function B2BCreateForm({ initialData }: B2BCreateFormProps) {
 
             <AttachmentCard />
             {/* SUBMIT BUTTON */}
-            <Button type="submit" className="w-full py-6 text-base">
-              Save
+            <Button
+              disabled={isSubmitting}
+              type="submit"
+              className="w-full py-6 text-base"
+            >
+              {isSubmitting ? "Saving..." : "Save"}
             </Button>
           </form>
         </FormProvider>

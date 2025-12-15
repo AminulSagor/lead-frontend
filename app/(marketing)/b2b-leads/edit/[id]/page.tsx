@@ -53,6 +53,8 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     return [];
   };
 
+  console.log(cleanedData, "cleaned data");
+
   const initialData = {
     ...cleanedData,
     metaTags: normalizeMetaTags(cleanedData.metaTags),
