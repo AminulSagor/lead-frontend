@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import B2CTableLoader from "./_components/b2c-table-loader";
 import ExcelExport from "../../../components/excel-export";
+import B2CLeadsTableSkeleton from "@/components/b2c-leads-table-skeleton";
 
 interface B2CPageProps {
   searchParams: {
@@ -76,7 +77,7 @@ const page = async ({ searchParams }: B2CPageProps) => {
           </Button>
         </div>
       </div>
-      <Suspense fallback={<p>Loading...</p>}>
+      <Suspense fallback={<B2CLeadsTableSkeleton />}>
         <B2CTableLoader
           page={parsedParams.page}
           limit={parsedParams.pageSize}

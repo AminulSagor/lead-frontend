@@ -4,6 +4,7 @@ import { CirclePlus, Import } from "lucide-react";
 import { Suspense } from "react";
 import B2bTableLoader from "./_components/b2b-table-loader";
 import ExcelExport from "@/components/excel-export";
+import TableLoadingSkeleton from "@/components/table-loading-skeleton";
 
 interface B2BPageProps {
   searchParams: {
@@ -58,7 +59,7 @@ const page = async ({ searchParams }: B2BPageProps) => {
           </Button>
         </div>
       </div>
-      <Suspense fallback={<p>Loading...</p>}>
+      <Suspense fallback={<TableLoadingSkeleton />}>
         <B2bTableLoader
           page={parsedParams.page}
           limit={parsedParams.pageSize}

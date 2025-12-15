@@ -2,7 +2,6 @@
 
 import { saveB2CBulkImport } from "@/actions/saveB2CBulkImport";
 import { normalizeB2CRow } from "@/app/(marketing)/b2c-leads/_components/normalizeB2CRow";
-
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -19,6 +18,8 @@ import * as XLSX from "xlsx";
 import { usePathname } from "next/navigation";
 import { normalizeB2BRow } from "@/app/(marketing)/b2b-leads/_components/normalizeB2BRow";
 import { saveB2BBulkImport } from "@/actions/saveB2BBulkImport";
+import { b2bKeys, b2cKeys } from "@/lib/data";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 type B2CProfileRow = Record<string, unknown>;
 
@@ -31,6 +32,8 @@ const BulkImportTable = () => {
 
   const [tableData, setTableData] = useState<B2CProfileRow[]>([]);
   const [isSaving, setIsSaving] = useState(false);
+
+  console.log(tableData, "table Data");
 
   // Select normalize function based on route
   const normalizeRow = isB2C
@@ -125,30 +128,38 @@ const BulkImportTable = () => {
         {tableData.length > 0 ? (
           <div className="w-full">
             <div className="mx-auto [&>div]:rounded-sm [&>div]:border">
-              <Table>
-                <TableHeader className="bg-muted">
-                  <TableRow className="[&>th]:border-r [&>th]:border-r-accent-foreground/20 [&>th:last-child]:border-r-0">
-                    {Object.keys(tableData[0]).map((key) => (
-                      <TableHead key={key}>{key}</TableHead>
-                    ))}
-                  </TableRow>
-                </TableHeader>
-
-                <TableBody>
-                  {tableData.map((row, rowIndex) => (
-                    <TableRow
-                      className="[&>td]:border-r [&>td:last-child]:border-r-0"
-                      key={rowIndex}
-                    >
-                      {Object.keys(row).map((colKey, colIndex) => (
-                        <TableCell key={colIndex}>
-                          {renderCellValue(row[colKey])}
-                        </TableCell>
+              <ScrollArea className="w-[82vw] rounded-md border whitespace-nowrap">
+                <Table>
+                  <TableHeader className="bg-muted">
+                    <TableRow className="[&>th]:border-r [&>th]:border-r-accent-foreground/20 [&>th:last-child]:border-r-0">
+                      {Object.keys(tableData[0]).map((key) => (
+                        <TableHead key={key}>{key}</TableHead>
                       ))}
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+
+                  <TableBody>
+                    {tableData.map((row, rowIndex) => (
+                      <TableRow
+                        className="[&>td]:border-r [&>td:last-child]:border-r-0"
+                        key={rowIndex}
+                      >
+                        {Object.keys(row).map((colKey, colIndex) => (
+                          <TableCell key={colIndex}>
+                            {renderCellValue(row[colKey])}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                <div className="pt-2">
+                  <ScrollBar
+                    orientation="horizontal"
+                    className="cursor-pointer "
+                  />
+                </div>
+              </ScrollArea>
             </div>
           </div>
         ) : (
@@ -163,13 +174,57 @@ const BulkImportTable = () => {
               Upload an Excel file to preview and validate your{" "}
               {isB2C ? "B2C" : isB2B ? "B2B" : ""} profile rows here.
             </p>
+            <div className="py-4"></div>
+            {isB2B && (
+              <ScrollArea className="w-[78vw] rounded-md border whitespace-nowrap">
+                <Table>
+                  <TableHeader className="bg-muted">
+                    <TableRow className="[&>th]:border-r [&>th]:border-r-accent-foreground/20 [&>th:last-child]:border-r-0">
+                      {b2bKeys.map((key) => (
+                        <TableHead key={key}>{key}</TableHead>
+                      ))}
+                    </TableRow>
+                  </TableHeader>
+                </Table>
+                <div className="py-1">
+                  <ScrollBar
+                    orientation="horizontal"
+                    className="hover:cursor-pointer"
+                  />
+                </div>
+              </ScrollArea>
+            )}
+            {isB2C && (
+              <ScrollArea className="w-[78vw] rounded-md border whitespace-nowrap">
+                <Table>
+                  <TableHeader className="bg-muted">
+                    <TableRow className="[&>th]:border-r [&>th]:border-r-accent-foreground/20 [&>th:last-child]:border-r-0">
+                      {b2cKeys.map((key) => (
+                        <TableHead key={key}>{key}</TableHead>
+                      ))}
+                    </TableRow>
+                  </TableHeader>
+                </Table>
+                <div className="py-1">
+                  <ScrollBar
+                    orientation="horizontal"
+                    className="hover:cursor-pointer"
+                  />
+                </div>
+              </ScrollArea>
+            )}
           </div>
         )}
       </div>
 
       {tableData.length > 0 && (
         <div>
-          <Button variant="secondary" disabled={isSaving} onClick={handleSave}>
+          <Button
+            className="cursor-pointer"
+            variant="secondary"
+            disabled={isSaving}
+            onClick={handleSave}
+          >
             <Save />
             {isSaving ? "Saving..." : "Save"}
           </Button>
