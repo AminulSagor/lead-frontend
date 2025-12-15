@@ -89,10 +89,7 @@ export const B2CProfileSchema = z.object({
   licenses: z.string().optional(),
   credentials: z.string().optional(),
   // career summary
-  totalExperience: z
-    .string()
-    .min(1, "Total Years of Experience is required")
-    .regex(/^\d+$/, "Enter a valid number"),
+  totalExperience: z.string().min(1, "Total Years of Experience is required"),
   careerHighlight: z.string().optional(),
   // education
   highestDegree: z.string().min(1, "Highest Degree is required"),
@@ -128,7 +125,7 @@ export const B2CProfileSchema = z.object({
   partnerSpouse: z.string().optional(),
   childrenDependents: z.string().optional(),
   householdSize: z.string().optional(),
-  householdIncome: z.string().min(1, "Household Income is required"),
+  householdIncome: z.string().optional(),
   familyMedicalHistory: z.string().optional(),
   guardianshipStatus: z.string().optional(),
   // health / medical reports
@@ -180,6 +177,8 @@ export const B2CProfileSchema = z.object({
   nonprofits: z.string().optional(),
   loyaltyPrograms: z.string().optional(),
   volunteerActivities: z.string().optional(),
+  // attachment
+  profileImgUrl: z.string().optional(),
 });
 
 export type B2CProfileSchemaType = z.infer<typeof B2CProfileSchema>;

@@ -26,6 +26,7 @@ import MembershipsAffiliationsCard from "./membership-affiliation-card";
 import toast from "react-hot-toast";
 import { usePathname, useRouter } from "next/navigation";
 import { updateB2CLead } from "@/actions/updateB2CLead";
+import ProfileImageCard from "./profile-image-card";
 
 interface B2CCreateFormProps {
   initialData?: B2CProfileSchemaType & {
@@ -164,6 +165,7 @@ const B2CCreateForm = ({ initialData }: B2CCreateFormProps) => {
       loyaltyPrograms: "",
       volunteerActivities: "",
       // attachment
+      profileImgUrl: "",
     },
   });
 
@@ -238,6 +240,7 @@ const B2CCreateForm = ({ initialData }: B2CCreateFormProps) => {
             <FinancialInformationCard />
             <LegalGovernmentCard />
             <MembershipsAffiliationsCard />
+            <ProfileImageCard />
             <Button
               disabled={isSubmitting}
               type="submit"
