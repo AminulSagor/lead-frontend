@@ -19,173 +19,108 @@ import {
 import { EditIcon, EyeIcon, Trash2Icon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import { COUNTRY_LIST } from "./data";
 import { deleteB2BLead } from "@/actions/deleteB2BLead";
 import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
-import { useDebounce } from "@/hooks/use-debounce-hook";
 
 export interface B2BLeadsTableProps {
-  result: any;
+  result: any[];
   total: number;
 }
 
 export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
-  const [isPending, startTransition] = useTransition();
-  const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
+
+  /* ---------------- URL VALUES ---------------- */
   const filters = {
     businessType: searchParams.get("businessType") || "",
-    industry: searchParams.get("industry") || "",
-    onlineService: searchParams.get("onlineService") || "",
-    country: searchParams.get("country") || "",
+    primaryIndustry: searchParams.get("primaryIndustry") || "",
     niche: searchParams.get("niche") || "",
-    serviceAvailability: searchParams.get("serviceAvailability") || "",
     city: searchParams.get("city") || "",
+    country: searchParams.get("country") || "",
   };
+
   const page = Number(searchParams.get("page") || 1);
   const pageSize = Number(searchParams.get("pageSize") || 10);
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
-  const [inputs, setInputs] = useState({
-    businessType: filters.businessType,
-    industry: filters.industry,
-    niche: filters.niche,
-    city: filters.city,
-  });
-  const debouncedBusinessType = useDebounce(inputs.businessType, 500);
-  const debouncedIndustry = useDebounce(inputs.industry, 500);
-  const debouncedNiche = useDebounce(inputs.niche, 500);
-  const debouncedCity = useDebounce(inputs.city, 500);
-
+  /* ---------------- HELPERS ---------------- */
   function updateParam(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString());
 
-    if (!value) {
-      params.delete(key);
-    } else {
-      params.set(key, value);
-    }
+    if (!value) params.delete(key);
+    else params.set(key, value);
 
-    // When changing filters, reset to page 1
-    // if (key !== "page") {
-    //   params.set("page", "1");
-    // }
-
+    params.set("page", "1"); // reset page on filter change
     router.replace(`${pathname}?${params.toString()}`);
   }
 
-  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  /* ---------------- FIX INVALID PAGE ---------------- */
   useEffect(() => {
-    updateParam("businessType", debouncedBusinessType);
-  }, [debouncedBusinessType]);
+    if (page > totalPages) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("page", "1");
+      router.replace(`${pathname}?${params.toString()}`);
+    }
+  }, [page, totalPages, pathname, router, searchParams]);
 
-  useEffect(() => {
-    updateParam("industry", debouncedIndustry);
-  }, [debouncedIndustry]);
-
-  useEffect(() => {
-    updateParam("niche", debouncedNiche);
-  }, [debouncedNiche]);
-
-  useEffect(() => {
-    updateParam("city", debouncedCity);
-  }, [debouncedCity]);
-  /* ---- If filters reduce result count, fix invalid page ---- */
-  useEffect(() => {
-    if (page > totalPages) updateParam("page", "1");
-  }, [totalPages]);
-
+  /* ---------------- DELETE ---------------- */
   const handleDelete = (businessId: string) => {
     const toastId = toast.loading("Deleting...");
     startTransition(async () => {
       try {
         await deleteB2BLead(businessId);
         toast.success("Lead deleted successfully", { id: toastId });
-      } catch (error) {
-        toast.error("Failed to delete");
+      } catch {
+        toast.error("Failed to delete", { id: toastId });
       }
     });
   };
 
+  /* ---------------- RENDER ---------------- */
   return (
     <div className="space-y-4">
       {/* FILTER BAR */}
-      <div className="p-4 border rounded-lg flex items-center justify-between">
-        <div className="flex flex-wrap gap-4 items-center">
-          <p className="text-lg font-semibold">Filters:</p>
-
-          {/* Business Type */}
-          {/* <Select
-            value={filters.businessType}
-            onValueChange={(value) => updateParam("businessType", value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Business Type" />
-            </SelectTrigger>
-            <SelectContent>
-              {BUSINESS_TYPE_LIST.map((item) => (
-                <SelectItem key={item} value={item}>
-                  {item}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select> */}
-
+      <div className="p-4 border rounded-lg flex justify-between gap-4">
+        <div className="flex flex-wrap gap-3 items-center">
           <Input
             placeholder="Business Type"
-            value={inputs.businessType}
-            onChange={(e) =>
-              setInputs((p) => ({ ...p, businessType: e.target.value }))
-            }
+            value={filters.businessType}
+            onChange={(e) => updateParam("businessType", e.target.value)}
             className="w-[180px]"
           />
-          {/* Industry */}
-          {/* <Select
-            value={filters.industry}
-            onValueChange={(value) => updateParam("industry", value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Industry" />
-            </SelectTrigger>
-            <SelectContent>
-              {INDUSTRY_LIST.map((item) => (
-                <SelectItem key={item.value} value={item.value}>
-                  {item.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select> */}
+
           <Input
             placeholder="Industry"
-            value={inputs.industry}
-            onChange={(e) =>
-              setInputs((p) => ({ ...p, industry: e.target.value }))
-            }
+            value={filters.primaryIndustry}
+            onChange={(e) => updateParam("primaryIndustry", e.target.value)}
             className="w-[180px]"
           />
 
-          {/* Online Service */}
-          {/* <Select
-            value={filters.onlineService}
-            onValueChange={(value) => updateParam("onlineService", value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Online Service" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Yes">Yes</SelectItem>
-              <SelectItem value="No">No</SelectItem>
-            </SelectContent>
-          </Select> */}
+          <Input
+            placeholder="Niche"
+            value={filters.niche}
+            onChange={(e) => updateParam("niche", e.target.value)}
+            className="w-[180px]"
+          />
 
-          {/* Country */}
+          <Input
+            placeholder="City"
+            value={filters.city}
+            onChange={(e) => updateParam("city", e.target.value)}
+            className="w-[180px]"
+          />
+
           <Select
             value={filters.country}
-            onValueChange={(value) => updateParam("country", value)}
+            onValueChange={(v) => updateParam("country", v)}
           >
-            <SelectTrigger>
+            <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Country" />
             </SelectTrigger>
             <SelectContent>
@@ -196,84 +131,15 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
               ))}
             </SelectContent>
           </Select>
-
-          {/* Niche */}
-          {/* <Select
-            value={filters.niche}
-            onValueChange={(value) => updateParam("niche", value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Niche" />
-            </SelectTrigger>
-            <SelectContent>
-              {Array.from(new Set(DUMMY_LEADS.map((x) => x.niche))).map((n) => (
-                <SelectItem key={n} value={n}>
-                  {n}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select> */}
-          <Input
-            placeholder="Niche"
-            value={inputs.niche}
-            onChange={(e) =>
-              setInputs((p) => ({ ...p, niche: e.target.value }))
-            }
-            className="w-[180px]"
-          />
-          {/* Service Availability */}
-          {/* <Select
-            value={filters.serviceAvailability}
-            onValueChange={(value) => updateParam("serviceAvailability", value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Service Availability" />
-            </SelectTrigger>
-            <SelectContent>
-              {Array.from(
-                new Set(DUMMY_LEADS.map((x) => x.serviceAvailability))
-              ).map((service) => (
-                <SelectItem key={service} value={service}>
-                  {service}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select> */}
-
-          {/* City */}
-          {/* <Select
-            value={filters.city}
-            onValueChange={(value) => updateParam("city", value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="City" />
-            </SelectTrigger>
-            <SelectContent>
-              {Array.from(new Set(DUMMY_LEADS.map((x) => x.city))).map(
-                (city) => (
-                  <SelectItem key={city} value={city}>
-                    {city}
-                  </SelectItem>
-                )
-              )}
-            </SelectContent>
-          </Select> */}
-          <Input
-            placeholder="City"
-            value={inputs.city}
-            onChange={(e) => setInputs((p) => ({ ...p, city: e.target.value }))}
-            className="w-[180px]"
-          />
         </div>
 
-        {/* Reset */}
         <Button variant="destructive" onClick={() => router.replace(pathname)}>
-          Reset Filters
+          Reset
         </Button>
       </div>
 
       {/* TABLE */}
-      <div className="overflow-x-auto rounded-lg border">
+      <div className="border rounded-lg overflow-x-auto">
         <Table>
           <TableHeader className="bg-muted">
             <TableRow>
@@ -284,32 +150,25 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
               <TableHead>Service</TableHead>
               <TableHead>Country</TableHead>
               <TableHead>City</TableHead>
-              <TableHead className="text-right pr-4">Actions</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
 
           <TableBody>
             {result.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={13} className="text-center py-6">
-                  No results found.
+                <TableCell colSpan={8} className="text-center py-6">
+                  No results found
                 </TableCell>
               </TableRow>
             ) : (
-              result.map((row: any, index: number) => (
-                <TableRow key={index}>
+              result.map((row, i) => (
+                <TableRow key={i}>
                   <TableCell>{row.name}</TableCell>
                   <TableCell>{row.businessType}</TableCell>
                   <TableCell>{row.primaryIndustry}</TableCell>
                   <TableCell>{row.niche}</TableCell>
-                  <TableCell>
-                    {row.serviceName?.map((service: string, i: number) => (
-                      <span key={i}>
-                        {service}
-                        {i < row.serviceName.length - 1 ? ", " : ""}
-                      </span>
-                    ))}
-                  </TableCell>
+                  <TableCell>{row.serviceName?.join(", ")}</TableCell>
                   <TableCell>{row.country}</TableCell>
                   <TableCell>{row.city}</TableCell>
                   <TableCell className="text-right">
@@ -319,20 +178,17 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
                           <EyeIcon className="h-4 w-4" />
                         </Link>
                       </Button>
-
                       <Button size="sm" variant="ghost" asChild>
                         <Link href={`/b2b-leads/edit/${row.businessId}`}>
                           <EditIcon className="h-4 w-4" />
                         </Link>
                       </Button>
-
                       <Button
-                        className="cursor-pointer"
                         size="sm"
-                        variant={"ghost"}
+                        variant="ghost"
                         onClick={() => handleDelete(row.businessId)}
                       >
-                        <Trash2Icon />
+                        <Trash2Icon className="h-4 w-4" />
                       </Button>
                     </div>
                   </TableCell>
@@ -344,23 +200,18 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
       </div>
 
       {/* PAGINATION */}
-      <div className="flex items-center justify-between py-2">
-        <div>
-          {/* Page Size */}
-          <Select
-            value={String(pageSize)}
-            onValueChange={(v) => updateParam("pageSize", v)}
-          >
-            <SelectTrigger className="w-[120px]">
-              Rows: {pageSize}
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="5">5</SelectItem>
-              <SelectItem value="10">10</SelectItem>
-              <SelectItem value="20">20</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+      <div className="flex justify-between items-center">
+        <Select
+          value={String(pageSize)}
+          onValueChange={(v) => updateParam("pageSize", v)}
+        >
+          <SelectTrigger className="w-[120px]">Rows: {pageSize}</SelectTrigger>
+          <SelectContent>
+            <SelectItem value="5">5</SelectItem>
+            <SelectItem value="10">10</SelectItem>
+            <SelectItem value="20">20</SelectItem>
+          </SelectContent>
+        </Select>
 
         <div className="flex items-center gap-3">
           <Button

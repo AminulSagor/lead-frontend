@@ -15,6 +15,7 @@ interface B2BPageProps {
     niche?: string;
     serviceName?: string;
     country?: string;
+    city?: string;
   };
 }
 
@@ -28,6 +29,7 @@ const page = async ({ searchParams }: B2BPageProps) => {
     niche: params.niche ?? "",
     serviceName: params.serviceName ?? "",
     country: params.country ?? "",
+    city: params.city ?? "",
   };
 
   // detect if filters except page/pageSize exist

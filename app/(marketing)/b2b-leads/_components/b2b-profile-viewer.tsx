@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeftCircle } from "lucide-react";
@@ -116,29 +115,26 @@ const B2BProfileViewer = ({ data }: { data: any }) => {
                                 className="rounded-md border p-3"
                               >
                                 <p>
-                                  <b>Name:</b> {contact.keyContactName || "N/A"}
+                                  <b>Name:</b> {contact.name || "N/A"}
                                 </p>
                                 <p>
-                                  <b>Position:</b>{" "}
-                                  {contact.keyContactPosition || "N/A"}
+                                  <b>Position:</b> {contact.position || "N/A"}
                                 </p>
                                 <p>
                                   <b>Department:</b>{" "}
-                                  {contact.keyContactDepartment || "N/A"}
+                                  {contact.department || "N/A"}
                                 </p>
                                 <p>
-                                  <b>Phone:</b>{" "}
-                                  {contact.keyContactPhone || "N/A"}
+                                  <b>Phone:</b> {contact.phone || "N/A"}
                                 </p>
                                 <p>
-                                  <b>Email:</b>{" "}
-                                  {contact.keyContactEmail || "N/A"}
+                                  <b>Email:</b> {contact.email || "N/A"}
                                 </p>
                                 <p>
                                   <b>LinkedIn:</b>{" "}
-                                  {contact.keyContactLinkedIn ? (
+                                  {contact.linkedIn ? (
                                     <a
-                                      href={contact.keyContactLinkedIn}
+                                      href={contact.linkedIn}
                                       target="_blank"
                                       className="text-blue-600 underline"
                                     >
