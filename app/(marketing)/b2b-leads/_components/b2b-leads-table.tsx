@@ -116,6 +116,13 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
             className="w-[180px]"
           />
 
+          <Input
+            placeholder="Country"
+            value={filters.country}
+            onChange={(e) => updateParam("country", e.target.value)}
+            className="w-[180px]"
+          />
+          {/* 
           <Select
             value={filters.country}
             onValueChange={(v) => updateParam("country", v)}
@@ -130,7 +137,7 @@ export default function B2BLeadsTable({ result, total }: B2BLeadsTableProps) {
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </Select> */}
         </div>
 
         <Button variant="destructive" onClick={() => router.replace(pathname)}>

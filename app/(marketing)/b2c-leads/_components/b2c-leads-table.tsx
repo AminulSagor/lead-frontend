@@ -25,6 +25,11 @@ import React from "react";
 import { deleteB2CLead } from "@/actions/deleteB2CLead";
 import toast from "react-hot-toast";
 
+type IncomeObject = {
+  totalAmount?: string | number;
+  totalCurrency?: string;
+};
+
 export interface Lead {
   id: number;
   name: string;
@@ -36,11 +41,12 @@ export interface Lead {
   skills: string;
   highestDegree: string;
   interests: string[];
-  company: "string";
+  company: string;
   maritalStatus: string;
-  income: string;
+  income: string | IncomeObject | null;
   salary: any;
 }
+
 export interface B2CLeadsTableProps {
   result: Lead[];
   total: number;
@@ -64,9 +70,9 @@ export default function B2CLeadsTable({ result, total }: B2CLeadsTableProps) {
   const skillsFilter = searchParams.get("skills") || "";
   const highestDegreeFilter = searchParams.get("highestDegree") || "";
   const hobbiesFilter = searchParams.get("hobbies") || "";
-  const organizationsFilter = searchParams.get("organizations") || "";
+  const organizationsFilter = searchParams.get("company") || "";
   const maritalStatusFilter = searchParams.get("maritalStatus") || "";
-  const incomeFilter = searchParams.get("income") || "";
+  const totalIncomeFilter = searchParams.get("totalIncome") || "";
   const salaryFilter = searchParams.get("salary") || "";
 
   function updateParam(key: string, value: string) {
@@ -87,6 +93,30 @@ export default function B2CLeadsTable({ result, total }: B2CLeadsTableProps) {
     } catch (error) {
       toast.error("Error Deleting Lead");
     }
+  };
+
+  console.log("Rendering B2CLeadsTable with result:", result);
+
+  const renderIncome = (income: Lead["income"]) => {
+    if (!income) return "-";
+
+    // If backend sends string directly
+    if (typeof income === "string") {
+      return income;
+    }
+
+    // If backend sends object
+    if (typeof income === "object") {
+      const { totalAmount, totalCurrency } = income;
+
+      if (totalAmount && totalCurrency) {
+        return `${totalAmount} ${totalCurrency}`;
+      }
+
+      return totalAmount ?? "-";
+    }
+
+    return "-";
   };
 
   return (
@@ -114,7 +144,7 @@ export default function B2CLeadsTable({ result, total }: B2CLeadsTableProps) {
           />
 
           {/* Gender Filter */}
-          <Select
+          {/* <Select
             value={genderFilter || "__all"}
             onValueChange={(v) => updateParam("gender", v === "__all" ? "" : v)}
           >
@@ -126,10 +156,15 @@ export default function B2CLeadsTable({ result, total }: B2CLeadsTableProps) {
               <SelectItem value="Male">Male</SelectItem>
               <SelectItem value="Female">Female</SelectItem>
             </SelectContent>
-          </Select>
+          </Select> */}
+          <Input
+            placeholder="Gender"
+            value={genderFilter}
+            onChange={(e) => updateParam("gender", e.target.value)}
+          />
 
           {/* Industry Filter */}
-          <Select
+          {/* <Select
             value={industryFilter || "__all"}
             onValueChange={(v) =>
               updateParam("industry", v === "__all" ? "" : v)
@@ -144,7 +179,12 @@ export default function B2CLeadsTable({ result, total }: B2CLeadsTableProps) {
               <SelectItem value="Design">Design</SelectItem>
               <SelectItem value="Finance">Finance</SelectItem>
             </SelectContent>
-          </Select>
+          </Select> */}
+          <Input
+            placeholder="Industry"
+            value={industryFilter}
+            onChange={(e) => updateParam("industry", e.target.value)}
+          />
 
           <Input
             placeholder="Nationality"
@@ -167,7 +207,7 @@ export default function B2CLeadsTable({ result, total }: B2CLeadsTableProps) {
             onChange={(e) => updateParam("skills", e.target.value)}
           />
 
-          <Select
+          {/* <Select
             value={highestDegreeFilter || "__all"}
             onValueChange={(v) =>
               updateParam("highestDegree", v === "__all" ? "" : v)
@@ -182,7 +222,12 @@ export default function B2CLeadsTable({ result, total }: B2CLeadsTableProps) {
               <SelectItem value="Master">Master</SelectItem>
               <SelectItem value="PhD">PhD</SelectItem>
             </SelectContent>
-          </Select>
+          </Select> */}
+          <Input
+            placeholder="Highest Degree"
+            value={highestDegreeFilter}
+            onChange={(e) => updateParam("highestDegree", e.target.value)}
+          />
 
           <Input
             placeholder="Hobbies"
@@ -191,12 +236,12 @@ export default function B2CLeadsTable({ result, total }: B2CLeadsTableProps) {
           />
 
           <Input
-            placeholder="Organizations"
+            placeholder="Company"
             value={organizationsFilter}
-            onChange={(e) => updateParam("organizations", e.target.value)}
+            onChange={(e) => updateParam("company", e.target.value)}
           />
 
-          <Select
+          {/* <Select
             value={maritalStatusFilter || "__all"}
             onValueChange={(v) =>
               updateParam("maritalStatus", v === "__all" ? "" : v)
@@ -211,11 +256,18 @@ export default function B2CLeadsTable({ result, total }: B2CLeadsTableProps) {
               <SelectItem value="Married">Married</SelectItem>
               <SelectItem value="Divorced">Divorced</SelectItem>
             </SelectContent>
-          </Select>
+          </Select> */}
+
           <Input
-            placeholder="Income"
-            value={incomeFilter}
-            onChange={(e) => updateParam("income", e.target.value)}
+            placeholder="Marital Status"
+            value={maritalStatusFilter}
+            onChange={(e) => updateParam("maritalStatus", e.target.value)}
+          />
+
+          <Input
+            placeholder="Total Income"
+            value={totalIncomeFilter}
+            onChange={(e) => updateParam("totalIncome", e.target.value)}
           />
 
           <Input
@@ -258,6 +310,7 @@ export default function B2CLeadsTable({ result, total }: B2CLeadsTableProps) {
                 </TableRow>
               ) : (
                 result?.map((lead) => {
+                  console.log(lead.income);
                   return (
                     <TableRow
                       className="[&>td]:border-r [&>td:last-child]:border-r-0"
@@ -283,7 +336,7 @@ export default function B2CLeadsTable({ result, total }: B2CLeadsTableProps) {
                       </TableCell>
                       <TableCell>{lead.company}</TableCell>
                       <TableCell>{lead.maritalStatus}</TableCell>
-                      <TableCell>{lead.income}</TableCell>
+                      <TableCell>{renderIncome(lead.income)}</TableCell>
                       <TableCell>
                         {lead.salary?.salaryAmount
                           ? lead.salary.salaryAmount +

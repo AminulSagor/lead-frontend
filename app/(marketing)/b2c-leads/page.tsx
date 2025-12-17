@@ -10,7 +10,6 @@ interface B2CPageProps {
   searchParams: {
     page?: string;
     pageSize?: string;
-
     name?: string;
     gender?: string;
     industry?: string;
@@ -19,10 +18,10 @@ interface B2CPageProps {
     subSector?: string;
     skills?: string;
     highestDegree?: string;
-    hobbies?: string;
-    organizations?: string;
+    interests?: string;
+    company?: string;
     maritalStatus?: string;
-    income?: string;
+    totalIncome?: string;
     salary?: string;
   };
 }
@@ -41,10 +40,10 @@ const page = async ({ searchParams }: B2CPageProps) => {
     subSector: params.subSector ?? "",
     skills: params.skills ?? "",
     highestDegree: params.highestDegree ?? "",
-    hobbies: params.hobbies ?? "",
-    organizations: params.organizations ?? "",
+    interests: params.interests ?? "",
+    company: params.company ?? "",
     maritalStatus: params.maritalStatus ?? "",
-    income: params.income ?? "",
+    totalIncome: params.totalIncome ?? "",
     salary: params.salary ?? "",
   };
 
